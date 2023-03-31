@@ -1,9 +1,15 @@
 package com.sharipov.mynotificationmanager.viewmodel
 
+import android.service.notification.NotificationListenerService
 import androidx.lifecycle.ViewModel
 import com.sharipov.mynotificationmanager.data.repository.NotificationRepository
 import com.sharipov.mynotificationmanager.model.NotificationEntity
+import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 interface HomeViewModelAbstract {
 
@@ -13,16 +19,33 @@ interface HomeViewModelAbstract {
     fun deleteNotification(notification: NotificationEntity)
 }
 
-class HomeViewModel constructor(
+@HiltViewModel
+class HomeViewModel
+@Inject constructor(
     private val notificationRepository: NotificationRepository
 ): ViewModel(), HomeViewModelAbstract {
 
+
+    private val ioScope = CoroutineScope(Dispatchers.IO)
+
     override val notificationListFlow: Flow<List<NotificationEntity>> = notificationRepository.getAllFlow()
 
-    override fun addNotification(notification: NotificationEntity) = notificationRepository.insert(notification)
+    override fun addNotification(notification: NotificationEntity) {
+      ioScope.launch {
+          notificationRepository.insert(notification)
+      }
+    }
 
-    override fun upgradeNotification(notification: NotificationEntity) = notificationRepository.upgrade(notification)
+    override fun upgradeNotification(notification: NotificationEntity) {
+        ioScope.launch {
+            notificationRepository.upgrade(notification)
+        }
+    }
 
-    override fun deleteNotification(notification: NotificationEntity) = notificationRepository.delete(notification)
+    override fun deleteNotification(notification: NotificationEntity) {
+        ioScope.launch {
+            notificationRepository.delete(notification)
+        }
+    }
 
 }

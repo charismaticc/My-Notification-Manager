@@ -22,29 +22,23 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.sharipov.mynotificationmanager.ui.home.component.NotificationItem
+import com.sharipov.mynotificationmanager.viewmodel.HomeViewModel
+
 import java.text.SimpleDateFormat
 import java.util.*
 
 @OptIn(ExperimentalMaterial3Api::class)
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun HomeScreen() {
+fun HomeScreen(
+    homeViewModel: HomeViewModel
+) {
     var searchVisible by remember { mutableStateOf(false) }
     var searchText by remember { mutableStateOf("") }
-    val notifications = mutableListOf<Notification>()
 
-    repeat (20){
-        val currentTimeMillis = System.currentTimeMillis()
-        val dateFormat = SimpleDateFormat("dd.MM.yyyy HH:mm", Locale.getDefault())
-        val formattedTime = dateFormat.format(Date(currentTimeMillis))
-        Log.d("Time", formattedTime)
-        notifications.add(
-            Notification("Application name", "User name", "Message text", formattedTime)
-        )
-    }
-
+    val notificationListState = homeViewModel.notificationListFlow.collectAsState(initial = listOf())
 
     Scaffold(
         topBar = {
@@ -111,12 +105,16 @@ fun HomeScreen() {
                 LazyColumn(
                     verticalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
-                    items(notifications) { item ->
-                        if (searchText.lowercase() in item.appName.lowercase() ||
-                            searchText.lowercase() in item.userName.lowercase() ||
-                            searchText.lowercase() in item.message.lowercase() ||
+                    item {
+                        Spacer(modifier = Modifier.height(8.dp))
+                    }
+                    items(notificationListState.value.size) { index ->
+                        val notification = notificationListState.value[index]
+                        if (searchText.lowercase() in notification.title.lowercase() ||
+                            searchText.lowercase() in notification.user.lowercase() ||
+                            searchText.lowercase() in notification.text.lowercase() ||
                             searchText == "") {
-                            NotificationItem(notification = item)
+                            NotificationItem(notificationEntity = notification)
                         }
                     }
                     item {
@@ -128,57 +126,26 @@ fun HomeScreen() {
     )
 }
 
-data class Notification(
-    val appName: String,
-    val userName: String,
-    val message: String,
-    val time: String
-)
 
-@Composable
-fun NotificationItem(notification: Notification) {
-    Card(
-        elevation = CardDefaults.cardElevation(),
-        modifier = Modifier.padding(16.dp, 16.dp, 16.dp)
-    ) {
-        Box(modifier = Modifier.fillMaxSize()) {
-            Row(modifier = Modifier.padding(8.dp, 16.dp, 16.dp, 16.dp)) {
-                Icon(
-                    imageVector = Icons.Filled.Notifications,
-                    contentDescription = "icon",
-                    tint = MaterialTheme.colorScheme.primary,
-                    modifier = Modifier
-                        .padding(8.dp, 8.dp, 16.dp, 8.dp)
-                        .size(56.dp)
-                )
-                Column(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(end = 16.dp)
-                ) {
-                    Text(notification.appName, style = MaterialTheme.typography.titleMedium)
-                    Text(notification.userName, style = MaterialTheme.typography.bodyLarge)
-                    Text(
-                        notification.message,
-                        style = MaterialTheme.typography.bodyMedium,
-                        maxLines = 1
-                    )
-                }
-            }
-            Text(
-                text = notification.time,
-                style = MaterialTheme.typography.bodySmall,
-                modifier = Modifier
-                    .align(Alignment.BottomEnd)
-                    .padding(16.dp)
-            )
-        }
-    }
-}
-
-
-@Preview
-@Composable
-fun PreviewHomeScreen(){
-    HomeScreen()
-}
+//@Preview
+//@Composable
+//fun PreviewHomeScreen(){
+//    HomeScreen(
+//        homeViewModel = object : HomeViewModelAbstract {
+//            override val notificationListFlow: Flow<List<NotificationEntity>>
+//                get() = flowOf(listOf(
+//                    NotificationEntity(0,"Application name", "User name", "Message text Message text Message text Message text Message text", System.currentTimeMillis()),
+//                    NotificationEntity(1,"Application name", "User name", "Message text Message text Message text Message text Message text", System.currentTimeMillis()),
+//                    NotificationEntity(2,"Application name", "User name", "Message text Message text Message text Message text Message text", System.currentTimeMillis()),
+//                    NotificationEntity(3,"Application name", "User name", "Message text Message text Message text Message text Message text", System.currentTimeMillis())
+//                ))
+//
+//            override fun addNotification(notification: NotificationEntity) {}
+//
+//            override fun upgradeNotification(notification: NotificationEntity) {}
+//
+//            override fun deleteNotification(notification: NotificationEntity) {}
+//
+//        }
+//    )
+//}

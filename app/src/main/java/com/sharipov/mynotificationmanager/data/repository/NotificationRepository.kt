@@ -9,8 +9,8 @@ class NotificationRepository(
 ) {
 
     fun getAllFlow(): Flow<List<NotificationEntity>> = notificationDao.getAllFlow()
-    fun insert(notification: NotificationEntity) = notificationDao.insert(notification)
-    fun upgrade(notification: NotificationEntity) = notificationDao.update(notification)
-    fun delete(notification: NotificationEntity) = notificationDao.delete(notification)
+    suspend fun insert(notification: NotificationEntity) = notificationDao.insert(notification)
+    suspend fun upgrade(notification: NotificationEntity) = notificationDao.update(notification)
+    suspend fun delete(notification: NotificationEntity) = notificationDao.delete(notification)
 
 }
