@@ -7,7 +7,7 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface NotificationDao {
 
-    @Query("select * from notification")
+    @Query("select * from notification ORDER BY id DESC")
     fun getAllFlow(): Flow<List<NotificationEntity>>
 
     @Query("SELECT COUNT(*) FROM notification WHERE user = :user AND text = :text AND title = :title")
@@ -21,6 +21,5 @@ interface NotificationDao {
 
     @Delete
     suspend fun delete(notification: NotificationEntity)
-
 
 }

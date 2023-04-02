@@ -1,6 +1,7 @@
 package com.sharipov.mynotificationmanager.ui.home.component
 
 import android.annotation.SuppressLint
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Notifications
@@ -9,12 +10,16 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import com.sharipov.mynotificationmanager.model.NotificationEntity
+import com.sharipov.mynotificationmanager.navigation.Screens
+import java.text.SimpleDateFormat
+import java.util.*
 
 @OptIn(ExperimentalMaterial3Api::class)
-@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
+@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter", "RememberReturnType")
 @Composable
-fun NotificationItem(notificationEntity: NotificationEntity) {
+fun NotificationItem(notificationEntity: NotificationEntity, navController: NavController) {
 
     Card(
         elevation = CardDefaults.cardElevation(),
@@ -30,6 +35,7 @@ fun NotificationItem(notificationEntity: NotificationEntity) {
                         .padding(8.dp, 8.dp, 16.dp, 8.dp)
                         .size(56.dp)
                 )
+
                 Column(
                     modifier = Modifier
                         .fillMaxSize()
@@ -44,8 +50,10 @@ fun NotificationItem(notificationEntity: NotificationEntity) {
                     )
                 }
             }
+
+            val dateFormat = SimpleDateFormat("dd.MM.yyyy HH:mm:ss", Locale.getDefault())
             Text(
-                text = notificationEntity.time.toString(),
+                text = dateFormat.format(Date(notificationEntity.time)),
                 style = MaterialTheme.typography.bodySmall,
                 modifier = Modifier
                     .align(Alignment.BottomEnd)

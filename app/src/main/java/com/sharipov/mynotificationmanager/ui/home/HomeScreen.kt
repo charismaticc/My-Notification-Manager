@@ -4,14 +4,12 @@
 package com.sharipov.mynotificationmanager.ui.home
 
 import android.annotation.SuppressLint
-import android.util.Log
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
@@ -23,17 +21,18 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import com.sharipov.mynotificationmanager.ui.home.component.NotificationItem
 import com.sharipov.mynotificationmanager.viewmodel.HomeViewModel
-
-import java.text.SimpleDateFormat
 import java.util.*
+
 
 @OptIn(ExperimentalMaterial3Api::class)
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun HomeScreen(
-    homeViewModel: HomeViewModel
+    homeViewModel: HomeViewModel,
+    navController: NavController
 ) {
     var searchVisible by remember { mutableStateOf(false) }
     var searchText by remember { mutableStateOf("") }
@@ -105,47 +104,23 @@ fun HomeScreen(
                 LazyColumn(
                     verticalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
-                    item {
-                        Spacer(modifier = Modifier.height(8.dp))
-                    }
+                    item { Spacer(modifier = Modifier.height(8.dp)) }
+
                     items(notificationListState.value.size) { index ->
                         val notification = notificationListState.value[index]
                         if (searchText.lowercase() in notification.title.lowercase() ||
                             searchText.lowercase() in notification.user.lowercase() ||
                             searchText.lowercase() in notification.text.lowercase() ||
-                            searchText == "") {
-                            NotificationItem(notificationEntity = notification)
+                            searchText == ""
+                        ) {
+                            NotificationItem(notificationEntity = notification, navController)
                         }
                     }
-                    item {
-                        Spacer(modifier = Modifier.height(16.dp))
-                    }
+
+                    item { Spacer(modifier = Modifier.height(16.dp)) }
                 }
             }
         }
     )
 }
 
-
-//@Preview
-//@Composable
-//fun PreviewHomeScreen(){
-//    HomeScreen(
-//        homeViewModel = object : HomeViewModelAbstract {
-//            override val notificationListFlow: Flow<List<NotificationEntity>>
-//                get() = flowOf(listOf(
-//                    NotificationEntity(0,"Application name", "User name", "Message text Message text Message text Message text Message text", System.currentTimeMillis()),
-//                    NotificationEntity(1,"Application name", "User name", "Message text Message text Message text Message text Message text", System.currentTimeMillis()),
-//                    NotificationEntity(2,"Application name", "User name", "Message text Message text Message text Message text Message text", System.currentTimeMillis()),
-//                    NotificationEntity(3,"Application name", "User name", "Message text Message text Message text Message text Message text", System.currentTimeMillis())
-//                ))
-//
-//            override fun addNotification(notification: NotificationEntity) {}
-//
-//            override fun upgradeNotification(notification: NotificationEntity) {}
-//
-//            override fun deleteNotification(notification: NotificationEntity) {}
-//
-//        }
-//    )
-//}

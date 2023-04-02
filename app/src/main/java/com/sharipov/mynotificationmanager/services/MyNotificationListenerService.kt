@@ -31,7 +31,6 @@ class MyNotificationListenerService : NotificationListenerService() {
 
     @RequiresApi(Build.VERSION_CODES.S)
     override fun onNotificationPosted(sbn: StatusBarNotification) {
-        // Получение уведомления
         val sbn = sbn.notification
         val extras = sbn.extras
         val user = extras.getString(Notification.EXTRA_TITLE).toString()
@@ -40,7 +39,6 @@ class MyNotificationListenerService : NotificationListenerService() {
 
         GlobalScope.launch(Dispatchers.IO) {
             val count = notificationDao.checkNotificationExists(user, text, title)
-            Log.d("count", count.toString())
             if (count == 0) {
                 val notificationEntity =
                     NotificationEntity(null, title, user, text, System.currentTimeMillis())

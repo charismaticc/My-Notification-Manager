@@ -1,6 +1,5 @@
 package com.sharipov.mynotificationmanager.viewmodel
 
-import android.service.notification.NotificationListenerService
 import androidx.lifecycle.ViewModel
 import com.sharipov.mynotificationmanager.data.repository.NotificationRepository
 import com.sharipov.mynotificationmanager.model.NotificationEntity
@@ -25,9 +24,7 @@ class HomeViewModel
     private val notificationRepository: NotificationRepository
 ): ViewModel(), HomeViewModelAbstract {
 
-
     private val ioScope = CoroutineScope(Dispatchers.IO)
-
     override val notificationListFlow: Flow<List<NotificationEntity>> = notificationRepository.getAllFlow()
 
     override fun addNotification(notification: NotificationEntity) {
