@@ -33,10 +33,13 @@ class MyNotificationListenerService : NotificationListenerService() {
     override fun onNotificationPosted(sbn: StatusBarNotification) {
         val sbn = sbn.notification
         val extras = sbn.extras
-        val user = extras.getString(Notification.EXTRA_TITLE).toString()
+        var user = extras.getString(Notification.EXTRA_TITLE).toString()
         val text = extras.getString(Notification.EXTRA_TEXT).toString()
         val title = sbn.smallIcon.resPackage
-
+        if ("com.instander.android" == title)
+        {
+            user = user.split(':')[1].trim()
+        }
         GlobalScope.launch(Dispatchers.IO) {
             val count = notificationDao.checkNotificationExists(user, text, title)
             if (count == 0) {

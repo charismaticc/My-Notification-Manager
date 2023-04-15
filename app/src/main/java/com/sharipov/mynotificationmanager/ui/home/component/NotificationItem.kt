@@ -1,7 +1,6 @@
 package com.sharipov.mynotificationmanager.ui.home.component
 
 import android.annotation.SuppressLint
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Notifications
@@ -10,20 +9,17 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
 import com.sharipov.mynotificationmanager.model.NotificationEntity
-import com.sharipov.mynotificationmanager.navigation.Screens
 import java.text.SimpleDateFormat
 import java.util.*
 
-@OptIn(ExperimentalMaterial3Api::class)
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter", "RememberReturnType")
 @Composable
-fun NotificationItem(notificationEntity: NotificationEntity, navController: NavController) {
+fun NotificationItem(notificationEntity: NotificationEntity, modifier: Modifier) {
 
     Card(
         elevation = CardDefaults.cardElevation(),
-        modifier = Modifier.padding(16.dp, 16.dp, 16.dp)
+        modifier = modifier
     ) {
         Box(modifier = Modifier.fillMaxSize()) {
             Row(modifier = Modifier.padding(8.dp, 16.dp, 16.dp, 16.dp)) {

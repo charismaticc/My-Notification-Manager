@@ -22,7 +22,7 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        // Запрос разрешения на прослушивание уведомлений
+        // Request permission to listen to notifications
         if (!NotificationManagerCompat.getEnabledListenerPackages(this).contains(packageName)) {
             val intent = Intent(Settings.ACTION_NOTIFICATION_LISTENER_SETTINGS)
             startActivity(intent)
