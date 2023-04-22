@@ -98,7 +98,7 @@ fun ChatScreen(
                                 }
                             },
                             onClick = {
-                                //
+                                homeViewModel.deleteNotificationsForUser(userName)
                                 expanded = false
                             }
                         )
@@ -131,9 +131,6 @@ fun ChatScreen(
 
                 }
             }
-
-
-
         }
     )
 }

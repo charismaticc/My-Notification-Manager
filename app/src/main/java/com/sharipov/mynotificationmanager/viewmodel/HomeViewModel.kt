@@ -18,6 +18,7 @@ interface HomeViewModelAbstract {
     fun addNotification(notification: NotificationEntity)
     fun upgradeNotification(notification: NotificationEntity)
     fun deleteNotification(notification: NotificationEntity)
+    fun deleteNotificationsForUser(user: String)
 }
 
 @HiltViewModel
@@ -51,4 +52,9 @@ class HomeViewModel
         }
     }
 
+    override fun deleteNotificationsForUser(user: String) {
+        ioScope.launch {
+            notificationRepository.deleteNotificationsForUser(user)
+        }
+    }
 }
