@@ -1,6 +1,5 @@
 package com.sharipov.mynotificationmanager.navigation
 
-import android.util.Log
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -52,7 +51,7 @@ fun SetupNavHost(
             ConversationsScreen(
                 homeViewModel = homeViewModel,
                 navController = navController,
-                packageName = backStackEntry.arguments?.getString("packageName") ?: "None"
+                packageName = backStackEntry.arguments?.getString("packageName") ?: ""
             )
         }
 
@@ -63,11 +62,12 @@ fun SetupNavHost(
             )
         }
 
-        composable(route = Screens.Chat.route + "/{user}") { backStackEntry ->
+        composable(route = Screens.Chat.route + "/{user}/{packageName}") { backStackEntry ->
             ChatScreen(
                 homeViewModel = homeViewModel,
                 navController = navController,
-                userName =  backStackEntry.arguments?.getString("user") ?: "0"
+                userName =  backStackEntry.arguments?.getString("user") ?: "0",
+                packageName =  backStackEntry.arguments?.getString("packageName") ?: ""
             )
         }
 

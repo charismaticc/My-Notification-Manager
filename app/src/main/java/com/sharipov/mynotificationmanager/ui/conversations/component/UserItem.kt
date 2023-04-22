@@ -18,16 +18,6 @@ import com.google.accompanist.drawablepainter.rememberDrawablePainter
 @Composable
 fun UserItem(userName: String, modifier: Modifier) {
 
-//    val context = LocalContext.current
-//
-//    // get app icon
-//    val appIconDrawable = context.packageManager.getApplicationIcon(packageName)
-//
-//    // get app name
-//    val appInfo = context.packageManager.getApplicationInfo(packageName, 0)
-//    val appName = context.packageManager.getApplicationLabel(appInfo).toString()
-
-
     Card(
         modifier = modifier,
         elevation = CardDefaults.cardElevation(),

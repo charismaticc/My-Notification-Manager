@@ -14,7 +14,6 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import com.sharipov.mynotificationmanager.model.NotificationEntity
 import com.sharipov.mynotificationmanager.ui.chat.components.ChatItem
 import com.sharipov.mynotificationmanager.viewmodel.HomeViewModel
 import java.util.*
@@ -26,9 +25,9 @@ fun ChatScreen(
     homeViewModel: HomeViewModel,
     navController: NavController,
     userName: String,
+    packageName: String
 ) {
-
-    val notificationsFlow = homeViewModel.getAllUserNotifications(userName)
+    val notificationsFlow = homeViewModel.getAllUserNotifications(userName, packageName)
     val notificationListState = notificationsFlow.collectAsState(initial = listOf())
 
     var expanded by remember { mutableStateOf(false) }
@@ -98,7 +97,8 @@ fun ChatScreen(
                                 }
                             },
                             onClick = {
-                                homeViewModel.deleteNotificationsForUser(userName)
+                                homeViewModel.deleteNotificationsForUser(userName, packageName)
+                                navController.navigateUp()
                                 expanded = false
                             }
                         )

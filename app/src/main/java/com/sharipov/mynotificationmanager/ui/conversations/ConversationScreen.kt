@@ -1,8 +1,7 @@
 package com.sharipov.mynotificationmanager.ui.conversations
 
 import android.annotation.SuppressLint
-import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.basicMarquee
+import android.util.Log
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -15,37 +14,25 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import androidx.navigation.compose.currentBackStackEntryAsState
 import com.sharipov.mynotificationmanager.navigation.Screens
-import com.sharipov.mynotificationmanager.ui.conversations.component.ApplicationItem
 import com.sharipov.mynotificationmanager.ui.conversations.component.UserItem
 import com.sharipov.mynotificationmanager.viewmodel.HomeViewModel
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.launch
 import java.util.*
 
-@OptIn(ExperimentalFoundationApi::class, ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class)
 @SuppressLint("FlowOperatorInvokedInComposition")
 @Composable
 fun ConversationsScreen(
     homeViewModel: HomeViewModel,
     navController: NavController,
     packageName: String,
-    coroutineScope: CoroutineScope = rememberCoroutineScope(),
-    drawerState: DrawerState = rememberDrawerState(initialValue = DrawerValue.Closed),
 ) {
 
-
-    val notificationsFlow = homeViewModel.notificationListFlow
-//    val notifications = notificationsFlow.map { notifications ->
-//        notifications.firstOrNull { it.packageName == packageName }
-//    }
-//    val notificationState  = notifications.collectAsState(initial = null)
-    val usersListState =notificationsFlow
+    val notificationsFlow = homeViewModel.getApplicationNotifications(packageName)
+    val usersListState = notificationsFlow
         .map { list -> list.distinctBy { it.user } }
         .collectAsState(initial = listOf())
-
 
     Scaffold(
         modifier = Modifier.fillMaxSize(),
@@ -85,6 +72,7 @@ fun ConversationsScreen(
                     item { Spacer(modifier = Modifier.height(8.dp)) }
 
                     items(usersListState.value.size) { index ->
+                        Log.d("Size", usersListState.value.size.toString())
                         val notification = usersListState.value[index]
                         if (packageName == notification.packageName) {
                             val userName = notification.user
@@ -93,7 +81,7 @@ fun ConversationsScreen(
                                     .clickable {
                                         navController.navigate(
                                             Screens.Chat.route +
-                                                    "/${userName}"
+                                                    "/${userName}/${packageName}"
                                         )
                                     }
                             )
