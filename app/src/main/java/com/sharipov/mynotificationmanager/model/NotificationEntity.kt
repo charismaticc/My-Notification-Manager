@@ -7,8 +7,10 @@ import androidx.room.PrimaryKey
 data class NotificationEntity(
     @PrimaryKey(autoGenerate = true)
     val id: Int? = null,
-    val title: String,
+    val appName: String,
+    val packageName: String,
     val user: String,
     val text: String,
-    val time: Long
+    val time: Long,
+    val favorite: Boolean
 )

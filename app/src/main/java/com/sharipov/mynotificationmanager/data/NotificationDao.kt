@@ -10,8 +10,13 @@ interface NotificationDao {
     @Query("select * from notification ORDER BY id DESC")
     fun getAllFlow(): Flow<List<NotificationEntity>>
 
-    @Query("SELECT COUNT(*) FROM notification WHERE user = :user AND text = :text AND title = :title")
-    suspend fun checkNotificationExists(user: String, text: String, title: String): Int
+    @Query("select * from notification WHERE user = :user ORDER BY id DESC")
+    fun getAllUserNotifications(user: String): Flow<List<NotificationEntity>>
+
+    @Query("select * from notification WHERE favorite = 1")
+    fun getFavoriteNotifications(): Flow<List<NotificationEntity>>
+    @Query("SELECT COUNT(*) FROM notification WHERE user = :user AND text = :text AND packageName = :packageName AND appName = :appName")
+    suspend fun checkNotificationExists(user: String, text: String, packageName: String, appName: String): Int
 
     @Insert
     suspend fun insert(notification: NotificationEntity)

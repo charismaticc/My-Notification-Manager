@@ -1,9 +1,10 @@
-package com.sharipov.mynotificationmanager
+package com.sharipov.mynotificationmanager.ui.drawer
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.*
@@ -14,13 +15,15 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.sharipov.mynotificationmanager.R
 import com.sharipov.mynotificationmanager.utils.Constants
 
 @Composable
 fun AppDrawer(
     route: String,
     modifier: Modifier = Modifier,
-    navigateToHome: () -> Unit = {},
+    navigateToApplications: () -> Unit = {},
+    navigateToAllNotifications: () -> Unit = {},
     navigateToSettings: () -> Unit = {},
     navigateToFavorite: () -> Unit = {},
     closeDrawer: () -> Unit = {}
@@ -29,6 +32,18 @@ fun AppDrawer(
         DrawerHeader(modifier)
         Spacer(modifier = Modifier.padding(16.dp))
         Column(modifier = modifier) {
+
+            NavigationDrawerItem(
+                label = { Text(text = "Applications", style = MaterialTheme.typography.bodyMedium) },
+                selected = route == Constants.Screens.APPLICATION_SCREEN,
+                onClick = {
+                    navigateToApplications()
+                    closeDrawer()
+                },
+                icon = { Icon(imageVector = Icons.Default.Home, contentDescription = null) },
+                shape = MaterialTheme.shapes.medium
+            )
+
             NavigationDrawerItem(
                 label = {
                     Text(
@@ -36,9 +51,9 @@ fun AppDrawer(
                         style = MaterialTheme.typography.bodyMedium
                     )
                 },
-                selected = route == Constants.Screens.MAIN_SCREEN,
+                selected = route == Constants.Screens.ALL_NOTIFICATIONS_SCREEN,
                 onClick = {
-                    navigateToHome()
+                    navigateToAllNotifications()
                     closeDrawer()
                 },
                 icon = { Icon(imageVector = Icons.Default.Notifications, contentDescription = null) },
@@ -95,5 +110,5 @@ fun DrawerHeader(modifier: Modifier) {
 @Preview
 @Composable
 fun DrawerHeaderPreview() {
-    AppDrawer(modifier = Modifier, route = Constants.Screens.MAIN_SCREEN)
+    AppDrawer(modifier = Modifier, route = Constants.Screens.APPLICATION_SCREEN)
 }

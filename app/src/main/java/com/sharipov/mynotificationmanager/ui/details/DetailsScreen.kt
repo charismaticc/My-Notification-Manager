@@ -51,13 +51,15 @@ fun DetailsScreen(homeViewModel: HomeViewModel, notificationId: String) {
                     Column(Modifier.padding(16.dp, 16.dp, 16.dp, 16.dp)) {
                         Row {
                             Text("From: ")
-                            Text(notificationState.value?.user.toString().trim(),
+                            Text(
+                                notificationState.value?.user ?: "None",
                                 modifier = Modifier.basicMarquee()
                             )
                         }
                         Row {
                             Text("In app: ")
-                            Text(notificationState.value?.title.toString().trim(),
+                            Text(
+                                notificationState.value?.appName ?: "None",
                                 modifier = Modifier.basicMarquee()
                             )
                         }

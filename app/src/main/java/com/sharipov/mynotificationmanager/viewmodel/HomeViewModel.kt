@@ -13,6 +13,8 @@ import javax.inject.Inject
 interface HomeViewModelAbstract {
 
     val notificationListFlow: Flow<List<NotificationEntity>>
+    fun getAllUserNotifications(userName: String) : Flow<List<NotificationEntity>>
+    fun getFavoriteNotifications() : Flow<List<NotificationEntity>>
     fun addNotification(notification: NotificationEntity)
     fun upgradeNotification(notification: NotificationEntity)
     fun deleteNotification(notification: NotificationEntity)
@@ -26,6 +28,10 @@ class HomeViewModel
 
     private val ioScope = CoroutineScope(Dispatchers.IO)
     override val notificationListFlow: Flow<List<NotificationEntity>> = notificationRepository.getAllFlow()
+
+    override fun getAllUserNotifications(userName: String) = notificationRepository.getAllUserNotifications(userName)
+
+    override fun getFavoriteNotifications() = notificationRepository.getFavoriteNotifications()
 
     override fun addNotification(notification: NotificationEntity) {
       ioScope.launch {

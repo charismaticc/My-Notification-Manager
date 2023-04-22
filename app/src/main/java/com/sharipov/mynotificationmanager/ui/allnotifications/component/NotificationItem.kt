@@ -1,14 +1,16 @@
-package com.sharipov.mynotificationmanager.ui.home.component
+package com.sharipov.mynotificationmanager.ui.allnotifications.component
 
 import android.annotation.SuppressLint
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import com.google.accompanist.drawablepainter.rememberDrawablePainter
 import com.sharipov.mynotificationmanager.model.NotificationEntity
 import java.text.SimpleDateFormat
 import java.util.*
@@ -17,44 +19,47 @@ import java.util.*
 @Composable
 fun NotificationItem(notificationEntity: NotificationEntity, modifier: Modifier) {
 
+    val context = LocalContext.current
+
+    // get app icon
+    val appIconDrawable = context.packageManager.getApplicationIcon(notificationEntity.packageName)
+
+    // data format
+    val dateFormat = SimpleDateFormat("dd.MM.yyyy HH:mm:ss", Locale.getDefault())
+
     Card(
         elevation = CardDefaults.cardElevation(),
         modifier = modifier
     ) {
         Box(modifier = Modifier.fillMaxSize()) {
             Row(modifier = Modifier.padding(8.dp, 16.dp, 16.dp, 16.dp)) {
-                Icon(
-                    imageVector = Icons.Filled.Notifications,
-                    contentDescription = "icon",
-                    tint = MaterialTheme.colorScheme.primary,
-                    modifier = Modifier
-                        .padding(8.dp, 8.dp, 16.dp, 8.dp)
-                        .size(56.dp)
+                Image(
+                    painter = rememberDrawablePainter(appIconDrawable),
+                    contentDescription = "App icon",
+                    modifier = Modifier.size(74.dp).padding(8.dp, end = 16.dp)
                 )
-
                 Column(
                     modifier = Modifier
                         .fillMaxSize()
-                        .padding(end = 16.dp)
+                        .padding(end = 8.dp)
                 ) {
-                    Text(notificationEntity.title, style = MaterialTheme.typography.titleMedium, maxLines = 1)
+                    Text(notificationEntity.appName, style = MaterialTheme.typography.titleMedium, maxLines = 1)
                     Text(notificationEntity.user, style = MaterialTheme.typography.bodyLarge, maxLines = 1)
                     Text(
                         notificationEntity.text,
                         style = MaterialTheme.typography.bodyMedium,
                         maxLines = 1
                     )
+                    Text(
+                        text = dateFormat.format(Date(notificationEntity.time)),
+                        style = MaterialTheme.typography.bodySmall,
+                        modifier = Modifier
+                            .align(Alignment.End)
+                            .padding(top = 8.dp)
+                    )
                 }
             }
 
-            val dateFormat = SimpleDateFormat("dd.MM.yyyy HH:mm:ss", Locale.getDefault())
-            Text(
-                text = dateFormat.format(Date(notificationEntity.time)),
-                style = MaterialTheme.typography.bodySmall,
-                modifier = Modifier
-                    .align(Alignment.BottomEnd)
-                    .padding(top = 16.dp, end = 16.dp, bottom = 8.dp)
-            )
         }
     }
 }
