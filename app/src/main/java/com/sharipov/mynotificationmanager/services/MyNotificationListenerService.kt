@@ -2,6 +2,7 @@ package com.sharipov.mynotificationmanager.services
 
 import android.app.Notification
 import android.content.Context
+import android.content.pm.ApplicationInfo
 import android.content.pm.PackageManager
 import android.os.Build
 import android.service.notification.NotificationListenerService
@@ -40,7 +41,16 @@ class MyNotificationListenerService : NotificationListenerService() {
         val packageName = sbn.notification.smallIcon.resPackage
 
         // get application name
-        val applicationInfo = packageManager.getApplicationInfo(packageName, PackageManager.GET_META_DATA)
+
+        val applicationInfo: ApplicationInfo = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            packageManager.getApplicationInfo(
+                packageName,
+                PackageManager.ApplicationInfoFlags.of(0)
+            )
+        } else {
+            packageManager.getApplicationInfo(packageName, PackageManager.GET_META_DATA)
+        }
+
         val appName = context.packageManager.getApplicationLabel(applicationInfo).toString()
 
         // get user name

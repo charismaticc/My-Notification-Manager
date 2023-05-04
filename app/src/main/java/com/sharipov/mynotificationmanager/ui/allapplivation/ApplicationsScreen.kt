@@ -1,5 +1,4 @@
 @file:OptIn(ExperimentalMaterial3Api::class)
-@file:Suppress("UNUSED_EXPRESSION")
 
 package com.sharipov.mynotificationmanager.ui.allapplivation
 
@@ -41,9 +40,7 @@ fun ApplicationsScreen(
     val currentNavBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = currentNavBackStackEntry?.destination?.route ?: Constants.Screens.APPLICATION_SCREEN
 
-    val applicationListState = homeViewModel.notificationListFlow
-        .map { list -> list.distinctBy { it.packageName } }
-        .collectAsState(initial = listOf())
+    val applicationListState = homeViewModel.getApplications().collectAsState(initial = listOf())
 
     ModalNavigationDrawer(
         drawerContent = {
@@ -89,14 +86,13 @@ fun ApplicationsScreen(
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     Spacer(modifier = Modifier.height(48.dp))
-
                     LazyColumn(
                         verticalArrangement = Arrangement.spacedBy(8.dp)
                     ) {
                         item { Spacer(modifier = Modifier.height(8.dp)) }
 
                         items(applicationListState.value.size) { index ->
-                            val packageName = applicationListState.value[index].packageName
+                            val packageName = applicationListState.value[index]
                             ApplicationItem(
                                 packageName = packageName,
                                 modifier = Modifier.fillMaxSize().padding(16.dp, 16.dp, 16.dp).clickable {

@@ -15,10 +15,10 @@ interface NotificationDao {
 
     @Query("SELECT * FROM notification WHERE favorite = 1")
     fun getFavoriteNotifications(): Flow<List<NotificationEntity>>
-
+    @Query("SELECT DISTINCT packageName FROM notification")
+    fun getApplications(): Flow<List<String>>
     @Query("SELECT * FROM notification WHERE packageName = :packageName")
     fun getApplicationNotifications(packageName: String): Flow<List<NotificationEntity>>
-
 
     @Query("SELECT COUNT(*) FROM notification WHERE user = :user AND text = :text AND packageName = :packageName AND appName = :appName")
     suspend fun checkNotificationExists(user: String, text: String, packageName: String, appName: String): Int

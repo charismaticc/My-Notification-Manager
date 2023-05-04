@@ -1,13 +1,21 @@
 package com.sharipov.mynotificationmanager.ui.settings
 
 
+import android.annotation.SuppressLint
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Info
+import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material.icons.filled.Menu
+import androidx.compose.material.icons.filled.Notifications
+import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
@@ -19,6 +27,7 @@ import com.sharipov.mynotificationmanager.viewmodel.HomeViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
+@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SettingsScreen(
@@ -72,61 +81,77 @@ fun SettingsScreen(
                 LazyColumn(
                     verticalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
-
-                    items(1) {
-                        Card(modifier = Modifier.fillParentMaxWidth().padding(16.dp)) {
-                            Text("Display theme")
-                        }
-
-                        Card(modifier = Modifier.fillParentMaxWidth().padding(16.dp)) {
-                            Text("Select apps")
-                        }
-
-                        Card(modifier = Modifier.fillParentMaxWidth().padding(16.dp)) {
-                            Text("Private policy")
-                        }
-
-                        Card(modifier = Modifier.fillParentMaxWidth().padding(16.dp)) {
-                            Text("Feedback")
-                        }
-
-                        Card(modifier = Modifier.fillParentMaxWidth().padding(16.dp)) {
-                            Text("About us")
-                        }
+                    item {
+                        ClickableListItem(
+                            text = "Display theme",
+                            icon = Icons.Default.Settings,
+                            onClick = {}
+                        )
                     }
-
-//                    item {
-//                        Card(modifier = Modifier.fillParentMaxWidth().padding(16.dp)) {
-//                            Text("Display theme")
-//                        }
-//                    }
-//
-//                    item {
-//                        Card(modifier = Modifier.fillParentMaxWidth().padding(16.dp)) {
-//                            Text("Select apps")
-//                        }
-//                    }
-//
-//                    item {
-//                        Card(modifier = Modifier.fillParentMaxWidth().padding(16.dp)) {
-//                            Text("Private policy")
-//                        }
-//                    }
-//
-//                    item {
-//                        Card(modifier = Modifier.fillParentMaxWidth().padding(16.dp)) {
-//                            Text("Feedback")
-//                        }
-//                    }
-//
-//                    item {
-//                        Card(modifier = Modifier.fillParentMaxWidth().padding(16.dp)) {
-//                            Text("About us")
-//                        }
-//                    }
+                    item {
+                        ClickableListItem(
+                            text = "Select apps",
+                            icon = Icons.Default.Notifications,
+                            onClick = {}
+                        )
+                    }
+                    item {
+                        ClickableListItem(
+                            text = "Private policy",
+                            icon = Icons.Default.Lock,
+                            onClick = {}
+                        )
+                    }
+                    item {
+                        ClickableListItem(
+                            text = "Feedback",
+                            icon = Icons.Default.Notifications,
+                            onClick = {}
+                        )
+                    }
+                    item {
+                        ClickableListItem(
+                            text = "About us",
+                            icon = Icons.Default.Info,
+                            onClick = {}
+                        )
+                    }
                 }
             }
         )
     }
 }
 
+@Composable
+fun ClickableListItem(
+    text: String,
+    icon: ImageVector,
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    Card(
+        modifier = modifier
+            .padding(8.dp)
+            .fillMaxWidth()
+            .clickable(onClick = onClick),
+        elevation = CardDefaults.cardElevation(4.dp)
+    ) {
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier
+                .padding(horizontal = 16.dp, vertical = 8.dp)
+                .fillMaxWidth()
+        ) {
+            Icon(
+                imageVector = icon,
+                contentDescription = "Icon",
+                modifier = Modifier.padding(end = 16.dp),
+            )
+            Text(
+                text = text,
+                style = MaterialTheme.typography.titleMedium,
+                modifier = Modifier.fillMaxWidth(),
+            )
+        }
+    }
+}
