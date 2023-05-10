@@ -38,20 +38,12 @@ class MyNotificationListenerService : NotificationListenerService() {
     override fun onNotificationPosted(sbn: StatusBarNotification) {
 
         // get package Name
-        val packageName = sbn.notification.smallIcon.resPackage
+        val packageName = sbn.packageName
 
         // get application name
+        val pm = context.packageManager
+        val appName = pm.getApplicationLabel(pm.getApplicationInfo(packageName, PackageManager.GET_META_DATA)).toString()
 
-        val applicationInfo: ApplicationInfo = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            packageManager.getApplicationInfo(
-                packageName,
-                PackageManager.ApplicationInfoFlags.of(0)
-            )
-        } else {
-            packageManager.getApplicationInfo(packageName, PackageManager.GET_META_DATA)
-        }
-
-        val appName = context.packageManager.getApplicationLabel(applicationInfo).toString()
 
         // get user name
         val extras = sbn.notification.extras
