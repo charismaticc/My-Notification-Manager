@@ -2,10 +2,10 @@ package com.sharipov.mynotificationmanager.ui.settings
 
 
 import android.annotation.SuppressLint
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material.icons.filled.Menu
@@ -13,9 +13,8 @@ import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
@@ -26,6 +25,12 @@ import com.sharipov.mynotificationmanager.utils.Constants
 import com.sharipov.mynotificationmanager.viewmodel.HomeViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
+import com.sharipov.mynotificationmanager.ui.settings.components.ClickableListItem
+import com.sharipov.mynotificationmanager.ui.settings.components.aboutUsDialog
+import com.sharipov.mynotificationmanager.ui.settings.components.autoRemoveDialog
+import com.sharipov.mynotificationmanager.ui.settings.components.feedbackDialog
+import com.sharipov.mynotificationmanager.ui.settings.components.privatePolicyDialog
+import com.sharipov.mynotificationmanager.ui.settings.components.selectAppsDialog
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
@@ -38,6 +43,19 @@ fun SettingsScreen(
 ) {
     val currentNavBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = currentNavBackStackEntry?.destination?.route ?: Constants.Screens.SETTINGS_SCREEN
+    val context = LocalContext.current
+
+    val openAutoRemoveDialog = remember { mutableStateOf(false) }
+    val openSelectAppsDialog = remember { mutableStateOf(false) }
+    val openPrivatePolicyDialog = remember { mutableStateOf(false) }
+    val openFeedbackDialog = remember { mutableStateOf(false) }
+    val openAboutUsDialog = remember { mutableStateOf(false) }
+
+
+    val scope = rememberCoroutineScope()
+    var selectedTime by remember { mutableStateOf("Newer") }
+    val showAutoDeleteDialog= remember { mutableStateOf(false) }
+
 
     ModalNavigationDrawer(
         drawerContent = {
@@ -81,77 +99,66 @@ fun SettingsScreen(
                 LazyColumn(
                     verticalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
+
+                    item { Spacer(modifier = Modifier.height(64.dp)) }
+
                     item {
                         ClickableListItem(
-                            text = "Display theme",
-                            icon = Icons.Default.Settings,
-                            onClick = {}
+                            text = "Automatic deletion of notifications",
+                            icon = Icons.Default.Delete,
+                            onClick = {
+                                openAutoRemoveDialog.value = true
+                            }
                         )
                     }
                     item {
                         ClickableListItem(
                             text = "Select apps",
                             icon = Icons.Default.Notifications,
-                            onClick = {}
+                            onClick = {
+                                openSelectAppsDialog.value = true
+                            }
                         )
                     }
                     item {
                         ClickableListItem(
                             text = "Private policy",
                             icon = Icons.Default.Lock,
-                            onClick = {}
+                            onClick = {
+                                openPrivatePolicyDialog.value = true
+                            }
                         )
                     }
                     item {
                         ClickableListItem(
                             text = "Feedback",
                             icon = Icons.Default.Notifications,
-                            onClick = {}
+                            onClick = {
+                                openFeedbackDialog.value = true
+                            }
                         )
                     }
                     item {
                         ClickableListItem(
                             text = "About us",
                             icon = Icons.Default.Info,
-                            onClick = {}
+                            onClick = {
+                                openAboutUsDialog.value = true
+                            }
                         )
                     }
                 }
+                when {
+                    openAutoRemoveDialog.value -> openAutoRemoveDialog.value = autoRemoveDialog(
+                        selectedTime = selectedTime,
+                        onDismiss = { showAutoDeleteDialog.value = false },
+                        onTimeSelected = { selectedTime = it })
+                    openSelectAppsDialog.value -> openSelectAppsDialog.value = selectAppsDialog()
+                    openPrivatePolicyDialog.value -> openPrivatePolicyDialog.value = privatePolicyDialog()
+                    openFeedbackDialog.value -> openFeedbackDialog.value = feedbackDialog()
+                    openAboutUsDialog.value -> openAboutUsDialog.value = aboutUsDialog()
+                }
             }
         )
-    }
-}
-
-@Composable
-fun ClickableListItem(
-    text: String,
-    icon: ImageVector,
-    onClick: () -> Unit,
-    modifier: Modifier = Modifier,
-) {
-    Card(
-        modifier = modifier
-            .padding(8.dp)
-            .fillMaxWidth()
-            .clickable(onClick = onClick),
-        elevation = CardDefaults.cardElevation(4.dp)
-    ) {
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier
-                .padding(horizontal = 16.dp, vertical = 8.dp)
-                .fillMaxWidth()
-        ) {
-            Icon(
-                imageVector = icon,
-                contentDescription = "Icon",
-                modifier = Modifier.padding(end = 16.dp),
-            )
-            Text(
-                text = text,
-                style = MaterialTheme.typography.titleMedium,
-                modifier = Modifier.fillMaxWidth(),
-            )
-        }
     }
 }

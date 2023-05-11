@@ -7,6 +7,7 @@ import android.content.pm.PackageManager
 import android.os.Build
 import android.service.notification.NotificationListenerService
 import android.service.notification.StatusBarNotification
+import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.room.Room
 import com.sharipov.mynotificationmanager.data.AppDatabase
@@ -52,9 +53,11 @@ class MyNotificationListenerService : NotificationListenerService() {
         // wrong path when switching to a user whose name contains this character
 
         // get notification text
-        val text = extras.getString(Notification.EXTRA_TEXT).toString()
+        var text= extras.getCharSequence(Notification.EXTRA_TEXT)?.toString() ?: ""
+        text += extras.getCharSequence(Notification.EXTRA_BIG_TEXT)?.toString() ?: ""
 
 
+        Log.d("mail", text)
 
         GlobalScope.launch(Dispatchers.IO) {
             val count = notificationDao.checkNotificationExists(user, text, packageName, appName)

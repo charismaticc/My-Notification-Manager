@@ -13,7 +13,6 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.sharipov.mynotificationmanager.navigation.Screens
@@ -51,10 +50,4 @@ fun Splash(alpha: Float){
             tint = MaterialTheme.colorScheme.primary
         )
     }
-}
-
-@Composable
-@Preview
-fun preSplash(){
-    Splash(alpha = 1f)
 }

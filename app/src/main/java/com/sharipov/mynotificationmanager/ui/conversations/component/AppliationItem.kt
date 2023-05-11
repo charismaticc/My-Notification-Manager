@@ -34,7 +34,6 @@ fun ApplicationItem(packageName: String, modifier: Modifier) {
         ).toString()
     } catch (e: PackageManager.NameNotFoundException) {
         // handle the error, e.g. show a placeholder name
-        // ...
         "Unknown"
     }
 

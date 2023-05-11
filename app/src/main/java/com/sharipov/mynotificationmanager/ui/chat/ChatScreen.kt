@@ -19,7 +19,7 @@ import com.sharipov.mynotificationmanager.viewmodel.HomeViewModel
 import java.util.*
 
 @OptIn(ExperimentalMaterial3Api::class)
-@SuppressLint("FlowOperatorInvokedInComposition")
+@SuppressLint("FlowOperatorInvokedInComposition", "UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun ChatScreen(
     homeViewModel: HomeViewModel,
