@@ -1,6 +1,6 @@
 @file:OptIn(ExperimentalMaterial3Api::class)
 
-package com.sharipov.mynotificationmanager.ui.allapplivation
+package com.sharipov.mynotificationmanager.ui.allapplication
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.clickable
@@ -19,10 +19,10 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import com.sharipov.mynotificationmanager.ui.drawer.AppDrawer
 import com.sharipov.mynotificationmanager.navigation.Screens
 import com.sharipov.mynotificationmanager.ui.conversations.component.ApplicationItem
+import com.sharipov.mynotificationmanager.ui.transparentSystemBars.TransparentSystemBars
 import com.sharipov.mynotificationmanager.utils.Constants
 import com.sharipov.mynotificationmanager.viewmodel.HomeViewModel
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import java.util.*
 
@@ -41,6 +41,8 @@ fun ApplicationsScreen(
     val currentRoute = currentNavBackStackEntry?.destination?.route ?: Constants.Screens.APPLICATION_SCREEN
 
     val applicationListState = homeViewModel.getApplications().collectAsState(initial = listOf())
+
+    TransparentSystemBars()
 
     ModalNavigationDrawer(
         drawerContent = {

@@ -95,6 +95,9 @@ dependencies {
     // Room test helpers
     testImplementation "androidx.room:room-testing:$room_version"
 
-    //AndroidX Preferences DataStore 
+    // AndroidX Preferences DataStore
     implementation "androidx.datastore:datastore-preferences:1.0.0"
+
+    // Accompanist System UI ControllerAccompanist System UI Controller
+    implementation "com.google.accompanist:accompanist-systemuicontroller:0.31.0-alpha"
 }

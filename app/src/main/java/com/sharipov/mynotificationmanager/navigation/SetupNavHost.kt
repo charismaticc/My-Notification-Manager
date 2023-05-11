@@ -8,7 +8,7 @@ import com.sharipov.mynotificationmanager.ui.allnotifications.AllNotificationScr
 import com.sharipov.mynotificationmanager.ui.conversations.ConversationsScreen
 import com.sharipov.mynotificationmanager.ui.details.DetailsScreen
 import com.sharipov.mynotificationmanager.ui.favorite.FavoriteScreen
-import com.sharipov.mynotificationmanager.ui.allapplivation.ApplicationsScreen
+import com.sharipov.mynotificationmanager.ui.allapplication.ApplicationsScreen
 import com.sharipov.mynotificationmanager.ui.chat.ChatScreen
 import com.sharipov.mynotificationmanager.ui.settings.SettingsScreen
 import com.sharipov.mynotificationmanager.ui.splashscreen.SplashScreen
