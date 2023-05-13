@@ -7,25 +7,19 @@ import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.text.KeyboardActions
-import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Menu
-import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.text.input.ImeAction
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.sharipov.mynotificationmanager.model.NotificationEntity
-import com.sharipov.mynotificationmanager.ui.drawer.AppDrawer
 import com.sharipov.mynotificationmanager.navigation.Screens
 import com.sharipov.mynotificationmanager.ui.allnotifications.component.NotificationItem
+import com.sharipov.mynotificationmanager.ui.appcomponent.SearchTopBarContent
+import com.sharipov.mynotificationmanager.ui.drawer.AppDrawer
 import com.sharipov.mynotificationmanager.ui.transparentSystemBars.TransparentSystemBars
 import com.sharipov.mynotificationmanager.utils.Constants
 import com.sharipov.mynotificationmanager.viewmodel.HomeViewModel
@@ -73,33 +67,13 @@ fun AllNotificationScreen (
         ) {
             Scaffold(
                 topBar = {
-                    CenterAlignedTopAppBar(
-                        title = {
-                            Text(
-                                "All notification",
-                                maxLines = 1,
-                                overflow = TextOverflow.Ellipsis
-                            )
-                        },
-                        navigationIcon = {
-                            IconButton(
-                                onClick = {
-                                    coroutineScope.launch { drawerState.open() }
-                                }) {
-                                Icon(
-                                    imageVector = Icons.Filled.Menu,
-                                    contentDescription = "Localized description"
-                                )
-                            }
-                        },
-                        actions = {
-                            IconButton(onClick = { searchVisible = !searchVisible }) {
-                                Icon(
-                                    imageVector = Icons.Filled.Search,
-                                    contentDescription = "Localized description"
-                                )
-                            }
-                        }
+                    SearchTopBarContent(
+                        title = "All notification",
+                        onMenuClick = { coroutineScope.launch { drawerState.open() } },
+                        onSearchClick = { searchVisible = !searchVisible },
+                        searchVisible = searchVisible,
+                        searchText = searchText,
+                        onSearchTextChange = { searchText = it }
                     )
                 },
                 content = {
@@ -108,42 +82,31 @@ fun AllNotificationScreen (
                         verticalArrangement = Arrangement.Top,
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
-                        Spacer(modifier = Modifier.height(64.dp))
+
+                        Spacer(modifier = Modifier.padding(32.dp))
 
                         AnimatedVisibility(
                             visible = !searchVisible
                         ) {
 
                             Card(
-                                modifier = Modifier.fillMaxWidth()
+                                modifier = Modifier
+                                    .fillMaxWidth()
                                     .padding(start = 16.dp, top = 16.dp, end = 16.dp, bottom = 8.dp)
                             ) {
                                 Text(
                                     text = "Count of your notification: ${notificationFlow.size}",
-                                    modifier = Modifier.align(Alignment.CenterHorizontally).padding(8.dp)
+                                    modifier = Modifier
+                                        .align(Alignment.CenterHorizontally)
+                                        .padding(8.dp)
                                 )
                             }
                         }
 
                         AnimatedVisibility(
-                            visible = searchVisible,
+                            visible = searchVisible
                         ) {
-                            OutlinedTextField(
-                                value = searchText,
-                                onValueChange = { searchText = it },
-                                label = { Text("Search") },
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .padding(16.dp),
-                                keyboardOptions = KeyboardOptions(
-                                    imeAction = ImeAction.Done
-                                ),
-                                keyboardActions = KeyboardActions(
-                                    onDone = {
-                                        searchVisible = false
-                                    }
-                                )
-                            )
+                            Spacer(modifier = Modifier.padding(32.dp))
                         }
 
                         AnimatedVisibility(
@@ -153,7 +116,9 @@ fun AllNotificationScreen (
                                 items(notificationFlow.size) { index ->
                                     val notification = notificationFlow[index]
                                     NotificationItem(notificationEntity = notification,
-                                        Modifier.fillMaxSize().padding(16.dp, 16.dp, 16.dp)
+                                        Modifier
+                                            .fillMaxSize()
+                                            .padding(16.dp, 16.dp, 16.dp)
                                             .combinedClickable(
                                                 onClick = {
                                                     navController.navigate(
@@ -174,17 +139,19 @@ fun AllNotificationScreen (
                                                         )
                                                     )
 
-                                                    val msg = if(!notification.favorite) {
+                                                    val msg = if (!notification.favorite) {
                                                         "add to"
                                                     } else {
                                                         "removed from"
                                                     }
 
-                                                    Toast.makeText(
-                                                        context,
-                                                        "Notification $msg favorite!",
-                                                        Toast.LENGTH_SHORT
-                                                    ).show()
+                                                    Toast
+                                                        .makeText(
+                                                            context,
+                                                            "Notification $msg favorite!",
+                                                            Toast.LENGTH_SHORT
+                                                        )
+                                                        .show()
                                                 }
                                             )
                                     )

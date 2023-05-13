@@ -10,17 +10,15 @@ import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.Notifications
-import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.sharipov.mynotificationmanager.ui.drawer.AppDrawer
 import com.sharipov.mynotificationmanager.navigation.Screens
+import com.sharipov.mynotificationmanager.ui.appcomponent.TopBarContent
 import com.sharipov.mynotificationmanager.utils.Constants
 import com.sharipov.mynotificationmanager.viewmodel.HomeViewModel
 import kotlinx.coroutines.CoroutineScope
@@ -34,7 +32,6 @@ import com.sharipov.mynotificationmanager.ui.settings.components.selectAppsDialo
 import com.sharipov.mynotificationmanager.ui.transparentSystemBars.TransparentSystemBars
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SettingsScreen(
     homeViewModel: HomeViewModel,
@@ -44,7 +41,6 @@ fun SettingsScreen(
 ) {
     val currentNavBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = currentNavBackStackEntry?.destination?.route ?: Constants.Screens.SETTINGS_SCREEN
-    val context = LocalContext.current
 
     val openAutoRemoveDialog = remember { mutableStateOf(false) }
     val openSelectAppsDialog = remember { mutableStateOf(false) }
@@ -52,7 +48,6 @@ fun SettingsScreen(
     val openFeedbackDialog = remember { mutableStateOf(false) }
     val openAboutUsDialog = remember { mutableStateOf(false) }
 
-    val scope = rememberCoroutineScope()
     var selectedTime by remember { mutableStateOf("Newer") }
     val showAutoDeleteDialog= remember { mutableStateOf(false) }
 
@@ -75,25 +70,10 @@ fun SettingsScreen(
         Scaffold(
             modifier  = Modifier,
             topBar = {
-                CenterAlignedTopAppBar(
-                    title = {
-                        Text(
-                            "Settings",
-                            maxLines = 1,
-                            overflow = TextOverflow.Ellipsis
-                        )
-                    },
-                    navigationIcon = {
-                        IconButton(
-                            onClick = {
-                                coroutineScope.launch { drawerState.open() }
-                            }) {
-                            Icon(
-                                imageVector = Icons.Filled.Menu,
-                                contentDescription = "Localized description"
-                            )
-                        }
-                    },
+                TopBarContent(
+                    title = "Settings",
+                    icon = Icons.Filled.Menu,
+                    onNavigationClick = { coroutineScope.launch { drawerState.open() } }
                 )
             },
             content = {
