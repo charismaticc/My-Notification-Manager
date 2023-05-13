@@ -1,12 +1,8 @@
 package com.sharipov.mynotificationmanager.ui.allnotifications
 
 import android.annotation.SuppressLint
-import android.util.Log
 import android.widget.Toast
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.core.tween
-import androidx.compose.animation.slideInVertically
-import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.*
@@ -53,8 +49,6 @@ fun AllNotificationScreen (
         val currentNavBackStackEntry by navController.currentBackStackEntryAsState()
         val currentRoute = currentNavBackStackEntry?.destination?.route ?: Constants.Screens.APPLICATION_SCREEN
         val notificationListState = homeViewModel.notificationListFlow.collectAsState(initial = listOf())
-
-
 
         TransparentSystemBars()
 
