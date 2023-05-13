@@ -17,6 +17,7 @@ interface HomeViewModelAbstract {
     fun getApplications() : Flow<List<String>>
     fun getApplicationNotifications(packageName: String) : Flow<List<NotificationEntity>>
     fun getFavoriteNotifications() : Flow<List<NotificationEntity>>
+    fun searchNotifications(query: String): Flow<List<NotificationEntity>>
     fun addNotification(notification: NotificationEntity)
     fun upgradeNotification(notification: NotificationEntity)
     fun deleteNotification(notification: NotificationEntity)
@@ -30,14 +31,24 @@ class HomeViewModel
 ): ViewModel(), HomeViewModelAbstract {
 
     private val ioScope = CoroutineScope(Dispatchers.IO)
-    override val notificationListFlow: Flow<List<NotificationEntity>> = notificationRepository.getAllFlow()
 
-    override fun getAllUserNotifications(userName: String, packageName: String) = notificationRepository.getAllUserNotifications(userName, packageName)
-    override fun getApplications() = notificationRepository.getApplications()
+    override val notificationListFlow: Flow<List<NotificationEntity>> =
+        notificationRepository.getAllFlow()
 
-    override fun getFavoriteNotifications() = notificationRepository.getFavoriteNotifications()
+    override fun getAllUserNotifications(userName: String, packageName: String) =
+        notificationRepository.getAllUserNotifications(userName, packageName)
 
-    override fun getApplicationNotifications(packageName: String) = notificationRepository.getApplicationNotifications(packageName)
+    override fun getApplications() =
+        notificationRepository.getApplications()
+
+    override fun getFavoriteNotifications() =
+        notificationRepository.getFavoriteNotifications()
+
+    override fun searchNotifications(query: String): Flow<List<NotificationEntity>> =
+        notificationRepository.searchNotifications(query)
+
+    override fun getApplicationNotifications(packageName: String) =
+        notificationRepository.getApplicationNotifications(packageName)
 
     override fun addNotification(notification: NotificationEntity) {
       ioScope.launch {

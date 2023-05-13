@@ -6,21 +6,35 @@ import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface NotificationDao {
-
     @Query("SELECT * FROM notification ORDER BY id DESC")
     fun getAllFlow(): Flow<List<NotificationEntity>>
 
     @Query("SELECT * FROM notification WHERE user = :user AND packageName = :packageName ORDER BY id DESC")
     fun getAllUserNotifications(user: String, packageName: String): Flow<List<NotificationEntity>>
 
+    @Query(
+        "SELECT * FROM notification WHERE " +
+            "text LIKE '%' || :query || '%' OR " +
+            "user LIKE '%' || :query || '%' OR " +
+            "packageName LIKE '%' || :query || '%'"
+    )
+    fun searchNotifications(query: String): Flow<List<NotificationEntity>>
+
     @Query("SELECT * FROM notification WHERE favorite = 1")
     fun getFavoriteNotifications(): Flow<List<NotificationEntity>>
+
     @Query("SELECT DISTINCT packageName FROM notification")
     fun getApplications(): Flow<List<String>>
+
     @Query("SELECT * FROM notification WHERE packageName = :packageName")
     fun getApplicationNotifications(packageName: String): Flow<List<NotificationEntity>>
 
-    @Query("SELECT COUNT(*) FROM notification WHERE user = :user AND text = :text AND packageName = :packageName AND appName = :appName")
+    @Query(
+        "SELECT COUNT(*) FROM notification WHERE user = :user " +
+            "AND text = :text " +
+            "AND packageName = :packageName " +
+            "AND appName = :appName"
+    )
     suspend fun checkNotificationExists(user: String, text: String, packageName: String, appName: String): Int
 
     @Query("DELETE FROM notification WHERE user = :user AND packageName = :packageName")
@@ -34,5 +48,4 @@ interface NotificationDao {
 
     @Delete
     suspend fun delete(notification: NotificationEntity)
-
 }

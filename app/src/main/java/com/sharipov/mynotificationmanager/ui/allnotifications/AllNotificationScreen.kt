@@ -48,7 +48,12 @@ fun AllNotificationScreen (
         var searchText by remember { mutableStateOf("") }
         val currentNavBackStackEntry by navController.currentBackStackEntryAsState()
         val currentRoute = currentNavBackStackEntry?.destination?.route ?: Constants.Screens.APPLICATION_SCREEN
-        val notificationListState = homeViewModel.notificationListFlow.collectAsState(initial = listOf())
+
+        val notificationFlow = if (searchText.isNotBlank()) {
+            homeViewModel.searchNotifications(searchText).collectAsState(emptyList()).value
+        } else {
+            homeViewModel.notificationListFlow.collectAsState(emptyList()).value
+        }
 
         TransparentSystemBars()
 
@@ -110,10 +115,11 @@ fun AllNotificationScreen (
                         ) {
 
                             Card(
-                                modifier = Modifier.fillMaxWidth().padding(start = 16.dp, top = 16.dp, end = 16.dp, bottom = 8.dp)
+                                modifier = Modifier.fillMaxWidth()
+                                    .padding(start = 16.dp, top = 16.dp, end = 16.dp, bottom = 8.dp)
                             ) {
                                 Text(
-                                    text = "Count of your notification: ${notificationListState.value.size}",
+                                    text = "Count of your notification: ${notificationFlow.size}",
                                     modifier = Modifier.align(Alignment.CenterHorizontally).padding(8.dp)
                                 )
                             }
@@ -144,50 +150,44 @@ fun AllNotificationScreen (
                             visible = !searchVisible || searchText.isNotEmpty(),
                         ) {
                             LazyColumn {
-                                items(notificationListState.value.size) { index ->
-                                    val notification = notificationListState.value[index]
-                                    if (searchText.lowercase() in notification.packageName.lowercase() ||
-                                        searchText.lowercase() in notification.user.lowercase() ||
-                                        searchText.lowercase() in notification.text.lowercase() &&
-                                        searchText != ""
-                                    ) {
-                                        NotificationItem(notificationEntity = notification,
-                                            Modifier.fillMaxSize().padding(16.dp, 16.dp, 16.dp)
-                                                .combinedClickable(
-                                                    onClick = {
-                                                        navController.navigate(
-                                                            Screens.Details.route +
-                                                                    "/${notification.id.toString()}"
+                                items(notificationFlow.size) { index ->
+                                    val notification = notificationFlow[index]
+                                    NotificationItem(notificationEntity = notification,
+                                        Modifier.fillMaxSize().padding(16.dp, 16.dp, 16.dp)
+                                            .combinedClickable(
+                                                onClick = {
+                                                    navController.navigate(
+                                                        Screens.Details.route +
+                                                                "/${notification.id.toString()}"
+                                                    )
+                                                },
+                                                onLongClick = {
+                                                    homeViewModel.upgradeNotification(
+                                                        notification = NotificationEntity(
+                                                            id = notification.id,
+                                                            appName = notification.appName,
+                                                            packageName = notification.packageName,
+                                                            user = notification.user,
+                                                            text = notification.text,
+                                                            time = notification.time,
+                                                            favorite = !notification.favorite
                                                         )
-                                                    },
-                                                    onLongClick = {
-                                                        homeViewModel.upgradeNotification(
-                                                            notification = NotificationEntity(
-                                                                id = notification.id,
-                                                                appName = notification.appName,
-                                                                packageName = notification.packageName,
-                                                                user = notification.user,
-                                                                text = notification.text,
-                                                                time = notification.time,
-                                                                favorite = !notification.favorite
-                                                            )
-                                                        )
+                                                    )
 
-                                                        val msg = if(!notification.favorite) {
-                                                            "add to"
-                                                        } else {
-                                                            "removed from"
-                                                        }
-
-                                                        Toast.makeText(
-                                                            context,
-                                                            "Notification $msg favorite!",
-                                                            Toast.LENGTH_SHORT
-                                                        ).show()
+                                                    val msg = if(!notification.favorite) {
+                                                        "add to"
+                                                    } else {
+                                                        "removed from"
                                                     }
-                                                )
-                                        )
-                                    }
+
+                                                    Toast.makeText(
+                                                        context,
+                                                        "Notification $msg favorite!",
+                                                        Toast.LENGTH_SHORT
+                                                    ).show()
+                                                }
+                                            )
+                                    )
                                 }
                                 item { Spacer(modifier = Modifier.height(16.dp)) }
                             }
