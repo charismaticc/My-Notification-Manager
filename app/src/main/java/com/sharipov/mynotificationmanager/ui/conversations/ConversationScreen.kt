@@ -16,12 +16,13 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.sharipov.mynotificationmanager.navigation.Screens
 import com.sharipov.mynotificationmanager.ui.conversations.component.UserItem
+import com.sharipov.mynotificationmanager.ui.transparentSystemBars.TransparentSystemBars
 import com.sharipov.mynotificationmanager.viewmodel.HomeViewModel
 import kotlinx.coroutines.flow.map
 import java.util.*
 
 @OptIn(ExperimentalMaterial3Api::class)
-@SuppressLint("FlowOperatorInvokedInComposition")
+@SuppressLint("FlowOperatorInvokedInComposition", "UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun ConversationsScreen(
     homeViewModel: HomeViewModel,
@@ -33,6 +34,8 @@ fun ConversationsScreen(
     val usersListState = notificationsFlow
         .map { list -> list.distinctBy { it.user } }
         .collectAsState(initial = listOf())
+
+    TransparentSystemBars()
 
     Scaffold(
         modifier = Modifier.fillMaxSize(),

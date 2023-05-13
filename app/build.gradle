@@ -50,8 +50,8 @@ android {
 
 dependencies {
 
+    // Drawable painter
     implementation "com.google.accompanist:accompanist-drawablepainter:0.30.0"
-
 
     // Hilt
     implementation 'com.google.dagger:hilt-android:2.45'

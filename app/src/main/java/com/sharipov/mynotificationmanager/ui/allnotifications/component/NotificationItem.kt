@@ -7,7 +7,6 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import com.google.accompanist.drawablepainter.rememberDrawablePainter
@@ -32,7 +31,7 @@ fun NotificationItem(notificationEntity: NotificationEntity, modifier: Modifier)
         modifier = modifier
     ) {
         Box(modifier = Modifier.fillMaxSize()) {
-            Row(modifier = Modifier.padding(8.dp, 16.dp, 16.dp, 16.dp)) {
+            Row(modifier = Modifier.padding(start = 16.dp, end =  16.dp, bottom =  16.dp)) {
                 Image(
                     painter = rememberDrawablePainter(appIconDrawable),
                     contentDescription = "App icon",

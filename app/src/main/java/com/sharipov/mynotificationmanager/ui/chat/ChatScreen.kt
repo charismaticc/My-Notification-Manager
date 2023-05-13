@@ -15,6 +15,7 @@ import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.sharipov.mynotificationmanager.ui.chat.components.ChatItem
+import com.sharipov.mynotificationmanager.ui.transparentSystemBars.TransparentSystemBars
 import com.sharipov.mynotificationmanager.viewmodel.HomeViewModel
 import java.util.*
 
@@ -29,8 +30,9 @@ fun ChatScreen(
 ) {
     val notificationsFlow = homeViewModel.getAllUserNotifications(userName, packageName)
     val notificationListState = notificationsFlow.collectAsState(initial = listOf())
-
     var expanded by remember { mutableStateOf(false) }
+
+    TransparentSystemBars()
 
     Scaffold(
         modifier = Modifier.fillMaxSize(),

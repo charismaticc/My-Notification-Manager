@@ -16,10 +16,14 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.sharipov.mynotificationmanager.navigation.Screens
+import com.sharipov.mynotificationmanager.ui.transparentSystemBars.TransparentSystemBars
 import kotlinx.coroutines.delay
 
 @Composable
 fun SplashScreen(navController: NavController){
+
+    TransparentSystemBars()
+
     var startAnimate by remember {
         mutableStateOf(false)
     }

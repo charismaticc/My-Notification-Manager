@@ -17,6 +17,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import com.sharipov.mynotificationmanager.ui.drawer.AppDrawer
 import com.sharipov.mynotificationmanager.navigation.Screens
 import com.sharipov.mynotificationmanager.ui.allnotifications.component.NotificationItem
+import com.sharipov.mynotificationmanager.ui.transparentSystemBars.TransparentSystemBars
 import com.sharipov.mynotificationmanager.utils.Constants
 import com.sharipov.mynotificationmanager.viewmodel.HomeViewModel
 import kotlinx.coroutines.CoroutineScope
@@ -36,6 +37,8 @@ fun FavoriteScreen(
     val currentRoute = currentNavBackStackEntry?.destination?.route ?: Constants.Screens.FAVORITE_SCREEN
 
     val notificationListState = homeViewModel.getFavoriteNotifications().collectAsState(initial = listOf())
+
+    TransparentSystemBars()
 
     ModalNavigationDrawer(
         drawerContent = {

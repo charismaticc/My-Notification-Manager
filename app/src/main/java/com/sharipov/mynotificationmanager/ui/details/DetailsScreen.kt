@@ -16,6 +16,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.sharipov.mynotificationmanager.ui.transparentSystemBars.TransparentSystemBars
 import com.sharipov.mynotificationmanager.viewmodel.HomeViewModel
 import kotlinx.coroutines.flow.map
 import java.text.SimpleDateFormat
@@ -31,8 +32,9 @@ fun DetailsScreen(homeViewModel: HomeViewModel, notificationId: String) {
         notifications.firstOrNull { it.id == notificationId.toInt() }
     }
     val notificationState  = notification.collectAsState(initial = null)
-
     val dateFormat = SimpleDateFormat("dd.MM.yyyy HH:mm:ss", Locale.getDefault())
+
+    TransparentSystemBars()
 
     Surface(
         modifier = Modifier.fillMaxSize()
