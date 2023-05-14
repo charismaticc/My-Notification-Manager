@@ -14,6 +14,7 @@ interface HomeViewModelAbstract {
 
     val notificationListFlow: Flow<List<NotificationEntity>>
     fun getAllUserNotifications(userName: String, packageName: String) : Flow<List<NotificationEntity>>
+    fun searchUserNotifications(userName: String, packageName: String, query: String) : Flow<List<NotificationEntity>>
     fun getApplications() : Flow<List<String>>
     fun getApplicationNotifications(packageName: String) : Flow<List<NotificationEntity>>
     fun getFavoriteNotifications() : Flow<List<NotificationEntity>>
@@ -37,6 +38,9 @@ class HomeViewModel
 
     override fun getAllUserNotifications(userName: String, packageName: String) =
         notificationRepository.getAllUserNotifications(userName, packageName)
+
+    override fun searchUserNotifications(userName: String, packageName: String, query: String) =
+        notificationRepository.searchUserNotifications(userName, packageName, query)
 
     override fun getApplications() =
         notificationRepository.getApplications()

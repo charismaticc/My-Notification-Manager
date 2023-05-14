@@ -15,6 +15,13 @@ interface NotificationDao {
     @Query("SELECT * FROM notification WHERE user = :user AND packageName = :packageName ORDER BY id DESC")
     fun getAllUserNotifications(user: String, packageName: String): Flow<List<NotificationEntity>>
 
+    // Search for notifications by text for a specific user and package in reverse order
+    @Query("SELECT * FROM notification WHERE user = :user " +
+            "AND packageName = :packageName " +
+            "AND text LIKE '%' || :query || '%' " +
+            "ORDER BY id DESC")
+    fun searchUserNotifications(user: String, packageName: String, query: String): Flow<List<NotificationEntity>>
+
     // Search for notifications by text, user, or package name
     @Query(
         "SELECT * FROM notification WHERE " +

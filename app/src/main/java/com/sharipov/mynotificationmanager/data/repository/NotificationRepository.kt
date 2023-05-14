@@ -11,6 +11,8 @@ class NotificationRepository(
         notificationDao.getAllFlow()
     fun getAllUserNotifications(userName: String, packageName: String): Flow<List<NotificationEntity>> =
         notificationDao.getAllUserNotifications(userName, packageName)
+    fun searchUserNotifications(userName: String, packageName: String, query: String): Flow<List<NotificationEntity>> =
+        notificationDao.searchUserNotifications(userName, packageName, query)
     fun getFavoriteNotifications(): Flow<List<NotificationEntity>> =
         notificationDao.getFavoriteNotifications()
     fun getApplications(): Flow<List<String>> =
