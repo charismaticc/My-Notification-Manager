@@ -2,26 +2,25 @@ package com.sharipov.mynotificationmanager.services
 
 import android.app.Notification
 import android.content.Context
-import android.content.pm.ApplicationInfo
 import android.content.pm.PackageManager
 import android.os.Build
 import android.service.notification.NotificationListenerService
 import android.service.notification.StatusBarNotification
-import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.room.Room
 import com.sharipov.mynotificationmanager.data.AppDatabase
+import com.sharipov.mynotificationmanager.data.ExcludedAppDao
 import com.sharipov.mynotificationmanager.data.NotificationDao
 import com.sharipov.mynotificationmanager.model.NotificationEntity
-import kotlinx.coroutines.DelicateCoroutinesApi
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
 
 class MyNotificationListenerService : NotificationListenerService() {
 
     private lateinit var notificationDao: NotificationDao
+    private lateinit var excludedAppDao: ExcludedAppDao
     private lateinit var context: Context
     override fun onCreate() {
         super.onCreate()
@@ -31,40 +30,51 @@ class MyNotificationListenerService : NotificationListenerService() {
             "notification.db"
         ).build()
         notificationDao = database.notificationDao()
+        excludedAppDao = database.excludedAppDao()
         context = applicationContext
     }
 
-    @OptIn(DelicateCoroutinesApi::class)
     @RequiresApi(Build.VERSION_CODES.S)
     override fun onNotificationPosted(sbn: StatusBarNotification) {
 
         // get package Name
         val packageName = sbn.packageName
 
-        // get application name
-        val pm = context.packageManager
-        val appName = pm.getApplicationLabel(pm.getApplicationInfo(packageName, PackageManager.GET_META_DATA)).toString()
+        val coroutineScope = CoroutineScope(Dispatchers.IO)
+        coroutineScope.launch {
+            val excludedApp = excludedAppDao.getExcludedAppByPackageName(packageName)
+            val isExcluded = (excludedApp != null)
 
+            if (!isExcluded) {
+                // get application name
+                val pm = context.packageManager
+                val appName =
+                    pm.getApplicationLabel(pm.getApplicationInfo(packageName, PackageManager.GET_META_DATA)).toString()
 
-        // get user name
-        val extras = sbn.notification.extras
-        val user = extras.getString(Notification.EXTRA_TITLE).toString().replace("/", "-")
-        // We change '/' to '-' because the tail gives an error indicating the
-        // wrong path when switching to a user whose name contains this character
+                // get user name
+                val extras = sbn.notification.extras
+                val user = extras.getString(Notification.EXTRA_TITLE).toString().replace("/", "-")
+                // We change '/' to '-' because the tail gives an error indicating the
+                // wrong path when switching to a user whose name contains this character
 
-        // get notification text
-        var text= extras.getCharSequence(Notification.EXTRA_TEXT)?.toString() ?: ""
-        text += extras.getCharSequence(Notification.EXTRA_BIG_TEXT)?.toString() ?: ""
+                // get notification text
+                var text = extras.getCharSequence(Notification.EXTRA_TEXT)?.toString() ?: ""
+                text += extras.getCharSequence(Notification.EXTRA_BIG_TEXT)?.toString() ?: ""
 
-
-        Log.d("mail", text)
-
-        GlobalScope.launch(Dispatchers.IO) {
-            val count = notificationDao.checkNotificationExists(user, text, packageName, appName)
-            if (count == 0) {
-                val notificationEntity =
-                    NotificationEntity(null, appName, packageName, user, text, System.currentTimeMillis(), false)
-                notificationDao.insert(notificationEntity)
+                val count = notificationDao.checkNotificationExists(user, text, packageName, appName)
+                if (count == 0) {
+                    val notificationEntity =
+                        NotificationEntity(
+                            null,
+                            appName,
+                            packageName,
+                            user,
+                            text,
+                            System.currentTimeMillis(),
+                            false
+                        )
+                    notificationDao.insert(notificationEntity)
+                }
             }
         }
     }
