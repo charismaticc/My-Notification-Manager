@@ -55,8 +55,8 @@ dependencies {
 
     // Hilt
     implementation 'com.google.dagger:hilt-android:2.45'
-    implementation 'androidx.wear.compose:compose-material3:1.0.0-alpha03'
-    implementation 'com.google.android.material:material:1.5.0'
+    implementation 'androidx.wear.compose:compose-material3:1.0.0-alpha04'
+    implementation 'com.google.android.material:material:1.9.0'
     kapt 'com.google.dagger:hilt-compiler:2.45'
     implementation 'androidx.hilt:hilt-navigation-compose:1.0.0'
 
@@ -73,13 +73,13 @@ dependencies {
     def nav_version = "2.5.3"
     implementation "androidx.navigation:navigation-compose:$nav_version"
 
-    implementation 'androidx.core:core-ktx:1.7.0'
-    implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.3.1'
+    implementation 'androidx.core:core-ktx:1.10.1'
+    implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.6.1'
     implementation 'androidx.activity:activity-compose:1.7.1'
     implementation "androidx.compose.ui:ui:$compose_version"
     implementation "androidx.compose.ui:ui-tooling-preview:$compose_version"
-    implementation 'androidx.compose.material3:material3:1.1.0-rc01'
-    implementation "androidx.compose.runtime:runtime:1.4.2"
+    implementation 'androidx.compose.material3:material3:1.2.0-alpha01'
+    implementation "androidx.compose.runtime:runtime:1.4.3"
 
 
     // unit tests
@@ -94,9 +94,6 @@ dependencies {
 
     // Room test helpers
     testImplementation "androidx.room:room-testing:$room_version"
-
-    // AndroidX Preferences DataStore
-    implementation "androidx.datastore:datastore-preferences:1.0.0"
 
     // Accompanist System UI ControllerAccompanist System UI Controller
     implementation "com.google.accompanist:accompanist-systemuicontroller:0.31.0-alpha"

@@ -20,7 +20,6 @@ import com.sharipov.mynotificationmanager.ui.drawer.AppDrawer
 import com.sharipov.mynotificationmanager.navigation.Screens
 import com.sharipov.mynotificationmanager.ui.topbarscomponent.TopBarContent
 import com.sharipov.mynotificationmanager.utils.Constants
-import com.sharipov.mynotificationmanager.viewmodel.HomeViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import com.sharipov.mynotificationmanager.ui.settings.components.ClickableListItem
@@ -30,11 +29,12 @@ import com.sharipov.mynotificationmanager.ui.settings.components.feedbackDialog
 import com.sharipov.mynotificationmanager.ui.settings.components.privatePolicyDialog
 import com.sharipov.mynotificationmanager.ui.settings.components.selectAppsDialog
 import com.sharipov.mynotificationmanager.ui.transparentSystemBars.TransparentSystemBars
+import com.sharipov.mynotificationmanager.viewmodel.SettingsViewModel
 
-@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
+@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter", "CoroutineCreationDuringComposition")
 @Composable
 fun SettingsScreen(
-    homeViewModel: HomeViewModel,
+    settingsViewModel: SettingsViewModel,
     navController: NavController,
     coroutineScope: CoroutineScope = rememberCoroutineScope(),
     drawerState: DrawerState = rememberDrawerState(initialValue = DrawerValue.Closed),
@@ -131,7 +131,7 @@ fun SettingsScreen(
                 }
                 when {
                     openAutoRemoveDialog.value -> openAutoRemoveDialog.value = autoRemoveDialog(
-                        selectedTime = selectedTime,
+                        settingsViewModel = settingsViewModel,
                         onDismiss = { showAutoDeleteDialog.value = false },
                         onTimeSelected = { selectedTime = it })
                     openSelectAppsDialog.value -> openSelectAppsDialog.value = selectAppsDialog()

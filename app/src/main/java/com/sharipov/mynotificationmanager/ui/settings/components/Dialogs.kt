@@ -1,7 +1,7 @@
 package com.sharipov.mynotificationmanager.ui.settings.components
 
 import android.graphics.drawable.Drawable
-import android.widget.NumberPicker
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -41,19 +41,37 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.google.accompanist.drawablepainter.rememberDrawablePainter
 import com.sharipov.mynotificationmanager.R
+import com.sharipov.mynotificationmanager.model.AppSettingsEntity
+import com.sharipov.mynotificationmanager.viewmodel.SettingsViewModel
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.runBlocking
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun autoRemoveDialog(
-    selectedTime: String,
+    settingsViewModel: SettingsViewModel,
     onDismiss: () -> Unit,
     onTimeSelected: (String) -> Unit
 ): Boolean {
-
+    val context = LocalContext.current
     val openDialog = remember { mutableStateOf(true) }
     val timeOptions = listOf("Newer", "1 hour", "1 day", "1 week", "2 weeks", "1 month")
-    var selectedOption by remember { mutableStateOf(selectedTime) }
 
+    var selectedTime = "Never"
+    var selectedTimeLong = 0L
+    runBlocking {
+        val appSettings = settingsViewModel.getAppSettings()
+        if (appSettings != null) {
+            selectedTime = appSettings.autoDeleteTimeoutString
+            selectedTimeLong = appSettings.autoDeleteTimeoutLong
+        }
+        else {
+            settingsViewModel.saveAppSettings(AppSettingsEntity(0, selectedTimeLong, selectedTime))
+        }
+    }
+
+    var selectedOption by remember { mutableStateOf(selectedTime) }
 
     AlertDialog(
         onDismissRequest = {
@@ -79,10 +97,13 @@ fun autoRemoveDialog(
                 Spacer(modifier = Modifier.height(16.dp))
 
                 timeOptions.forEach { text ->
-                    Row(Modifier.selectable(
-                        selected = (text == selectedOption),
-                        onClick = { selectedOption = text }
-                    ).fillMaxWidth().padding(16.dp)) {
+                    Row(Modifier
+                        .selectable(
+                            selected = (text == selectedOption),
+                            onClick = { selectedOption = text }
+                        )
+                        .fillMaxWidth()
+                        .padding(16.dp)) {
                         RadioButton(
                             selected = (text == selectedOption),
                             onClick = null // null so that the processing is only on Row
@@ -99,6 +120,22 @@ fun autoRemoveDialog(
                 Button(
                     modifier = Modifier.fillMaxWidth(),
                     onClick = {
+                        selectedTimeLong = when (selectedOption) {
+                            "Newer" -> 0L
+                            "1 hour" -> 1 * 60 * 60 * 1000L
+                            "1 day" -> 24 * 60 * 60 * 1000L
+                            "1 week" -> 7 * 24 * 60 * 60 * 1000L
+                            "2 weeks" -> 14 * 24 * 60 * 60 * 1000L
+                            "1 month" -> 30 * 24 * 60 * 60 * 1000L
+                            else -> 0L
+                        }
+
+                        runBlocking {
+                            settingsViewModel.updateSettings(AppSettingsEntity(0, selectedTimeLong, selectedOption))
+                        }
+
+                        Toast.makeText(context, selectedOption, Toast.LENGTH_LONG).show()
+
                         onTimeSelected(selectedOption)
                         onDismiss()
                     }
@@ -114,8 +151,8 @@ fun autoRemoveDialog(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun selectAppsDialog(): Boolean {
+    val context = LocalContext.current
     val openDialog = remember { mutableStateOf(true) }
-
     val packageManager = LocalContext.current.packageManager
     val apps = packageManager.getInstalledPackages(0)
 
@@ -132,14 +169,31 @@ fun selectAppsDialog(): Boolean {
                 .padding(top = 32.dp, bottom = 32.dp),
             shape = MaterialTheme.shapes.large
         ) {
-            LazyColumn(
-                modifier = Modifier.padding(top = 32.dp, bottom = 32.dp)
-            ) {
-                items(apps) { app ->
-                    val icon = packageManager.getApplicationIcon(app.applicationInfo)
-                    val appName = app.applicationInfo.loadLabel(packageManager).toString()
+            Column() {
+                LazyColumn(
+                    modifier = Modifier.padding(top = 32.dp, bottom = 32.dp)
+                ) {
+                    items(apps) { app ->
+                        val icon = packageManager.getApplicationIcon(app.applicationInfo)
+                        val appName = app.applicationInfo.loadLabel(packageManager).toString()
+                        val packageName = app.packageName
+                        AppListItem(
+                            icon = icon,
+                            appName = appName,
+                            packageName = packageName,
+                        )
+                    }
+                }
 
-                    AppListItem(icon = icon, appName = appName)
+                Spacer(modifier = Modifier.height(16.dp))
+
+                Button(
+                    modifier = Modifier.fillMaxWidth(),
+                    onClick = {
+
+                    }
+                ) {
+                    Text("Select")
                 }
             }
         }
@@ -148,7 +202,13 @@ fun selectAppsDialog(): Boolean {
 }
 
 @Composable
-fun AppListItem(icon: Drawable, appName: String) {
+fun AppListItem(
+    icon: Drawable,
+    appName: String,
+    packageName: String,
+) {
+    val isChecked = remember { mutableStateOf(true) }
+
     Row(
         verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier
@@ -166,7 +226,12 @@ fun AppListItem(icon: Drawable, appName: String) {
             style = MaterialTheme.typography.bodyMedium,
             modifier = Modifier.weight(1f)
         )
-        Checkbox(checked = false, onCheckedChange = { /* todo */ })
+        Checkbox(
+            checked = isChecked.value,
+            onCheckedChange = {
+                isChecked.value = !isChecked.value
+            }
+        )
     }
 }
 

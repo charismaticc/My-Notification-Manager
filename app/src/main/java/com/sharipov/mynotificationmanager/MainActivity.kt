@@ -13,10 +13,12 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
 import androidx.core.app.NotificationManagerCompat
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.rememberNavController
 import com.sharipov.mynotificationmanager.ui.theme.MyNotificationManagerTheme
 import com.sharipov.mynotificationmanager.viewmodel.HomeViewModel
 import com.sharipov.mynotificationmanager.navigation.SetupNavHost
+import com.sharipov.mynotificationmanager.viewmodel.SettingsViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -32,6 +34,7 @@ class MainActivity : ComponentActivity() {
         }
 
         val homeViewModel: HomeViewModel by viewModels()
+        val settingsViewModel: SettingsViewModel by viewModels()
 
         setContent {
             MyNotificationManagerTheme {
@@ -40,7 +43,7 @@ class MainActivity : ComponentActivity() {
                     color = MaterialTheme.colorScheme.background
                 ) {
                     val navController = rememberNavController()
-                    SetupNavHost(homeViewModel ,navController = navController)
+                    SetupNavHost(homeViewModel, settingsViewModel, navController = navController)
                 }
             }
         }

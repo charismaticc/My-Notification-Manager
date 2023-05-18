@@ -3,7 +3,7 @@ package com.sharipov.mynotificationmanager.model
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
-@Entity("notification")
+@Entity(tableName = "notification")
 data class NotificationEntity(
     @PrimaryKey(autoGenerate = true)
     val id: Int? = null,

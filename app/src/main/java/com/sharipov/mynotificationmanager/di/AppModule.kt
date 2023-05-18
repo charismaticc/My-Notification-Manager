@@ -2,7 +2,10 @@ package com.sharipov.mynotificationmanager.di
 
 import android.app.Application
 import com.sharipov.mynotificationmanager.data.AppDatabase
+import com.sharipov.mynotificationmanager.data.AppSettingsDao
+import com.sharipov.mynotificationmanager.data.ExcludedAppDao
 import com.sharipov.mynotificationmanager.data.NotificationDao
+import com.sharipov.mynotificationmanager.data.repository.AppSettingsRepository
 import com.sharipov.mynotificationmanager.data.repository.NotificationRepository
 import dagger.Module
 import dagger.Provides
@@ -24,6 +27,14 @@ class AppModule {
 
     @Singleton
     @Provides
+    fun providerAppSettingsRepository(
+        appSettings: AppSettingsDao
+    ): AppSettingsRepository{
+        return AppSettingsRepository(appSettings = appSettings)
+    }
+
+    @Singleton
+    @Provides
     fun providerNotificationDatabase(app: Application): AppDatabase{
         return AppDatabase.getInstance(context = app)
     }
@@ -34,4 +45,15 @@ class AppModule {
         return appDatabase.notificationDao()
     }
 
+    @Singleton
+    @Provides
+    fun providerAppSettingsDao(appDatabase: AppDatabase): AppSettingsDao {
+        return appDatabase.appSettingsDao()
+    }
+
+    @Singleton
+    @Provides
+    fun providerExcludedAppDao(appDatabase: AppDatabase): ExcludedAppDao {
+        return appDatabase.excludedAppDao()
+    }
 }
