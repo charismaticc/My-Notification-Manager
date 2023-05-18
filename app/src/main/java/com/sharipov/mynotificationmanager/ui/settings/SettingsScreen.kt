@@ -133,8 +133,10 @@ fun SettingsScreen(
                     openAutoRemoveDialog.value -> openAutoRemoveDialog.value = autoRemoveDialog(
                         settingsViewModel = settingsViewModel,
                         onDismiss = { showAutoDeleteDialog.value = false },
-                        onTimeSelected = { selectedTime = it })
-                    openSelectAppsDialog.value -> openSelectAppsDialog.value = selectAppsDialog()
+                        onTimeSelected = { selectedTime = it }
+                    )
+                    openSelectAppsDialog.value -> openSelectAppsDialog.value =
+                        selectAppsDialog(settingsViewModel = settingsViewModel)
                     openPrivatePolicyDialog.value -> openPrivatePolicyDialog.value = privatePolicyDialog()
                     openFeedbackDialog.value -> openFeedbackDialog.value = feedbackDialog()
                     openAboutUsDialog.value -> openAboutUsDialog.value = aboutUsDialog()

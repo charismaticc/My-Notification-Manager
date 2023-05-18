@@ -6,6 +6,7 @@ import com.sharipov.mynotificationmanager.data.AppSettingsDao
 import com.sharipov.mynotificationmanager.data.ExcludedAppDao
 import com.sharipov.mynotificationmanager.data.NotificationDao
 import com.sharipov.mynotificationmanager.data.repository.AppSettingsRepository
+import com.sharipov.mynotificationmanager.data.repository.ExcludedAppRepository
 import com.sharipov.mynotificationmanager.data.repository.NotificationRepository
 import dagger.Module
 import dagger.Provides
@@ -31,6 +32,14 @@ class AppModule {
         appSettings: AppSettingsDao
     ): AppSettingsRepository{
         return AppSettingsRepository(appSettings = appSettings)
+    }
+
+    @Singleton
+    @Provides
+    fun providerExcludedAppRepository(
+        excludedApp: ExcludedAppDao
+    ): ExcludedAppRepository{
+        return ExcludedAppRepository(excludedApp = excludedApp)
     }
 
     @Singleton

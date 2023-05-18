@@ -10,11 +10,14 @@ import com.sharipov.mynotificationmanager.model.ExcludedAppEntity
 @Dao
 interface ExcludedAppDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun addExcludedApp(app: ExcludedAppEntity)
+    suspend fun addExcludedApp(excludedApp: ExcludedAppEntity)
 
-    @Delete
-    suspend fun removeExcludedApp(app: ExcludedAppEntity)
+    @Query("DELETE FROM excluded_apps WHERE packageName = :packageName")
+    suspend fun removeExcludedApp(packageName: String)
 
     @Query("SELECT * FROM excluded_apps")
     suspend fun getAllExcludedApps(): List<ExcludedAppEntity>
+
+    @Query("SELECT * FROM excluded_apps WHERE packageName = :packageName")
+    suspend fun getExcludedAppByPackageName(packageName: String): ExcludedAppEntity?
 }

@@ -1,6 +1,7 @@
 package com.sharipov.mynotificationmanager.ui.settings.components
 
 import android.graphics.drawable.Drawable
+import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
@@ -29,6 +30,7 @@ import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -39,13 +41,17 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewModelScope
 import com.google.accompanist.drawablepainter.rememberDrawablePainter
 import com.sharipov.mynotificationmanager.R
 import com.sharipov.mynotificationmanager.model.AppSettingsEntity
+import com.sharipov.mynotificationmanager.model.ExcludedAppEntity
 import com.sharipov.mynotificationmanager.viewmodel.SettingsViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.withContext
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -150,7 +156,9 @@ fun autoRemoveDialog(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun selectAppsDialog(): Boolean {
+fun selectAppsDialog(
+    settingsViewModel: SettingsViewModel
+): Boolean {
     val context = LocalContext.current
     val openDialog = remember { mutableStateOf(true) }
     val packageManager = LocalContext.current.packageManager
@@ -169,7 +177,7 @@ fun selectAppsDialog(): Boolean {
                 .padding(top = 32.dp, bottom = 32.dp),
             shape = MaterialTheme.shapes.large
         ) {
-            Column() {
+            Column {
                 LazyColumn(
                     modifier = Modifier.padding(top = 32.dp, bottom = 32.dp)
                 ) {
@@ -178,22 +186,12 @@ fun selectAppsDialog(): Boolean {
                         val appName = app.applicationInfo.loadLabel(packageManager).toString()
                         val packageName = app.packageName
                         AppListItem(
+                            settingsViewModel = settingsViewModel,
                             icon = icon,
                             appName = appName,
                             packageName = packageName,
                         )
                     }
-                }
-
-                Spacer(modifier = Modifier.height(16.dp))
-
-                Button(
-                    modifier = Modifier.fillMaxWidth(),
-                    onClick = {
-
-                    }
-                ) {
-                    Text("Select")
                 }
             }
         }
@@ -203,12 +201,16 @@ fun selectAppsDialog(): Boolean {
 
 @Composable
 fun AppListItem(
+    settingsViewModel: SettingsViewModel,
     icon: Drawable,
     appName: String,
     packageName: String,
 ) {
     val isChecked = remember { mutableStateOf(true) }
 
+    LaunchedEffect(Unit) {
+        isChecked.value = !settingsViewModel.checkExcludedAppExists(packageName)
+    }
     Row(
         verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier
@@ -228,8 +230,18 @@ fun AppListItem(
         )
         Checkbox(
             checked = isChecked.value,
-            onCheckedChange = {
-                isChecked.value = !isChecked.value
+            onCheckedChange =   { newValue ->
+                isChecked.value = newValue
+                val excludedApp = ExcludedAppEntity(packageName = packageName)
+                settingsViewModel.viewModelScope.launch {
+                    withContext(Dispatchers.IO) {
+                        if (!newValue) {
+                            settingsViewModel.addExcludedApp(excludedApp)
+                        } else {
+                            settingsViewModel.removeExcludedApp(packageName)
+                        }
+                    }
+                }
             }
         )
     }
