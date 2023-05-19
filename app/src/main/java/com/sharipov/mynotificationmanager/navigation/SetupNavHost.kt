@@ -15,7 +15,6 @@ import com.sharipov.mynotificationmanager.ui.splashscreen.SplashScreen
 import com.sharipov.mynotificationmanager.utils.Constants
 import com.sharipov.mynotificationmanager.viewmodel.HomeViewModel
 import com.sharipov.mynotificationmanager.viewmodel.SettingsViewModel
-import com.sharipov.mynotificationmanager.viewmodel.SettingsViewModelAbstract
 
 
 sealed class Screens(val route: String){
@@ -38,8 +37,13 @@ fun SetupNavHost(
         navController = navController,
         startDestination = Screens.Splash.route
     ) {
+
         composable(route = Screens.Splash.route) {
-            SplashScreen(navController = navController)
+            SplashScreen(
+                navController = navController,
+                homeViewModel = homeViewModel,
+                settingsViewModel = settingsViewModel
+            )
         }
 
         composable(route = Screens.Applications.route) {

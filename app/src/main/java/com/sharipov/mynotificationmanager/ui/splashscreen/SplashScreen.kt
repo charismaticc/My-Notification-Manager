@@ -17,10 +17,19 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.sharipov.mynotificationmanager.navigation.Screens
 import com.sharipov.mynotificationmanager.ui.transparentSystemBars.TransparentSystemBars
+import com.sharipov.mynotificationmanager.utils.DeleteExpiredNotifications
+import com.sharipov.mynotificationmanager.viewmodel.HomeViewModel
+import com.sharipov.mynotificationmanager.viewmodel.SettingsViewModel
 import kotlinx.coroutines.delay
 
 @Composable
-fun SplashScreen(navController: NavController){
+fun SplashScreen(
+    navController: NavController,
+                 homeViewModel: HomeViewModel,
+                 settingsViewModel: SettingsViewModel
+){
+
+    DeleteExpiredNotifications(homeViewModel = homeViewModel, settingsViewModel = settingsViewModel)
 
     TransparentSystemBars()
 
