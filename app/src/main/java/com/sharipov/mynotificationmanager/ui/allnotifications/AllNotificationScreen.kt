@@ -1,7 +1,6 @@
 package com.sharipov.mynotificationmanager.ui.allnotifications
 
 import android.annotation.SuppressLint
-import android.widget.Toast
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.combinedClickable
@@ -15,9 +14,9 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.currentBackStackEntryAsState
-import com.sharipov.mynotificationmanager.model.NotificationEntity
 import com.sharipov.mynotificationmanager.navigation.Screens
 import com.sharipov.mynotificationmanager.ui.allnotifications.component.NotificationItem
+import com.sharipov.mynotificationmanager.ui.allnotifications.component.updateNotification
 import com.sharipov.mynotificationmanager.ui.topbarscomponent.SearchTopBarContent
 import com.sharipov.mynotificationmanager.ui.drawer.AppDrawer
 import com.sharipov.mynotificationmanager.ui.transparentSystemBars.TransparentSystemBars
@@ -115,7 +114,9 @@ fun AllNotificationScreen (
                             LazyColumn {
                                 items(notificationFlow.size) { index ->
                                     val notification = notificationFlow[index]
-                                    NotificationItem(notificationEntity = notification,
+                                    NotificationItem(
+                                        homeViewModel = homeViewModel,
+                                        notification = notification,
                                         Modifier
                                             .fillMaxSize()
                                             .padding(16.dp, 16.dp, 16.dp)
@@ -127,31 +128,7 @@ fun AllNotificationScreen (
                                                     )
                                                 },
                                                 onLongClick = {
-                                                    homeViewModel.upgradeNotification(
-                                                        notification = NotificationEntity(
-                                                            id = notification.id,
-                                                            appName = notification.appName,
-                                                            packageName = notification.packageName,
-                                                            user = notification.user,
-                                                            text = notification.text,
-                                                            time = notification.time,
-                                                            favorite = !notification.favorite
-                                                        )
-                                                    )
-
-                                                    val msg = if (!notification.favorite) {
-                                                        "add to"
-                                                    } else {
-                                                        "removed from"
-                                                    }
-
-                                                    Toast
-                                                        .makeText(
-                                                            context,
-                                                            "Notification $msg favorite!",
-                                                            Toast.LENGTH_SHORT
-                                                        )
-                                                        .show()
+                                                    updateNotification(notification, homeViewModel, context)
                                                 }
                                             )
                                     )

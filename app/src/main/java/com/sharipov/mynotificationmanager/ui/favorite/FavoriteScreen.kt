@@ -76,7 +76,9 @@ fun FavoriteScreen(
 
                         items(notificationListState.value.size) { index ->
                             val notification = notificationListState.value[index]
-                            NotificationItem(notificationEntity = notification,
+                            NotificationItem(
+                                homeViewModel = homeViewModel,
+                                notification = notification,
                                 Modifier.fillMaxSize().padding(16.dp, 16.dp, 16.dp)
                                     .clickable {
                                     navController.navigate(
@@ -86,7 +88,6 @@ fun FavoriteScreen(
                                 }
                             )
                         }
-
                         item { Spacer(modifier = Modifier.height(16.dp)) }
                     }
                 }

@@ -3,10 +3,10 @@ package com.sharipov.mynotificationmanager.ui.drawer
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -67,7 +67,7 @@ fun AppDrawer(
                     navigateToFavorite()
                     closeDrawer()
                 },
-                icon = { Icon(imageVector = Icons.Default.Favorite, contentDescription = null) },
+                icon = { Icon(imageVector = Icons.Default.Star, contentDescription = null) },
                 shape = MaterialTheme.shapes.medium
             )
 
