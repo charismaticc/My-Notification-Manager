@@ -5,17 +5,15 @@ import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Delete
-import androidx.compose.material.icons.filled.Info
-import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material.icons.filled.Menu
-import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.currentBackStackEntryAsState
+import com.sharipov.mynotificationmanager.R
 import com.sharipov.mynotificationmanager.ui.drawer.AppDrawer
 import com.sharipov.mynotificationmanager.navigation.Screens
 import com.sharipov.mynotificationmanager.ui.topbarscomponent.TopBarContent
@@ -86,7 +84,7 @@ fun SettingsScreen(
                     item {
                         ClickableListItem(
                             text = "Automatic deletion of notifications",
-                            icon = Icons.Default.Delete,
+                            icon = painterResource(id = R.drawable.ic_auto_delete),
                             onClick = {
                                 openAutoRemoveDialog.value = true
                             }
@@ -95,7 +93,7 @@ fun SettingsScreen(
                     item {
                         ClickableListItem(
                             text = "Select apps",
-                            icon = Icons.Default.Notifications,
+                            icon = painterResource(id = R.drawable.ic_rule),
                             onClick = {
                                 openSelectAppsDialog.value = true
                             }
@@ -104,7 +102,7 @@ fun SettingsScreen(
                     item {
                         ClickableListItem(
                             text = "Private policy",
-                            icon = Icons.Default.Lock,
+                            icon = painterResource(id = R.drawable.ic_policy),
                             onClick = {
                                 openPrivatePolicyDialog.value = true
                             }
@@ -113,7 +111,7 @@ fun SettingsScreen(
                     item {
                         ClickableListItem(
                             text = "Feedback",
-                            icon = Icons.Default.Notifications,
+                            icon = painterResource(id = R.drawable.ic_comment),
                             onClick = {
                                 openFeedbackDialog.value = true
                             }
@@ -122,7 +120,7 @@ fun SettingsScreen(
                     item {
                         ClickableListItem(
                             text = "About us",
-                            icon = Icons.Default.Info,
+                            icon = painterResource(id = R.drawable.ic_about),
                             onClick = {
                                 openAboutUsDialog.value = true
                             }

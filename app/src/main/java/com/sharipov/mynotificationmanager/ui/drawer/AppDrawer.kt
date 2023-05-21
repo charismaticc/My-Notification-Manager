@@ -3,7 +3,6 @@ package com.sharipov.mynotificationmanager.ui.drawer
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.Star
@@ -11,6 +10,7 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -34,13 +34,19 @@ fun AppDrawer(
         Column(modifier = modifier) {
 
             NavigationDrawerItem(
-                label = { Text(text = "Applications", style = MaterialTheme.typography.bodyMedium) },
+                label = { Text(text = "Applications", style = MaterialTheme.typography.bodyLarge) },
                 selected = route == Constants.Screens.APPLICATION_SCREEN,
                 onClick = {
                     navigateToApplications()
                     closeDrawer()
                 },
-                icon = { Icon(imageVector = Icons.Default.Home, contentDescription = null) },
+                icon = {
+                    Icon(
+                        modifier = Modifier.size(36.dp),
+                        painter = painterResource(id = R.drawable.ic_apps),
+                        contentDescription = null
+                    )
+                },
                 shape = MaterialTheme.shapes.medium
             )
 
@@ -48,7 +54,7 @@ fun AppDrawer(
                 label = {
                     Text(
                         text = "All notification",
-                        style = MaterialTheme.typography.bodyMedium
+                        style = MaterialTheme.typography.bodyLarge
                     )
                 },
                 selected = route == Constants.Screens.ALL_NOTIFICATIONS_SCREEN,
@@ -56,31 +62,49 @@ fun AppDrawer(
                     navigateToAllNotifications()
                     closeDrawer()
                 },
-                icon = { Icon(imageVector = Icons.Default.Notifications, contentDescription = null) },
+                icon = {
+                    Icon(
+                        modifier = Modifier.size(36.dp),
+                        imageVector = Icons.Default.Notifications,
+                        contentDescription = null
+                    )
+                },
                 shape = MaterialTheme.shapes.large
             )
 
             NavigationDrawerItem(
-                label = { Text(text = "Favorites", style = MaterialTheme.typography.bodyMedium) },
+                label = { Text(text = "Favorites", style = MaterialTheme.typography.bodyLarge) },
                 selected = route == Constants.Screens.FAVORITE_SCREEN,
                 onClick = {
                     navigateToFavorite()
                     closeDrawer()
                 },
-                icon = { Icon(imageVector = Icons.Default.Star, contentDescription = null) },
+                icon = {
+                    Icon(
+                        modifier = Modifier.size(36.dp),
+                        imageVector = Icons.Default.Star,
+                        contentDescription = null
+                    )
+                },
                 shape = MaterialTheme.shapes.medium
             )
 
             Spacer(modifier = Modifier.weight(1f))
             NavigationDrawerItem(
                 modifier = Modifier.padding(bottom = 16.dp),
-                label = { Text(text = "Settings", style = MaterialTheme.typography.bodyMedium) },
+                label = { Text(text = "Settings", style = MaterialTheme.typography.bodyLarge) },
                 selected = route == Constants.Screens.SETTINGS_SCREEN,
                 onClick = {
                     navigateToSettings()
                     closeDrawer()
                 },
-                icon = { Icon(imageVector = Icons.Default.Settings, contentDescription = null) },
+                icon = {
+                    Icon(
+                        modifier = Modifier.size(36.dp),
+                        imageVector = Icons.Default.Settings,
+                        contentDescription = null
+                    )
+                },
                 shape = MaterialTheme.shapes.medium
             )
         }

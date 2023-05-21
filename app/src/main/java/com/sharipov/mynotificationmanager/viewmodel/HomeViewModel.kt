@@ -13,11 +13,11 @@ import javax.inject.Inject
 interface HomeViewModelAbstract {
 
     val notificationListFlow: Flow<List<NotificationEntity>>
-    fun getAllUserNotifications(userName: String, packageName: String) : Flow<List<NotificationEntity>>
-    fun searchUserNotifications(userName: String, packageName: String, query: String) : Flow<List<NotificationEntity>>
-    fun getApplications() : Flow<List<String>>
-    fun getApplicationNotifications(packageName: String) : Flow<List<NotificationEntity>>
-    fun getFavoriteNotifications() : Flow<List<NotificationEntity>>
+    fun getAllUserNotifications(userName: String, packageName: String): Flow<List<NotificationEntity>>
+    fun searchUserNotifications(userName: String, packageName: String, query: String): Flow<List<NotificationEntity>>
+    fun getApplications(): Flow<List<String>>
+    fun getApplicationNotifications(packageName: String): Flow<List<NotificationEntity>>
+    fun getFavoriteNotifications(): Flow<List<NotificationEntity>>
     fun searchNotifications(query: String): Flow<List<NotificationEntity>>
     fun addNotification(notification: NotificationEntity)
     fun upgradeNotification(notification: NotificationEntity)
@@ -29,7 +29,7 @@ interface HomeViewModelAbstract {
 class HomeViewModel
 @Inject constructor(
     private val notificationRepository: NotificationRepository
-): ViewModel(), HomeViewModelAbstract {
+) : ViewModel(), HomeViewModelAbstract {
 
     private val ioScope = CoroutineScope(Dispatchers.IO)
 
@@ -55,9 +55,9 @@ class HomeViewModel
         notificationRepository.getApplicationNotifications(packageName)
 
     override fun addNotification(notification: NotificationEntity) {
-      ioScope.launch {
-          notificationRepository.insert(notification)
-      }
+        ioScope.launch {
+            notificationRepository.insert(notification)
+        }
     }
 
     override fun upgradeNotification(notification: NotificationEntity) {
