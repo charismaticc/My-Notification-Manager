@@ -1,12 +1,12 @@
 package com.sharipov.mynotificationmanager.ui.settings.components
 
 import android.graphics.drawable.Drawable
-import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -29,8 +29,9 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -47,7 +48,6 @@ import com.sharipov.mynotificationmanager.R
 import com.sharipov.mynotificationmanager.model.AppSettingsEntity
 import com.sharipov.mynotificationmanager.model.ExcludedAppEntity
 import com.sharipov.mynotificationmanager.viewmodel.SettingsViewModel
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
@@ -161,36 +161,49 @@ fun selectAppsDialog(
 ): Boolean {
     val context = LocalContext.current
     val openDialog = remember { mutableStateOf(true) }
-    val packageManager = LocalContext.current.packageManager
-    val apps = packageManager.getInstalledPackages(0)
+    var searchQuery by remember { mutableStateOf("") }
+    var isSearching by remember { mutableStateOf(false) }
 
+    val apps = if (searchQuery.isNotBlank()) {
+        isSearching = true
+        settingsViewModel.searchApplication(searchQuery).collectAsState(emptyList()).value
+    } else {
+        settingsViewModel.getAllExcludedApps().collectAsState(emptyList()).value
+    }
 
     AlertDialog(
         onDismissRequest = {
             openDialog.value = false
         }
-    ) {
+    ){
         Surface(
             modifier = Modifier
-                .wrapContentWidth()
-                .wrapContentHeight()
+                .fillMaxWidth()
+                .fillMaxHeight()
                 .padding(top = 32.dp, bottom = 32.dp),
             shape = MaterialTheme.shapes.large
         ) {
             Column {
-                LazyColumn(
-                    modifier = Modifier.padding(top = 32.dp, bottom = 32.dp)
-                ) {
-                    items(apps) { app ->
-                        val icon = packageManager.getApplicationIcon(app.applicationInfo)
-                        val appName = app.applicationInfo.loadLabel(packageManager).toString()
-                        val packageName = app.packageName
-                        AppListItem(
-                            settingsViewModel = settingsViewModel,
-                            icon = icon,
-                            appName = appName,
-                            packageName = packageName,
-                        )
+                TextField(
+                    value = searchQuery,
+                    onValueChange = { searchQuery = it },
+                    placeholder = { Text("Search") },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 16.dp, vertical = 8.dp)
+                )
+                if (apps.isNotEmpty()) {
+                    LazyColumn(
+                        modifier = Modifier.padding(top = 8.dp)
+                    ) {
+                        items(apps) { app ->
+                            val icon =  context.packageManager.getApplicationIcon(app.packageName)
+                            AppListItem(
+                                settingsViewModel = settingsViewModel,
+                                icon = icon,
+                                appEntity = app
+                            )
+                        }
                     }
                 }
             }
@@ -203,14 +216,10 @@ fun selectAppsDialog(
 fun AppListItem(
     settingsViewModel: SettingsViewModel,
     icon: Drawable,
-    appName: String,
-    packageName: String,
+    appEntity: ExcludedAppEntity
 ) {
-    val isChecked = remember { mutableStateOf(true) }
+    val isChecked = remember { mutableStateOf(!appEntity.isExcluded) }
 
-    LaunchedEffect(Unit) {
-        isChecked.value = !settingsViewModel.checkExcludedAppExists(packageName)
-    }
     Row(
         verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier
@@ -224,7 +233,7 @@ fun AppListItem(
         )
         Spacer(modifier = Modifier.width(16.dp))
         Text(
-            text = appName,
+            text = appEntity.appName,
             style = MaterialTheme.typography.bodyMedium,
             modifier = Modifier.weight(1f)
         )
@@ -232,14 +241,10 @@ fun AppListItem(
             checked = isChecked.value,
             onCheckedChange =   { newValue ->
                 isChecked.value = newValue
-                val excludedApp = ExcludedAppEntity(packageName = packageName)
                 settingsViewModel.viewModelScope.launch {
+                    val newAppEntity = appEntity.copy(isExcluded = newValue)
                     withContext(Dispatchers.IO) {
-                        if (!newValue) {
-                            settingsViewModel.addExcludedApp(excludedApp)
-                        } else {
-                            settingsViewModel.removeExcludedApp(packageName)
-                        }
+                        settingsViewModel.updateExcludedApp(newAppEntity)
                     }
                 }
             }

@@ -18,6 +18,7 @@ import androidx.navigation.NavController
 import com.sharipov.mynotificationmanager.navigation.Screens
 import com.sharipov.mynotificationmanager.ui.transparentSystemBars.TransparentSystemBars
 import com.sharipov.mynotificationmanager.utils.DeleteExpiredNotifications
+import com.sharipov.mynotificationmanager.utils.UpdateApplicationList
 import com.sharipov.mynotificationmanager.viewmodel.HomeViewModel
 import com.sharipov.mynotificationmanager.viewmodel.SettingsViewModel
 import kotlinx.coroutines.delay
@@ -28,9 +29,8 @@ fun SplashScreen(
                  homeViewModel: HomeViewModel,
                  settingsViewModel: SettingsViewModel
 ){
-
+    UpdateApplicationList(settingsViewModel = settingsViewModel)
     DeleteExpiredNotifications(homeViewModel = homeViewModel, settingsViewModel = settingsViewModel)
-
     TransparentSystemBars()
 
     var startAnimate by remember {

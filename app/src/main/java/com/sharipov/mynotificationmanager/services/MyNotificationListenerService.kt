@@ -43,9 +43,8 @@ class MyNotificationListenerService : NotificationListenerService() {
         val coroutineScope = CoroutineScope(Dispatchers.IO)
         coroutineScope.launch {
             val excludedApp = excludedAppDao.getExcludedAppByPackageName(packageName)
-            val isExcluded = (excludedApp != null)
 
-            if (!isExcluded) {
+            if (excludedApp?.isExcluded!!) {
                 // get application name
                 val pm = context.packageManager
                 val appName =

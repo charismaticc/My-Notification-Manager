@@ -6,6 +6,10 @@ import com.sharipov.mynotificationmanager.data.repository.ExcludedAppRepository
 import com.sharipov.mynotificationmanager.model.AppSettingsEntity
 import com.sharipov.mynotificationmanager.model.ExcludedAppEntity
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 interface SettingsViewModelAbstract {
@@ -16,13 +20,13 @@ interface SettingsViewModelAbstract {
 
     suspend fun updateSettings(settings: AppSettingsEntity)
 
-    suspend fun addExcludedApp(app: ExcludedAppEntity)
+    fun addExcludedApp(app: ExcludedAppEntity)
 
-    suspend fun getAllExcludedApps() : List<ExcludedAppEntity>
+    fun getAllExcludedApps() : Flow<List<ExcludedAppEntity>>
 
-    suspend fun removeExcludedApp(packageName: String)
+    fun updateExcludedApp(app: ExcludedAppEntity)
 
-    suspend fun checkExcludedAppExists(packageName: String): Boolean
+    fun searchApplication(query: String): Flow<List<ExcludedAppEntity>>
 }
 
 
@@ -32,6 +36,8 @@ class SettingsViewModel
     private val appSettingsRepository: AppSettingsRepository,
     private val excludedAppRepository: ExcludedAppRepository
 ): ViewModel(), SettingsViewModelAbstract  {
+
+    private val ioScope = CoroutineScope(Dispatchers.IO)
 
     override suspend fun saveAppSettings(settings: AppSettingsEntity) {
         appSettingsRepository.saveAppSettings(settings)
@@ -45,20 +51,20 @@ class SettingsViewModel
         appSettingsRepository.updateSettings(settings)
     }
 
-    override suspend fun addExcludedApp(app: ExcludedAppEntity) {
-        excludedAppRepository.addExcludedApp(app)
-    }
-
-    override suspend fun getAllExcludedApps(): List<ExcludedAppEntity> {
+    override fun getAllExcludedApps(): Flow<List<ExcludedAppEntity>> {
         return excludedAppRepository.getAllExcludedApps()
     }
-
-    override suspend fun removeExcludedApp(packageName: String) {
-        excludedAppRepository.removeExcludedApp(packageName)
+    override  fun searchApplication(query: String): Flow<List<ExcludedAppEntity>> {
+        return excludedAppRepository.searchApplication(query)
     }
-
-    override suspend fun checkExcludedAppExists(packageName: String): Boolean {
-        val excludedApp = excludedAppRepository.getExcludedAppByPackageName(packageName)
-        return excludedApp != null
+    override fun addExcludedApp(app: ExcludedAppEntity) {
+        ioScope.launch {
+            excludedAppRepository.addExcludedApp(app)
+        }
+    }
+    override fun updateExcludedApp(app: ExcludedAppEntity) {
+        ioScope.launch {
+            excludedAppRepository.updateExcludedApp(app = app)
+        }
     }
 }

@@ -2,19 +2,18 @@ package com.sharipov.mynotificationmanager.data.repository
 
 import com.sharipov.mynotificationmanager.data.ExcludedAppDao
 import com.sharipov.mynotificationmanager.model.ExcludedAppEntity
+import kotlinx.coroutines.flow.Flow
 
 class ExcludedAppRepository(
     private val excludedApp: ExcludedAppDao
 ) {
+    fun getAllExcludedApps():  Flow<List<ExcludedAppEntity>> =
+        excludedApp.getAllExcludedApps()
+    fun searchApplication(query: String): Flow<List<ExcludedAppEntity>> =
+        excludedApp.searchApplication(query = query)
     suspend fun addExcludedApp(app: ExcludedAppEntity) =
         excludedApp.addExcludedApp(excludedApp = app)
+    suspend fun updateExcludedApp(app: ExcludedAppEntity) =
+        excludedApp.updateExcludedApp(excludedApp = app)
 
-    suspend fun getAllExcludedApps() =
-        excludedApp.getAllExcludedApps()
-
-    suspend fun removeExcludedApp(packageName: String) =
-        excludedApp.removeExcludedApp(packageName = packageName)
-
-    suspend fun getExcludedAppByPackageName(packageName: String) =
-        excludedApp.getExcludedAppByPackageName(packageName = packageName)
 }
