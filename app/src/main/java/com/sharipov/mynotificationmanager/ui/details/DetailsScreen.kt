@@ -16,7 +16,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.sharipov.mynotificationmanager.ui.transparentSystemBars.TransparentSystemBars
+import com.sharipov.mynotificationmanager.utils.TransparentSystemBars
 import com.sharipov.mynotificationmanager.viewmodel.HomeViewModel
 import kotlinx.coroutines.flow.map
 import java.text.SimpleDateFormat
@@ -31,7 +31,7 @@ fun DetailsScreen(homeViewModel: HomeViewModel, notificationId: String) {
     val notification = notificationsFlow.map { notifications ->
         notifications.firstOrNull { it.id == notificationId.toInt() }
     }
-    val notificationState  = notification.collectAsState(initial = null)
+    val notificationState = notification.collectAsState(initial = null)
     val dateFormat = SimpleDateFormat("dd.MM.yyyy HH:mm:ss", Locale.getDefault())
 
     TransparentSystemBars()
@@ -39,8 +39,10 @@ fun DetailsScreen(homeViewModel: HomeViewModel, notificationId: String) {
     Surface(
         modifier = Modifier.fillMaxSize()
     ) {
-        Column{
-            Card(modifier = Modifier.fillMaxWidth().padding(8.dp)) {
+        Column {
+            Card(modifier = Modifier
+                .fillMaxWidth()
+                .padding(8.dp)) {
                 Row(modifier = Modifier.padding(16.dp, 16.dp, 16.dp, 16.dp)) {
                     Icon(
                         imageVector = Icons.Filled.Notifications,
@@ -48,7 +50,8 @@ fun DetailsScreen(homeViewModel: HomeViewModel, notificationId: String) {
                         tint = MaterialTheme.colorScheme.primary,
                         modifier = Modifier
                             .padding(8.dp, 8.dp, 8.dp, 8.dp)
-                            .size(56.dp).align(Alignment.CenterVertically),
+                            .size(56.dp)
+                            .align(Alignment.CenterVertically),
                     )
                     Column(Modifier.padding(16.dp, 16.dp, 16.dp, 16.dp)) {
                         Row {
@@ -66,8 +69,9 @@ fun DetailsScreen(homeViewModel: HomeViewModel, notificationId: String) {
                             )
                         }
                         notificationState.value?.let { notification ->
-                            Text( "Time : " +
-                                    dateFormat.format(Date(notification.time)).toString(),
+                            Text(
+                                "Time : " +
+                                        dateFormat.format(Date(notification.time)).toString(),
                                 modifier = Modifier
                                     .fillMaxWidth()
                             )
@@ -79,9 +83,11 @@ fun DetailsScreen(homeViewModel: HomeViewModel, notificationId: String) {
             }
             LazyColumn(modifier = Modifier.fillMaxSize()) {
                 item {
-                    Card(modifier = Modifier
-                        .fillParentMaxSize()
-                        .padding(8.dp)) {
+                    Card(
+                        modifier = Modifier
+                            .fillParentMaxSize()
+                            .padding(8.dp)
+                    ) {
                         Text(
                             text = notificationState.value?.text ?: "Text",
                             modifier = Modifier

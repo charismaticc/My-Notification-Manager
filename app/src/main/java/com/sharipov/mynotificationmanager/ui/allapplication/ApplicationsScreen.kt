@@ -17,7 +17,7 @@ import com.sharipov.mynotificationmanager.ui.drawer.AppDrawer
 import com.sharipov.mynotificationmanager.navigation.Screens
 import com.sharipov.mynotificationmanager.ui.topbarscomponent.TopBarContent
 import com.sharipov.mynotificationmanager.ui.conversations.component.ApplicationItem
-import com.sharipov.mynotificationmanager.ui.transparentSystemBars.TransparentSystemBars
+import com.sharipov.mynotificationmanager.utils.TransparentSystemBars
 import com.sharipov.mynotificationmanager.utils.Constants
 import com.sharipov.mynotificationmanager.viewmodel.HomeViewModel
 import kotlinx.coroutines.CoroutineScope
@@ -64,7 +64,9 @@ fun ApplicationsScreen(
             },
             content = {
                 Column(
-                    modifier = Modifier.fillMaxSize().systemBarsPadding(),
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .systemBarsPadding(),
                     verticalArrangement = Arrangement.Top,
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
@@ -78,12 +80,15 @@ fun ApplicationsScreen(
                             val packageName = applicationListState.value[index]
                             ApplicationItem(
                                 packageName = packageName,
-                                modifier = Modifier.fillMaxSize().padding(16.dp, 16.dp, 16.dp).clickable {
-                                navController.navigate(
-                                    Screens.Conversations.route +
-                                            "/${packageName}"
-                                )
-                            })
+                                modifier = Modifier
+                                    .fillMaxSize()
+                                    .padding(16.dp, 16.dp, 16.dp)
+                                    .clickable {
+                                        navController.navigate(
+                                            Screens.Conversations.route +
+                                                    "/${packageName}"
+                                        )
+                                    })
                         }
                         item { Spacer(modifier = Modifier.height(16.dp)) }
                     }

@@ -12,7 +12,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.sharipov.mynotificationmanager.ui.chat.components.ChatItem
 import com.sharipov.mynotificationmanager.ui.topbarscomponent.ChatTopBarContent
-import com.sharipov.mynotificationmanager.ui.transparentSystemBars.TransparentSystemBars
+import com.sharipov.mynotificationmanager.utils.TransparentSystemBars
 import com.sharipov.mynotificationmanager.viewmodel.HomeViewModel
 
 @SuppressLint("FlowOperatorInvokedInComposition", "UnusedMaterial3ScaffoldPaddingParameter")
@@ -37,34 +37,34 @@ fun ChatScreen(
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         topBar = {
-                ChatTopBarContent(
-                    userName = userName,
-                    packageName = packageName,
-                    searchText = searchText,
-                    searchVisible = searchVisible,
-                    navController = navController,
-                    homeViewModel = homeViewModel,
-                    onSearchClick = { searchVisible = !searchVisible },
-                    onSearchVisibleChange = { searchVisible = it },
-                    onSearchTextChange = { searchText = it }
-                )
+            ChatTopBarContent(
+                userName = userName,
+                packageName = packageName,
+                searchText = searchText,
+                searchVisible = searchVisible,
+                navController = navController,
+                homeViewModel = homeViewModel,
+                onSearchClick = { searchVisible = !searchVisible },
+                onSearchVisibleChange = { searchVisible = it },
+                onSearchTextChange = { searchText = it }
+            )
         },
         content = {
             Column(
-                    modifier = Modifier.fillMaxSize(),
-                    verticalArrangement = Arrangement.Top,
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
+                modifier = Modifier.fillMaxSize(),
+                verticalArrangement = Arrangement.Top,
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
 
-                    Spacer(modifier = Modifier.height(64.dp))
-                    AnimatedVisibility(
-                        visible = searchVisible
-                    ) {
-                        Spacer(modifier = Modifier.padding(32.dp))
-                    }
-                    AnimatedVisibility(
-                        visible = !searchVisible || searchText.isNotEmpty(),
-                    ) {
+                Spacer(modifier = Modifier.height(64.dp))
+                AnimatedVisibility(
+                    visible = searchVisible
+                ) {
+                    Spacer(modifier = Modifier.padding(32.dp))
+                }
+                AnimatedVisibility(
+                    visible = !searchVisible || searchText.isNotEmpty(),
+                ) {
                     LazyColumn(
                         reverseLayout = true,
                         modifier = Modifier.fillMaxSize()

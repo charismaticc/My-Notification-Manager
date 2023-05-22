@@ -160,7 +160,8 @@ fun ChatTopBarContent(
         },
         actions = {
             IconButton(
-                onClick = {  expanded = true
+                onClick = {
+                    expanded = true
                 }) {
                 Icon(
                     imageVector = Icons.Filled.MoreVert,

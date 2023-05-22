@@ -71,8 +71,7 @@ fun autoRemoveDialog(
         if (appSettings != null) {
             selectedTime = appSettings.autoDeleteTimeoutString
             selectedTimeLong = appSettings.autoDeleteTimeoutLong
-        }
-        else {
+        } else {
             settingsViewModel.saveAppSettings(AppSettingsEntity(0, selectedTimeLong, selectedTime))
         }
     }
@@ -96,7 +95,7 @@ fun autoRemoveDialog(
                     .padding(16.dp)
             ) {
                 Text(
-                    modifier = Modifier.align(Alignment.CenterHorizontally) ,
+                    modifier = Modifier.align(Alignment.CenterHorizontally),
                     text = "Auto-delete time",
                     style = MaterialTheme.typography.titleMedium
                 )
@@ -175,7 +174,7 @@ fun selectAppsDialog(
         onDismissRequest = {
             openDialog.value = false
         }
-    ){
+    ) {
         Surface(
             modifier = Modifier
                 .fillMaxWidth()
@@ -197,7 +196,7 @@ fun selectAppsDialog(
                         modifier = Modifier.padding(top = 8.dp)
                     ) {
                         items(apps) { app ->
-                            val icon =  context.packageManager.getApplicationIcon(app.packageName)
+                            val icon = context.packageManager.getApplicationIcon(app.packageName)
                             AppListItem(
                                 settingsViewModel = settingsViewModel,
                                 icon = icon,
@@ -239,7 +238,7 @@ fun AppListItem(
         )
         Checkbox(
             checked = isChecked.value,
-            onCheckedChange =   { newValue ->
+            onCheckedChange = { newValue ->
                 isChecked.value = newValue
                 settingsViewModel.viewModelScope.launch {
                     val newAppEntity = appEntity.copy(isExcluded = newValue)

@@ -19,7 +19,7 @@ import com.sharipov.mynotificationmanager.ui.allnotifications.component.Notifica
 import com.sharipov.mynotificationmanager.ui.allnotifications.component.updateNotification
 import com.sharipov.mynotificationmanager.ui.topbarscomponent.SearchTopBarContent
 import com.sharipov.mynotificationmanager.ui.drawer.AppDrawer
-import com.sharipov.mynotificationmanager.ui.transparentSystemBars.TransparentSystemBars
+import com.sharipov.mynotificationmanager.utils.TransparentSystemBars
 import com.sharipov.mynotificationmanager.utils.Constants
 import com.sharipov.mynotificationmanager.viewmodel.HomeViewModel
 import kotlinx.coroutines.CoroutineScope
@@ -29,115 +29,115 @@ import kotlinx.coroutines.launch
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun AllNotificationScreen (
+fun AllNotificationScreen(
     homeViewModel: HomeViewModel,
     navController: NavController,
     coroutineScope: CoroutineScope = rememberCoroutineScope(),
     drawerState: DrawerState = rememberDrawerState(initialValue = DrawerValue.Closed),
+) {
+
+    val context = LocalContext.current
+    var searchVisible by remember { mutableStateOf(false) }
+    var searchText by remember { mutableStateOf("") }
+    val currentNavBackStackEntry by navController.currentBackStackEntryAsState()
+    val currentRoute = currentNavBackStackEntry?.destination?.route ?: Constants.Screens.APPLICATION_SCREEN
+
+    val notificationFlow = if (searchText.isNotBlank()) {
+        homeViewModel.searchNotifications(searchText).collectAsState(emptyList()).value
+    } else {
+        homeViewModel.notificationListFlow.collectAsState(emptyList()).value
+    }
+
+    TransparentSystemBars()
+
+    ModalNavigationDrawer(
+        drawerContent = {
+            AppDrawer(
+                route = currentRoute,
+                navigateToApplications = { navController.navigate(Screens.Applications.route) },
+                navigateToAllNotifications = { navController.navigate(Screens.AllNotifications.route) },
+                navigateToSettings = { navController.navigate(Screens.Settings.route) },
+                navigateToFavorite = { navController.navigate(Screens.Favorite.route) },
+                closeDrawer = { coroutineScope.launch { drawerState.close() } },
+                modifier = Modifier
+            )
+        },
+        drawerState = drawerState
     ) {
-
-        val context = LocalContext.current
-        var searchVisible by remember { mutableStateOf(false) }
-        var searchText by remember { mutableStateOf("") }
-        val currentNavBackStackEntry by navController.currentBackStackEntryAsState()
-        val currentRoute = currentNavBackStackEntry?.destination?.route ?: Constants.Screens.APPLICATION_SCREEN
-
-        val notificationFlow = if (searchText.isNotBlank()) {
-            homeViewModel.searchNotifications(searchText).collectAsState(emptyList()).value
-        } else {
-            homeViewModel.notificationListFlow.collectAsState(emptyList()).value
-        }
-
-        TransparentSystemBars()
-
-        ModalNavigationDrawer(
-            drawerContent = {
-                AppDrawer(
-                    route = currentRoute,
-                    navigateToApplications = { navController.navigate(Screens.Applications.route) },
-                    navigateToAllNotifications = { navController.navigate(Screens.AllNotifications.route) },
-                    navigateToSettings = { navController.navigate(Screens.Settings.route) },
-                    navigateToFavorite = { navController.navigate(Screens.Favorite.route) },
-                    closeDrawer = { coroutineScope.launch { drawerState.close() } },
-                    modifier = Modifier
+        Scaffold(
+            topBar = {
+                SearchTopBarContent(
+                    title = "All notification",
+                    onMenuClick = { coroutineScope.launch { drawerState.open() } },
+                    onSearchClick = { searchVisible = !searchVisible },
+                    searchVisible = searchVisible,
+                    searchText = searchText,
+                    onSearchTextChange = { searchText = it }
                 )
             },
-            drawerState = drawerState
-        ) {
-            Scaffold(
-                topBar = {
-                    SearchTopBarContent(
-                        title = "All notification",
-                        onMenuClick = { coroutineScope.launch { drawerState.open() } },
-                        onSearchClick = { searchVisible = !searchVisible },
-                        searchVisible = searchVisible,
-                        searchText = searchText,
-                        onSearchTextChange = { searchText = it }
-                    )
-                },
-                content = {
-                    Column(
-                        modifier = Modifier.fillMaxSize(),
-                        verticalArrangement = Arrangement.Top,
-                        horizontalAlignment = Alignment.CenterHorizontally
+            content = {
+                Column(
+                    modifier = Modifier.fillMaxSize(),
+                    verticalArrangement = Arrangement.Top,
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+
+                    Spacer(modifier = Modifier.padding(32.dp))
+
+                    AnimatedVisibility(
+                        visible = !searchVisible
                     ) {
 
-                        Spacer(modifier = Modifier.padding(32.dp))
-
-                        AnimatedVisibility(
-                            visible = !searchVisible
+                        Card(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(start = 16.dp, top = 16.dp, end = 16.dp, bottom = 8.dp)
                         ) {
-
-                            Card(
+                            Text(
+                                text = "Count of your notification: ${notificationFlow.size}",
                                 modifier = Modifier
-                                    .fillMaxWidth()
-                                    .padding(start = 16.dp, top = 16.dp, end = 16.dp, bottom = 8.dp)
-                            ) {
-                                Text(
-                                    text = "Count of your notification: ${notificationFlow.size}",
-                                    modifier = Modifier
-                                        .align(Alignment.CenterHorizontally)
-                                        .padding(8.dp)
+                                    .align(Alignment.CenterHorizontally)
+                                    .padding(8.dp)
+                            )
+                        }
+                    }
+
+                    AnimatedVisibility(
+                        visible = searchVisible
+                    ) {
+                        Spacer(modifier = Modifier.padding(32.dp))
+                    }
+
+                    AnimatedVisibility(
+                        visible = !searchVisible || searchText.isNotEmpty(),
+                    ) {
+                        LazyColumn {
+                            items(notificationFlow.size) { index ->
+                                val notification = notificationFlow[index]
+                                NotificationItem(
+                                    homeViewModel = homeViewModel,
+                                    notification = notification,
+                                    Modifier
+                                        .fillMaxSize()
+                                        .padding(16.dp, 16.dp, 16.dp)
+                                        .combinedClickable(
+                                            onClick = {
+                                                navController.navigate(
+                                                    Screens.Details.route +
+                                                            "/${notification.id.toString()}"
+                                                )
+                                            },
+                                            onLongClick = {
+                                                updateNotification(notification, homeViewModel, context)
+                                            }
+                                        )
                                 )
                             }
-                        }
-
-                        AnimatedVisibility(
-                            visible = searchVisible
-                        ) {
-                            Spacer(modifier = Modifier.padding(32.dp))
-                        }
-
-                        AnimatedVisibility(
-                            visible = !searchVisible || searchText.isNotEmpty(),
-                        ) {
-                            LazyColumn {
-                                items(notificationFlow.size) { index ->
-                                    val notification = notificationFlow[index]
-                                    NotificationItem(
-                                        homeViewModel = homeViewModel,
-                                        notification = notification,
-                                        Modifier
-                                            .fillMaxSize()
-                                            .padding(16.dp, 16.dp, 16.dp)
-                                            .combinedClickable(
-                                                onClick = {
-                                                    navController.navigate(
-                                                        Screens.Details.route +
-                                                                "/${notification.id.toString()}"
-                                                    )
-                                                },
-                                                onLongClick = {
-                                                    updateNotification(notification, homeViewModel, context)
-                                                }
-                                            )
-                                    )
-                                }
-                                item { Spacer(modifier = Modifier.height(16.dp)) }
-                            }
+                            item { Spacer(modifier = Modifier.height(16.dp)) }
                         }
                     }
                 }
-            )
-        }
+            }
+        )
     }
+}

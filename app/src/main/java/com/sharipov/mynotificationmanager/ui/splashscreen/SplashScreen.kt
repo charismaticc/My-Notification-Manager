@@ -16,22 +16,19 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.sharipov.mynotificationmanager.navigation.Screens
-import com.sharipov.mynotificationmanager.ui.transparentSystemBars.TransparentSystemBars
-import com.sharipov.mynotificationmanager.utils.DeleteExpiredNotifications
-import com.sharipov.mynotificationmanager.utils.UpdateApplicationList
 import com.sharipov.mynotificationmanager.viewmodel.HomeViewModel
 import com.sharipov.mynotificationmanager.viewmodel.SettingsViewModel
 import kotlinx.coroutines.delay
+import com.sharipov.mynotificationmanager.utils.TransparentSystemBars
+import com.sharipov.mynotificationmanager.utils.DeleteExpiredNotifications
+import com.sharipov.mynotificationmanager.utils.UpdateApplicationList
 
 @Composable
 fun SplashScreen(
     navController: NavController,
-                 homeViewModel: HomeViewModel,
-                 settingsViewModel: SettingsViewModel
-){
-    UpdateApplicationList(settingsViewModel = settingsViewModel)
-    DeleteExpiredNotifications(homeViewModel = homeViewModel, settingsViewModel = settingsViewModel)
-    TransparentSystemBars()
+    homeViewModel: HomeViewModel,
+    settingsViewModel: SettingsViewModel
+) {
 
     var startAnimate by remember {
         mutableStateOf(false)
@@ -41,8 +38,12 @@ fun SplashScreen(
         targetValue = if (startAnimate) 1f else 0f,
         animationSpec = tween(durationMillis = 1000)
     )
-    
-    LaunchedEffect(key1 = true){
+
+    UpdateApplicationList(settingsViewModel = settingsViewModel)
+    DeleteExpiredNotifications(homeViewModel = homeViewModel, settingsViewModel = settingsViewModel)
+    TransparentSystemBars()
+
+    LaunchedEffect(key1 = true) {
         startAnimate = true
         delay(1000)
         navController.navigate(Screens.Applications.route)
@@ -52,12 +53,15 @@ fun SplashScreen(
 }
 
 @Composable
-fun Splash(alpha: Float){
-    Box(modifier = Modifier.fillMaxSize(),
-        contentAlignment = Alignment.Center){
-        Icon(modifier = Modifier
-            .size(120.dp)
-            .alpha(alpha),
+fun Splash(alpha: Float) {
+    Box(
+        modifier = Modifier.fillMaxSize(),
+        contentAlignment = Alignment.Center
+    ) {
+        Icon(
+            modifier = Modifier
+                .size(120.dp)
+                .alpha(alpha),
             imageVector = Icons.Default.Notifications,
             contentDescription = "",
             tint = MaterialTheme.colorScheme.primary

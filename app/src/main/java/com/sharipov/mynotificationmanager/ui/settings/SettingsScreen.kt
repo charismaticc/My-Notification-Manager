@@ -26,7 +26,7 @@ import com.sharipov.mynotificationmanager.ui.settings.components.autoRemoveDialo
 import com.sharipov.mynotificationmanager.ui.settings.components.feedbackDialog
 import com.sharipov.mynotificationmanager.ui.settings.components.privatePolicyDialog
 import com.sharipov.mynotificationmanager.ui.settings.components.selectAppsDialog
-import com.sharipov.mynotificationmanager.ui.transparentSystemBars.TransparentSystemBars
+import com.sharipov.mynotificationmanager.utils.TransparentSystemBars
 import com.sharipov.mynotificationmanager.viewmodel.SettingsViewModel
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter", "CoroutineCreationDuringComposition")
@@ -47,7 +47,7 @@ fun SettingsScreen(
     val openAboutUsDialog = remember { mutableStateOf(false) }
 
     var selectedTime by remember { mutableStateOf("Newer") }
-    val showAutoDeleteDialog= remember { mutableStateOf(false) }
+    val showAutoDeleteDialog = remember { mutableStateOf(false) }
 
     TransparentSystemBars()
 
@@ -66,7 +66,7 @@ fun SettingsScreen(
         drawerState = drawerState
     ) {
         Scaffold(
-            modifier  = Modifier,
+            modifier = Modifier,
             topBar = {
                 TopBarContent(
                     title = "Settings",
@@ -133,8 +133,10 @@ fun SettingsScreen(
                         onDismiss = { showAutoDeleteDialog.value = false },
                         onTimeSelected = { selectedTime = it }
                     )
+
                     openSelectAppsDialog.value -> openSelectAppsDialog.value =
                         selectAppsDialog(settingsViewModel = settingsViewModel)
+
                     openPrivatePolicyDialog.value -> openPrivatePolicyDialog.value = privatePolicyDialog()
                     openFeedbackDialog.value -> openFeedbackDialog.value = feedbackDialog()
                     openAboutUsDialog.value -> openAboutUsDialog.value = aboutUsDialog()

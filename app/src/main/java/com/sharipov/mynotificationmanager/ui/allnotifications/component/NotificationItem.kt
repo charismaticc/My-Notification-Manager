@@ -52,7 +52,7 @@ fun NotificationItem(homeViewModel: HomeViewModel, notification: NotificationEnt
         modifier = modifier
     ) {
         Box(modifier = Modifier.fillMaxSize()) {
-            Row(modifier = Modifier.padding(start = 16.dp, end =  16.dp, bottom =  16.dp)) {
+            Row(modifier = Modifier.padding(start = 16.dp, end = 16.dp, bottom = 16.dp)) {
                 Image(
                     painter = rememberDrawablePainter(appIconDrawable),
                     contentDescription = "App icon",
@@ -76,7 +76,7 @@ fun NotificationItem(homeViewModel: HomeViewModel, notification: NotificationEnt
                     Row(
                         modifier = Modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.SpaceBetween
-                    ){
+                    ) {
                         Text(
                             text = dateFormat.format(Date(notification.time)),
                             style = MaterialTheme.typography.bodySmall,
@@ -85,7 +85,8 @@ fun NotificationItem(homeViewModel: HomeViewModel, notification: NotificationEnt
                         Image(
                             imageVector = icon,
                             contentDescription = "",
-                            modifier = Modifier.size(32.dp)
+                            modifier = Modifier
+                                .size(32.dp)
                                 .clickable {
                                     updateNotification(notification, homeViewModel, context)
                                 },

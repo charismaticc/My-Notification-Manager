@@ -17,7 +17,7 @@ import com.sharipov.mynotificationmanager.ui.drawer.AppDrawer
 import com.sharipov.mynotificationmanager.navigation.Screens
 import com.sharipov.mynotificationmanager.ui.allnotifications.component.NotificationItem
 import com.sharipov.mynotificationmanager.ui.topbarscomponent.TopBarContent
-import com.sharipov.mynotificationmanager.ui.transparentSystemBars.TransparentSystemBars
+import com.sharipov.mynotificationmanager.utils.TransparentSystemBars
 import com.sharipov.mynotificationmanager.utils.Constants
 import com.sharipov.mynotificationmanager.viewmodel.HomeViewModel
 import kotlinx.coroutines.CoroutineScope
@@ -79,13 +79,15 @@ fun FavoriteScreen(
                             NotificationItem(
                                 homeViewModel = homeViewModel,
                                 notification = notification,
-                                Modifier.fillMaxSize().padding(16.dp, 16.dp, 16.dp)
+                                Modifier
+                                    .fillMaxSize()
+                                    .padding(16.dp, 16.dp, 16.dp)
                                     .clickable {
-                                    navController.navigate(
-                                        Screens.Details.route +
-                                                "/${notification.id.toString()}"
-                                    )
-                                }
+                                        navController.navigate(
+                                            Screens.Details.route +
+                                                    "/${notification.id.toString()}"
+                                        )
+                                    }
                             )
                         }
                         item { Spacer(modifier = Modifier.height(16.dp)) }

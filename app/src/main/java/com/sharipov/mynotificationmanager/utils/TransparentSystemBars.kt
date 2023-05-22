@@ -1,4 +1,4 @@
-package com.sharipov.mynotificationmanager.ui.transparentSystemBars
+package com.sharipov.mynotificationmanager.utils
 
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme

@@ -16,7 +16,7 @@ import androidx.navigation.NavController
 import com.sharipov.mynotificationmanager.navigation.Screens
 import com.sharipov.mynotificationmanager.ui.topbarscomponent.TopBarContent
 import com.sharipov.mynotificationmanager.ui.conversations.component.UserItem
-import com.sharipov.mynotificationmanager.ui.transparentSystemBars.TransparentSystemBars
+import com.sharipov.mynotificationmanager.utils.TransparentSystemBars
 import com.sharipov.mynotificationmanager.viewmodel.HomeViewModel
 import kotlinx.coroutines.flow.map
 
@@ -41,7 +41,7 @@ fun ConversationsScreen(
             TopBarContent(
                 title = "Conversations",
                 icon = Icons.Default.ArrowBack,
-                onNavigationClick = {navController.navigateUp()}
+                onNavigationClick = { navController.navigateUp() }
             )
         },
         content = {
@@ -63,7 +63,9 @@ fun ConversationsScreen(
                         if (packageName == notification.packageName) {
                             val userName = notification.user
                             UserItem(userName = userName,
-                                modifier = Modifier.fillMaxSize().padding(16.dp, 16.dp, 16.dp)
+                                modifier = Modifier
+                                    .fillMaxSize()
+                                    .padding(16.dp, 16.dp, 16.dp)
                                     .clickable {
                                         navController.navigate(
                                             Screens.Chat.route +
