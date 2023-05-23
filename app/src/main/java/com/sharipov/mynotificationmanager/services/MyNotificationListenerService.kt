@@ -36,15 +36,13 @@ class MyNotificationListenerService : NotificationListenerService() {
 
     @RequiresApi(Build.VERSION_CODES.S)
     override fun onNotificationPosted(sbn: StatusBarNotification) {
-
         // get package Name
         val packageName = sbn.packageName
 
         val coroutineScope = CoroutineScope(Dispatchers.IO)
         coroutineScope.launch {
             val excludedApp = excludedAppDao.getExcludedAppByPackageName(packageName)
-
-            if (excludedApp?.isExcluded!!) {
+            if (!excludedApp?.isExcluded!!) {
                 // get application name
                 val pm = context.packageManager
                 val appName =
