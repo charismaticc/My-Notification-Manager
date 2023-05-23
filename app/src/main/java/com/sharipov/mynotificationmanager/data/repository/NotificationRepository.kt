@@ -23,6 +23,8 @@ class NotificationRepository(
         notificationDao.getApplicationNotifications(packageName)
     suspend fun deleteNotificationsForUser(user: String, packageName: String) =
         notificationDao.deleteNotificationsForUser(user, packageName)
+    suspend fun deleteExpiredNotification(autoDeleteTimeout: Long) =
+        notificationDao.deleteExpiredNotification(autoDeleteTimeout)
     suspend fun insert(notification: NotificationEntity) =
         notificationDao.insert(notification)
     suspend fun upgrade(notification: NotificationEntity) =

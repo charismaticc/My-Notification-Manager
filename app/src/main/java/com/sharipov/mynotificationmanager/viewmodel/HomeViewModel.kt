@@ -23,6 +23,7 @@ interface HomeViewModelAbstract {
     fun upgradeNotification(notification: NotificationEntity)
     fun deleteNotification(notification: NotificationEntity)
     fun deleteNotificationsForUser(user: String, packageName: String)
+    fun deleteExpiredNotification(autoDeleteTimeout: Long)
 }
 
 @HiltViewModel
@@ -75,6 +76,12 @@ class HomeViewModel
     override fun deleteNotificationsForUser(user: String, packageName: String) {
         ioScope.launch {
             notificationRepository.deleteNotificationsForUser(user, packageName)
+        }
+    }
+
+    override fun deleteExpiredNotification(autoDeleteTimeout: Long) {
+        ioScope.launch {
+            notificationRepository.deleteExpiredNotification(autoDeleteTimeout)
         }
     }
 }

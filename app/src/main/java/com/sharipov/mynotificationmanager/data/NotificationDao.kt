@@ -56,6 +56,9 @@ interface NotificationDao {
     @Query("DELETE FROM notification WHERE user = :user AND packageName = :packageName")
     suspend fun deleteNotificationsForUser(user: String, packageName: String)
 
+    @Query("DELETE FROM notification WHERE time < :autoDeleteTimeout")
+    suspend fun deleteExpiredNotification(autoDeleteTimeout: Long)
+
     // Insert a new notification
     @Insert
     suspend fun insert(notification: NotificationEntity)

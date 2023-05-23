@@ -66,6 +66,7 @@ fun autoRemoveDialog(
 
     var selectedTime = "Never"
     var selectedTimeLong = 0L
+
     runBlocking {
         val appSettings = settingsViewModel.getAppSettings()
         if (appSettings != null) {

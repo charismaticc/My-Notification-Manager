@@ -20,7 +20,6 @@ import com.sharipov.mynotificationmanager.viewmodel.HomeViewModel
 import com.sharipov.mynotificationmanager.viewmodel.SettingsViewModel
 import kotlinx.coroutines.delay
 import com.sharipov.mynotificationmanager.utils.TransparentSystemBars
-import com.sharipov.mynotificationmanager.utils.DeleteExpiredNotifications
 import com.sharipov.mynotificationmanager.utils.UpdateApplicationList
 
 @Composable
@@ -40,12 +39,21 @@ fun SplashScreen(
     )
 
     UpdateApplicationList(settingsViewModel = settingsViewModel)
-    DeleteExpiredNotifications(homeViewModel = homeViewModel, settingsViewModel = settingsViewModel)
     TransparentSystemBars()
 
     LaunchedEffect(key1 = true) {
         startAnimate = true
         delay(1000)
+
+        var autoDeleteTimeout = settingsViewModel.getAppSettings()?.autoDeleteTimeoutLong ?: 0L
+
+        if (autoDeleteTimeout != 0L) {
+            val currentTime = System.currentTimeMillis()
+            autoDeleteTimeout = currentTime - autoDeleteTimeout
+            homeViewModel.deleteExpiredNotification(autoDeleteTimeout)
+        }
+
+
         navController.navigate(Screens.Applications.route)
     }
 
