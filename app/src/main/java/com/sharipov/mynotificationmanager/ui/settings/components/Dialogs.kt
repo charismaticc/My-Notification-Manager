@@ -1,7 +1,11 @@
 package com.sharipov.mynotificationmanager.ui.settings.components
 
+import android.content.Intent
 import android.graphics.drawable.Drawable
+import android.net.Uri
 import android.widget.Toast
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -25,6 +29,7 @@ import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Surface
@@ -39,9 +44,12 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewModelScope
 import com.google.accompanist.drawablepainter.rememberDrawablePainter
 import com.sharipov.mynotificationmanager.R
@@ -290,6 +298,8 @@ fun privatePolicyDialog(): Boolean {
 @Composable
 fun feedbackDialog(): Boolean {
     val openDialog = remember { mutableStateOf(true) }
+    val launcher = rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()){}
+
     AlertDialog(
         onDismissRequest = {
             openDialog.value = false
@@ -302,7 +312,67 @@ fun feedbackDialog(): Boolean {
             shape = MaterialTheme.shapes.large
         ) {
             Column(modifier = Modifier.padding(16.dp)) {
-                Text(text = "feedbackDialog")
+
+                Text(
+                    text = "Choose a suitable communication method for you!",
+                    modifier = Modifier.fillMaxWidth(),
+                    textAlign = TextAlign.Center,
+                    style = TextStyle(
+                        fontSize = 18.sp,
+                        textAlign = TextAlign.Center
+                    ),
+                    softWrap = true
+                )
+
+                Spacer(modifier = Modifier.padding(16.dp))
+
+                Button(
+                    onClick = {
+                        val emailIntent = Intent(Intent.ACTION_SENDTO).apply {
+                            data = Uri.parse("mailto:")
+                            putExtra(Intent.EXTRA_EMAIL, arrayOf("akbar20sharipov01@gmail.com"))
+                            putExtra(Intent.EXTRA_SUBJECT, "My Notification Manager")
+                        }
+                        launcher.launch(emailIntent)
+                    },
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    Icon(
+                        modifier = Modifier
+                            .size(48.dp)
+                            .padding(end = 16.dp),
+                        painter = painterResource(R.drawable.ic_mail),
+                        contentDescription = "Icon",
+                    )
+                    Text(
+                        text = "Email",
+                        style = MaterialTheme.typography.titleMedium
+                    )
+                }
+
+                Spacer(modifier = Modifier.padding(8.dp))
+
+                Button(
+                    onClick = {
+                        val telegramIntent = Intent(Intent.ACTION_VIEW).apply {
+                            data = Uri.parse("https://t.me/moscowmap")
+                        }
+                        launcher.launch(telegramIntent)
+                    },
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    Icon(
+                        modifier = Modifier
+                            .size(48.dp)
+                            .padding(end = 16.dp),
+                        painter = painterResource(R.drawable.ic_telegram),
+                        contentDescription = "Icon",
+                    )
+                    Text(
+                        text = "Telegram",
+                        style = MaterialTheme.typography.titleMedium
+                    )
+                }
             }
         }
     }
@@ -325,7 +395,9 @@ fun aboutUsDialog(): Boolean {
             shape = MaterialTheme.shapes.large
         ) {
             Column(modifier = Modifier.padding(16.dp)) {
-                Text(text = "aboutUsDialog")
+                Text(text = "My Notification Manager")
+                Text(text = "Developer: Akbar Sharipov")
+                Text(text = "App Version: 1.0.0")
             }
         }
     }
