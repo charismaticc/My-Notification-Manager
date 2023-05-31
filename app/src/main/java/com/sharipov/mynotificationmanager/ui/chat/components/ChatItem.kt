@@ -6,10 +6,6 @@ import android.content.Context
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Delete
-import androidx.compose.material.icons.filled.Favorite
-import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Divider
@@ -23,9 +19,12 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import com.sharipov.mynotificationmanager.R
 import com.sharipov.mynotificationmanager.model.NotificationEntity
 import com.sharipov.mynotificationmanager.viewmodel.HomeViewModel
 import java.text.SimpleDateFormat
@@ -72,9 +71,21 @@ fun ChatItem(homeViewModel: HomeViewModel, notification: NotificationEntity) {
             DropdownMenuItem(
                 text = {
                     Row() {
-                        Icon(Icons.Default.Notifications, "Copy")
+                        Icon(
+                            modifier = Modifier
+                                .size(48.dp)
+                                .padding(end = 16.dp),
+                            painter = painterResource(R.drawable.ic_content_copy),
+                            contentDescription = "Copy",
+                        )
                         Spacer(Modifier.width(8.dp))
-                        Text("Add to favorite")
+                        Text(
+                            text = "Add to favorite",
+                            modifier = Modifier
+                                .weight(1f)
+                                .align(Alignment.CenterVertically)
+                                .fillMaxWidth()
+                        )
                     }
                 },
                 onClick = {
@@ -90,9 +101,21 @@ fun ChatItem(homeViewModel: HomeViewModel, notification: NotificationEntity) {
             DropdownMenuItem(
                 text = {
                     Row() {
-                        Icon(Icons.Default.Favorite, "Add to favorite")
+                        Icon(
+                            modifier = Modifier
+                                .size(48.dp)
+                                .padding(end = 16.dp),
+                            painter = painterResource(R.drawable.ic_star),
+                            contentDescription = "Add to favorite",
+                        )
                         Spacer(Modifier.width(8.dp))
-                        Text("Add to favorite")
+                        Text(
+                            text = "Add to favorite",
+                            modifier = Modifier
+                                .weight(1f)
+                                .align(Alignment.CenterVertically)
+                                .fillMaxWidth()
+                        )
                     }
                 },
                 onClick = {
@@ -116,9 +139,21 @@ fun ChatItem(homeViewModel: HomeViewModel, notification: NotificationEntity) {
             DropdownMenuItem(
                 text = {
                     Row() {
-                        Icon(Icons.Default.Delete, "Delete notification")
+                        Icon(
+                            modifier = Modifier
+                                .size(48.dp)
+                                .padding(end = 16.dp),
+                            painter = painterResource(R.drawable.ic_delete),
+                            contentDescription = "Delete notification",
+                        )
                         Spacer(Modifier.width(8.dp))
-                        Text("Delete")
+                        Text(
+                            text = "Delete",
+                            modifier = Modifier
+                                .weight(1f)
+                                .align(Alignment.CenterVertically)
+                                .fillMaxWidth()
+                        )
                     }
                 },
                 onClick = {

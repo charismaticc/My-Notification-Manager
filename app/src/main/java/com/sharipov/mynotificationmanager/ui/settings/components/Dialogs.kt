@@ -226,7 +226,7 @@ fun AppListItem(
     icon: Drawable,
     appEntity: ExcludedAppEntity
 ) {
-    val isChecked = remember { mutableStateOf(!appEntity.isExcluded) }
+    val isChecked = remember { mutableStateOf(appEntity.isExcluded) }
 
     Row(
         verticalAlignment = Alignment.CenterVertically,
@@ -355,7 +355,7 @@ fun feedbackDialog(): Boolean {
                 Button(
                     onClick = {
                         val telegramIntent = Intent(Intent.ACTION_VIEW).apply {
-                            data = Uri.parse("https://t.me/moscowmap")
+                            data = Uri.parse("https://t.me/MyNotificationManager")
                         }
                         launcher.launch(telegramIntent)
                     },

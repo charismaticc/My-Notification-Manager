@@ -15,5 +15,6 @@ class ExcludedAppRepository(
         excludedApp.addExcludedApp(excludedApp = app)
     suspend fun updateExcludedApp(app: ExcludedAppEntity) =
         excludedApp.updateExcludedApp(excludedApp = app)
-
+    suspend fun deleteExcludedAppByPackageName(packageName: String) =
+        excludedApp.deleteExcludedAppByPackageName(packageName = packageName)
 }

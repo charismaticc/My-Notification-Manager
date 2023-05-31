@@ -1,17 +1,19 @@
-package com.sharipov.mynotificationmanager.utils;
+package com.sharipov.mynotificationmanager.utils
 
 import android.content.pm.PackageManager
-import androidx.compose.runtime.Composable;
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
+import androidx.room.Transaction
 import com.sharipov.mynotificationmanager.model.ExcludedAppEntity
 import com.sharipov.mynotificationmanager.viewmodel.SettingsViewModel
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
-
 
 @Composable
 fun UpdateApplicationList(settingsViewModel: SettingsViewModel) {
     val packageManager = LocalContext.current.packageManager
     val apps = packageManager.getInstalledPackages(0)
+    val appListFromSource = mutableListOf<ExcludedAppEntity>()
 
     for (i in apps) {
         val appName =
@@ -22,11 +24,31 @@ fun UpdateApplicationList(settingsViewModel: SettingsViewModel) {
         val app = ExcludedAppEntity(
             packageName = i.packageName.toString(),
             appName = appName,
-            isExcluded = false
+            isExcluded = true
         )
+        appListFromSource.add(app)
+    }
+    runBlocking {
+        syncAppList(appListFromSource, settingsViewModel)
+    }
+}
 
-        runBlocking {
-            settingsViewModel.addExcludedApp(app)
+@Transaction
+suspend fun syncAppList(appListFromSource: List<ExcludedAppEntity>, settingsViewModel: SettingsViewModel) {
+    val appListFromDatabase = settingsViewModel.getAllExcludedApps().first()
+    val missingApps = appListFromSource.filter { app ->
+        appListFromDatabase.none { it.packageName == app.packageName }
+    }
+    if (missingApps.isNotEmpty()) {
+        for(i in missingApps)
+            settingsViewModel.addExcludedApp(i)
+    }
+    val appsToRemove = appListFromDatabase.filter { app ->
+        appListFromSource.none { it.packageName == app.packageName }
+    }
+    if (appsToRemove.isNotEmpty()) {
+        for (i in appsToRemove) {
+            settingsViewModel.deleteExcludedAppByPackageName(i.packageName)
         }
     }
 }

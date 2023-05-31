@@ -27,6 +27,8 @@ interface SettingsViewModelAbstract {
     fun updateExcludedApp(app: ExcludedAppEntity)
 
     fun searchApplication(query: String): Flow<List<ExcludedAppEntity>>
+
+    fun deleteExcludedAppByPackageName(packageName: String)
 }
 
 
@@ -65,6 +67,11 @@ class SettingsViewModel
     override fun updateExcludedApp(app: ExcludedAppEntity) {
         ioScope.launch {
             excludedAppRepository.updateExcludedApp(app = app)
+        }
+    }
+    override fun deleteExcludedAppByPackageName(packageName: String) {
+        ioScope.launch {
+            excludedAppRepository.deleteExcludedAppByPackageName(packageName = packageName)
         }
     }
 }
