@@ -23,6 +23,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.sharipov.mynotificationmanager.R
 import com.sharipov.mynotificationmanager.model.NotificationEntity
@@ -80,7 +81,7 @@ fun ChatItem(homeViewModel: HomeViewModel, notification: NotificationEntity) {
                         )
                         Spacer(Modifier.width(8.dp))
                         Text(
-                            text = "Add to favorite",
+                            text = stringResource(id = R.string.copy),
                             modifier = Modifier
                                 .weight(1f)
                                 .align(Alignment.CenterVertically)
@@ -110,7 +111,7 @@ fun ChatItem(homeViewModel: HomeViewModel, notification: NotificationEntity) {
                         )
                         Spacer(Modifier.width(8.dp))
                         Text(
-                            text = "Add to favorite",
+                            text = stringResource(id = R.string.add_to_favorite),
                             modifier = Modifier
                                 .weight(1f)
                                 .align(Alignment.CenterVertically)
@@ -148,7 +149,7 @@ fun ChatItem(homeViewModel: HomeViewModel, notification: NotificationEntity) {
                         )
                         Spacer(Modifier.width(8.dp))
                         Text(
-                            text = "Delete",
+                            text = stringResource(id = R.string.delete),
                             modifier = Modifier
                                 .weight(1f)
                                 .align(Alignment.CenterVertically)

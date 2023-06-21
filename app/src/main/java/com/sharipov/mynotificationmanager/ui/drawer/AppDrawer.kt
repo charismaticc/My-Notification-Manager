@@ -30,7 +30,7 @@ fun AppDrawer(
         Column(modifier = modifier) {
 
             MyNavigationDrawerItem(
-                label = "Applications",
+                label = stringResource(id = R.string.applications),
                 selected = route == Constants.Screens.APPLICATION_SCREEN,
                 onClick = {
                     navigateToApplications()
@@ -40,7 +40,7 @@ fun AppDrawer(
             )
             Spacer(modifier = Modifier.padding(2.dp))
             MyNavigationDrawerItem(
-                label = "All notification",
+                label = stringResource(id = R.string.all_notification),
                 selected = route == Constants.Screens.ALL_NOTIFICATIONS_SCREEN,
                 onClick = {
                     navigateToAllNotifications()
@@ -50,7 +50,7 @@ fun AppDrawer(
             )
             Spacer(modifier = Modifier.padding(2.dp))
             MyNavigationDrawerItem(
-                label = "Favorites",
+                label = stringResource(id = R.string.favorites),
                 selected = route == Constants.Screens.FAVORITE_SCREEN,
                 onClick = {
                     navigateToFavorite()
@@ -62,7 +62,7 @@ fun AppDrawer(
             Spacer(modifier = Modifier.weight(1f))
 
             MyNavigationDrawerItem(
-                label = "Settings",
+                label = stringResource(id = R.string.settings),
                 selected = route == Constants.Screens.SETTINGS_SCREEN,
                 onClick = {
                     navigateToSettings()

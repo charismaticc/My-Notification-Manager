@@ -12,10 +12,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.sharipov.mynotificationmanager.R
 import com.sharipov.mynotificationmanager.utils.TransparentSystemBars
 import com.sharipov.mynotificationmanager.viewmodel.HomeViewModel
 import kotlinx.coroutines.flow.map
@@ -55,14 +57,14 @@ fun DetailsScreen(homeViewModel: HomeViewModel, notificationId: String) {
                     )
                     Column(Modifier.padding(16.dp, 16.dp, 16.dp, 16.dp)) {
                         Row {
-                            Text("From: ")
+                            Text(stringResource(id = R.string.from))
                             Text(
                                 notificationState.value?.user ?: "None",
                                 modifier = Modifier.basicMarquee()
                             )
                         }
                         Row {
-                            Text("In app: ")
+                            Text(stringResource(id = R.string.in_app))
                             Text(
                                 notificationState.value?.appName ?: "None",
                                 modifier = Modifier.basicMarquee()
@@ -70,13 +72,13 @@ fun DetailsScreen(homeViewModel: HomeViewModel, notificationId: String) {
                         }
                         notificationState.value?.let { notification ->
                             Text(
-                                "Time : " +
+                                stringResource(id = R.string.time) +
                                         dateFormat.format(Date(notification.time)).toString(),
                                 modifier = Modifier
                                     .fillMaxWidth()
                             )
                         } ?: run {
-                            Text("Time is null")
+                            Text(stringResource(id = R.string.time_is_null))
                         }
                     }
                 }

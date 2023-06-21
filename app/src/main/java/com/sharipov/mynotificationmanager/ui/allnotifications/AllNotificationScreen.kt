@@ -11,9 +11,11 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.currentBackStackEntryAsState
+import com.sharipov.mynotificationmanager.R
 import com.sharipov.mynotificationmanager.navigation.Screens
 import com.sharipov.mynotificationmanager.ui.allnotifications.component.NotificationItem
 import com.sharipov.mynotificationmanager.ui.allnotifications.component.updateNotification
@@ -67,7 +69,7 @@ fun AllNotificationScreen(
         Scaffold(
             topBar = {
                 SearchTopBarContent(
-                    title = "All notification",
+                    title = stringResource(id = R.string.all_notification),
                     onMenuClick = { coroutineScope.launch { drawerState.open() } },
                     onSearchClick = { searchVisible = !searchVisible },
                     searchVisible = searchVisible,
@@ -94,7 +96,8 @@ fun AllNotificationScreen(
                                 .padding(start = 16.dp, top = 16.dp, end = 16.dp, bottom = 8.dp)
                         ) {
                             Text(
-                                text = "Count of your notification: ${notificationFlow.size}",
+                                text = "${stringResource(id = R.string.count_of_your_notification)} " +
+                                        "${notificationFlow.size}",
                                 modifier = Modifier
                                     .align(Alignment.CenterHorizontally)
                                     .padding(8.dp)

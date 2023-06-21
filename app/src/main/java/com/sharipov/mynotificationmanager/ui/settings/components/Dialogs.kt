@@ -283,7 +283,7 @@ fun privatePolicyDialog(): Boolean {
                     .verticalScroll(rememberScrollState())
             ) {
                 Text(
-                    text = stringResource(id = R.string.private_policy),
+                    text = stringResource(id = R.string.private_policy_text),
                     modifier = Modifier.fillMaxWidth(),
                     textAlign = TextAlign.Start,
                     style = MaterialTheme.typography.bodyLarge
@@ -298,7 +298,7 @@ fun privatePolicyDialog(): Boolean {
 @Composable
 fun feedbackDialog(): Boolean {
     val openDialog = remember { mutableStateOf(true) }
-    val launcher = rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()){}
+    val launcher = rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) {}
 
     AlertDialog(
         onDismissRequest = {
@@ -403,3 +403,59 @@ fun aboutUsDialog(): Boolean {
     }
     return openDialog.value
 }
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun languageDialog(): Boolean {
+    val languages = listOf("English", "Русский", "Тоҷикӣ")
+    var selectedLanguage by remember { mutableStateOf("English") }
+    val openDialog = remember { mutableStateOf(true) }
+    AlertDialog(
+        onDismissRequest = {
+            openDialog.value = false
+        })
+    {
+        Surface(
+            modifier = Modifier
+                .wrapContentWidth()
+                .wrapContentHeight(),
+            shape = MaterialTheme.shapes.large
+        ) {
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(16.dp)
+            ) {
+                Text(
+                    modifier = Modifier.align(Alignment.CenterHorizontally),
+                    text = stringResource(id = R.string.select_language),
+                    style = MaterialTheme.typography.titleMedium
+                )
+                Spacer(modifier = Modifier.height(16.dp))
+
+                languages.forEach { text ->
+                    Row(Modifier
+                        .selectable(
+                            selected = (text == selectedLanguage),
+                            onClick = { selectedLanguage = text }
+                        )
+                        .fillMaxWidth()
+                        .padding(16.dp)) {
+                        RadioButton(
+                            selected = (text == selectedLanguage),
+                            onClick = null // null so that the processing is only on Row
+                        )
+                        Text(
+                            text = text,
+                            modifier = Modifier.padding(start = 8.dp)
+                        )
+                    }
+                }
+            }
+        }
+    }
+    return openDialog.value
+}
+
+
+

@@ -19,6 +19,7 @@ import com.sharipov.mynotificationmanager.viewmodel.HomeViewModel
 import com.sharipov.mynotificationmanager.navigation.SetupNavHost
 import com.sharipov.mynotificationmanager.viewmodel.SettingsViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import java.util.Locale
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {

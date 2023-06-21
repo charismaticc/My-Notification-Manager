@@ -11,8 +11,10 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.sharipov.mynotificationmanager.R
 import com.sharipov.mynotificationmanager.navigation.Screens
 import com.sharipov.mynotificationmanager.ui.topbarscomponent.TopBarContent
 import com.sharipov.mynotificationmanager.ui.conversations.component.UserItem
@@ -39,7 +41,7 @@ fun ConversationsScreen(
         modifier = Modifier.fillMaxSize(),
         topBar = {
             TopBarContent(
-                title = "Conversations",
+                title = stringResource(id = R.string.conversations),
                 icon = Icons.Default.ArrowBack,
                 onNavigationClick = { navController.navigateUp() }
             )
@@ -58,26 +60,19 @@ fun ConversationsScreen(
                     item { Spacer(modifier = Modifier.height(8.dp)) }
 
                     items(usersListState.value.size) { index ->
-                        Log.d("Size", usersListState.value.size.toString())
                         val notification = usersListState.value[index]
                         if (packageName == notification.packageName) {
                             val userName = notification.user
-                            UserItem(userName = userName,
-                                modifier = Modifier
-                                    .fillMaxSize()
-                                    .padding(16.dp, 16.dp, 16.dp)
-                                    .clickable {
-                                        navController.navigate(
-                                            Screens.Chat.route +
-                                                    "/${userName}/${packageName}"
-                                        )
-                                    }
-                            )
+                            val modifier = Modifier
+                                .fillMaxSize()
+                                .padding(16.dp, 16.dp, 16.dp)
+                                .clickable {
+                                    navController.navigate(Screens.Chat.route + "/${userName}/${packageName}")
+                                }
+                            UserItem(userName = userName, modifier = modifier)
                         }
                     }
-
                     item { Spacer(modifier = Modifier.height(16.dp)) }
-
                 }
             }
         }

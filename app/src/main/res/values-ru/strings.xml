@@ -1,0 +1,36 @@
+<resources>
+    <string name="app_name">Мой менеджер уведомлений</string>
+    <string name="service_name">My Notification Listener Service</string>
+    <string name="private_policy_text">-Политика конфиденциальности\nДанное приложение сохраняет уведомления, которые приходят на ваш телефон. Мы ценим вашу конфиденциальность и соблюдаем высокие стандарты защиты данных.\n-Собираемые данные\nПриложение собирает только уведомления, которые приходят на ваш телефон. Они сохраняются в локальном хранилище вашего устройства и не передаются никаким третьим сторонам.\n-Использование данных\nСохраненные уведомления используются только внутри приложения, чтобы предоставить вам функциональность просмотра и управления ими.\n-Хранение данных\nУведомления хранятся на вашем устройстве в локальном хранилище и могут быть удалены только вами через интерфейс приложения.\n-Контакты\nЕсли у вас есть вопросы или замечания касательно нашей политики конфиденциальности, пожалуйста, свяжитесь с нами по адресу akbar20sharipov01@gmail.com</string>
+    <string name="applications">Приложения</string>
+
+
+    <string name="notification_added_to_favorites">Уведомление добавлено в избранное</string>
+    <string name="notification_removed_from_favorites">Уведомление удалено из избранного</string>
+
+    <string name="all_notification">Все уведомления</string>
+    <string name="count_of_your_notification">Количество ваших уведомлений:</string>
+
+    <string name="copy">Копировать</string>
+    <string name="text_copied">Скопированный текст</string>
+    <string name="add_to_favorite">Добавить в избранное</string>
+    <string name="delete">Удалить</string>
+
+    <string name="unknown">Неизвестный</string>
+    <string name="conversations">Чаты</string>
+
+    <string name="from">От: </string>
+    <string name="in_app">В приложении: </string>
+    <string name="time">Время: </string>
+    <string name="time_is_null">Время не известно</string>
+
+    <string name="favorites">Избранное</string>
+    <string name="settings">Настройки</string>
+
+    <string name="automatic_deletion_of_notifications">Автоматическое удаление уведомлений</string>
+    <string name="private_policy">Политика конфиденциальности</string>
+    <string name="select_apps">Выберите приложения</string>
+    <string name="feedback">Обратная связь</string>
+    <string name="select_language">Язык</string>
+    <string name="about_us">О нас</string>
+</resources>

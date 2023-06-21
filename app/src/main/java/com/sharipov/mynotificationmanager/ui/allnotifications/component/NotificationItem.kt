@@ -19,6 +19,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import com.google.accompanist.drawablepainter.rememberDrawablePainter
+import com.sharipov.mynotificationmanager.R
 import com.sharipov.mynotificationmanager.model.NotificationEntity
 import com.sharipov.mynotificationmanager.viewmodel.HomeViewModel
 import java.text.SimpleDateFormat
@@ -112,11 +113,15 @@ fun updateNotification(notificationEntity: NotificationEntity, homeViewModel: Ho
 
     homeViewModel.upgradeNotification(notification = notification)
 
-    val msg = if (notification.favorite) {
-        "add to"
-    } else {
-        "removed from"
-    }
+    val msg = getMessage(context = context, notification.favorite)
+    Toast.makeText(context, msg, Toast.LENGTH_SHORT).show()
+}
 
-    Toast.makeText(context, "Notification $msg favorite!", Toast.LENGTH_SHORT).show()
+fun getMessage(context: Context, isFavorite: Boolean): String {
+    val resourceId = if (isFavorite) {
+        R.string.notification_added_to_favorites
+    } else {
+        R.string.notification_removed_from_favorites
+    }
+    return context.getString(resourceId)
 }

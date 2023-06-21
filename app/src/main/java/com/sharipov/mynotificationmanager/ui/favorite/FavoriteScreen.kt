@@ -10,9 +10,11 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.currentBackStackEntryAsState
+import com.sharipov.mynotificationmanager.R
 import com.sharipov.mynotificationmanager.ui.drawer.AppDrawer
 import com.sharipov.mynotificationmanager.navigation.Screens
 import com.sharipov.mynotificationmanager.ui.allnotifications.component.NotificationItem
@@ -56,7 +58,7 @@ fun FavoriteScreen(
         Scaffold(
             topBar = {
                 TopBarContent(
-                    title = "Favorite",
+                    title = stringResource(id = R.string.favorites),
                     icon = Icons.Default.Menu,
                     onNavigationClick = { coroutineScope.launch { drawerState.open() } }
                 )

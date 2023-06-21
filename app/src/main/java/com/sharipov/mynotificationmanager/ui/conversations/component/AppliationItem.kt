@@ -10,8 +10,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.google.accompanist.drawablepainter.rememberDrawablePainter
+import com.sharipov.mynotificationmanager.R
 
 
 @Composable
@@ -34,7 +36,7 @@ fun ApplicationItem(packageName: String, modifier: Modifier) {
         ).toString()
     } catch (e: PackageManager.NameNotFoundException) {
         // handle the error, e.g. show a placeholder name
-        "Unknown"
+        stringResource(id = R.string.unknown)
     }
 
     Card(
