@@ -17,6 +17,7 @@ import androidx.navigation.compose.rememberNavController
 import com.sharipov.mynotificationmanager.ui.theme.MyNotificationManagerTheme
 import com.sharipov.mynotificationmanager.viewmodel.HomeViewModel
 import com.sharipov.mynotificationmanager.navigation.SetupNavHost
+import com.sharipov.mynotificationmanager.utils.setLanguage
 import com.sharipov.mynotificationmanager.viewmodel.SettingsViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -31,6 +32,8 @@ class MainActivity : ComponentActivity() {
             val intent = Intent(Settings.ACTION_NOTIFICATION_LISTENER_SETTINGS)
             startActivity(intent)
         }
+
+        setLanguage(this)
 
         val homeViewModel: HomeViewModel by viewModels()
         val settingsViewModel: SettingsViewModel by viewModels()

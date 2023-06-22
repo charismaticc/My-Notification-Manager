@@ -1,5 +1,6 @@
 package com.sharipov.mynotificationmanager.ui.settings.components
 
+import android.app.Activity
 import android.content.Intent
 import android.graphics.drawable.Drawable
 import android.net.Uri
@@ -52,9 +53,11 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewModelScope
 import com.google.accompanist.drawablepainter.rememberDrawablePainter
+import com.sharipov.mynotificationmanager.PreferencesManager
 import com.sharipov.mynotificationmanager.R
 import com.sharipov.mynotificationmanager.model.AppSettingsEntity
 import com.sharipov.mynotificationmanager.model.ExcludedAppEntity
+import com.sharipov.mynotificationmanager.utils.setLanguage
 import com.sharipov.mynotificationmanager.viewmodel.SettingsViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -397,7 +400,8 @@ fun aboutUsDialog(): Boolean {
             Column(modifier = Modifier.padding(16.dp)) {
                 Text(text = stringResource(id = R.string.app_name))
                 Text(text = stringResource(id = R.string.developer))
-                Text(text = stringResource(id = R.string.app_version))
+                Text(text = "${stringResource(R.string.app_version_text)} ${stringResource(R.string.app_version)}")
+
             }
         }
     }
@@ -407,9 +411,12 @@ fun aboutUsDialog(): Boolean {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun languageDialog(): Boolean {
+    val context = LocalContext.current
     val languages = listOf("English", "Русский", "Тоҷикӣ")
-    var selectedLanguage by remember { mutableStateOf("English") }
+    var selectedLanguage by remember { mutableStateOf(PreferencesManager.getSelectedLanguage(context) ?: "English") }
     val openDialog = remember { mutableStateOf(true) }
+
+
     AlertDialog(
         onDismissRequest = {
             openDialog.value = false
@@ -450,6 +457,18 @@ fun languageDialog(): Boolean {
                             modifier = Modifier.padding(start = 8.dp)
                         )
                     }
+                }
+                Button(
+                    modifier = Modifier.fillMaxWidth(),
+                    onClick = {
+                        PreferencesManager.saveSelectedLanguage(context, selectedLanguage)
+                        setLanguage(context)
+                        if (context is Activity) {
+                            context.recreate()
+                        }
+                    }
+                ) {
+                    Text(stringResource(id = R.string.select))
                 }
             }
         }
