@@ -33,4 +33,20 @@
     <string name="feedback">Обратная связь</string>
     <string name="select_language">Язык</string>
     <string name="about_us">О нас</string>
+
+    <string name="auto_delete_time">Время автоматического удаления</string>
+    <string name="never">Никогда</string>
+    <string name="one_hour">1 час</string>
+    <string name="one_day">1 день</string>
+    <string name="one_week">1 неделя</string>
+    <string name="two_weeks">2 недели</string>
+    <string name="one_month">1 месяц</string>
+    <string name="select">Выбрать</string>
+    <string name="search">Поиск</string>
+    <string name="communication_method">Выберите подходящий для вас способ связи!</string>
+    <string name="developer">Разработчик: Акбар Шарипов</string>
+    <string name="app_version_text">Версия приложения: </string>
+
+    <string name="delete_chat">Удалить чат</string>
+
 </resources>

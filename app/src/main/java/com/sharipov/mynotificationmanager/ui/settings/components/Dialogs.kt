@@ -70,7 +70,7 @@ fun autoRemoveDialog(
 ): Boolean {
     val context = LocalContext.current
     val openDialog = remember { mutableStateOf(true) }
-    val timeOptions = listOf("Newer", "1 hour", "1 day", "1 week", "2 weeks", "1 month")
+    val timeOptions = listOf("Never", "1 hour", "1 day", "1 week", "2 weeks", "1 month")
 
     var selectedTime = "Never"
     var selectedTimeLong = 0L
@@ -105,7 +105,7 @@ fun autoRemoveDialog(
             ) {
                 Text(
                     modifier = Modifier.align(Alignment.CenterHorizontally),
-                    text = "Auto-delete time",
+                    text = stringResource(id = R.string.auto_delete_time),
                     style = MaterialTheme.typography.titleMedium
                 )
                 Spacer(modifier = Modifier.height(16.dp))
@@ -135,7 +135,7 @@ fun autoRemoveDialog(
                     modifier = Modifier.fillMaxWidth(),
                     onClick = {
                         selectedTimeLong = when (selectedOption) {
-                            "Newer" -> 0L
+                            "Never" -> 0L
                             "1 hour" -> 1 * 60 * 60 * 1000L
                             "1 day" -> 24 * 60 * 60 * 1000L
                             "1 week" -> 7 * 24 * 60 * 60 * 1000L
@@ -154,7 +154,7 @@ fun autoRemoveDialog(
                         onDismiss()
                     }
                 ) {
-                    Text("Select")
+                    Text(stringResource(id = R.string.select))
                 }
             }
         }
@@ -195,7 +195,7 @@ fun selectAppsDialog(
                 TextField(
                     value = searchQuery,
                     onValueChange = { searchQuery = it },
-                    placeholder = { Text("Search") },
+                    placeholder = { Text(stringResource(id = R.string.search)) },
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(horizontal = 16.dp, vertical = 8.dp)
@@ -314,7 +314,7 @@ fun feedbackDialog(): Boolean {
             Column(modifier = Modifier.padding(16.dp)) {
 
                 Text(
-                    text = "Choose a suitable communication method for you!",
+                    text = stringResource(id = R.string.communication_method),
                     modifier = Modifier.fillMaxWidth(),
                     textAlign = TextAlign.Center,
                     style = TextStyle(
@@ -395,9 +395,9 @@ fun aboutUsDialog(): Boolean {
             shape = MaterialTheme.shapes.large
         ) {
             Column(modifier = Modifier.padding(16.dp)) {
-                Text(text = "My Notification Manager")
-                Text(text = "Developer: Akbar Sharipov")
-                Text(text = "App Version: 1.0.0")
+                Text(text = stringResource(id = R.string.app_name))
+                Text(text = stringResource(id = R.string.developer))
+                Text(text = stringResource(id = R.string.app_version))
             }
         }
     }

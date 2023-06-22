@@ -33,4 +33,19 @@
     <string name="select_language">Забон</string>
     <string name="about_us">Дар бораи мо</string>
 
+    <string name="auto_delete_time">Вақти худкор нест кардан</string>
+    <string name="never">ҳеҷ гоҳ</string>
+    <string name="one_hour">1 соат</string>
+    <string name="one_day">1 рӯз</string>
+    <string name="one_week">1 ҳафта</string>
+    <string name="two_weeks">2 ҳафтаҳо</string>
+    <string name="one_month">1 моҳ</string>
+    <string name="select">Интихоб кардан</string>
+    <string name="search">Ҷустуҷӯ</string>
+    <string name="communication_method">Усули муоширатро интихоб кунед!</string>
+    <string name="developer">Таҳиягар: Акбар Шарипов</string>
+    <string name="app_version_text">Версияи барнома: </string>
+
+    <string name="delete_chat">Чатро нест кардан</string>
+
 </resources>

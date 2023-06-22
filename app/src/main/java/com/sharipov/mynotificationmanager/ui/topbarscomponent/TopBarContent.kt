@@ -32,11 +32,13 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.sharipov.mynotificationmanager.R
 import com.sharipov.mynotificationmanager.viewmodel.HomeViewModel
 
 
@@ -181,7 +183,7 @@ fun ChatTopBarContent(
                         Row {
                             Icon(Icons.Default.Search, "Search in chat")
                             Spacer(Modifier.width(8.dp))
-                            Text("Find")
+                            Text(stringResource(id = R.string.search))
                         }
                     },
                     onClick = {
@@ -198,7 +200,7 @@ fun ChatTopBarContent(
                         Row {
                             Icon(Icons.Default.Delete, "Delete chat")
                             Spacer(Modifier.width(8.dp))
-                            Text("Delete chat")
+                            Text(stringResource(id = R.string.delete_chat))
                         }
                     },
                     onClick = {
@@ -215,7 +217,7 @@ fun ChatTopBarContent(
         OutlinedTextField(
             value = searchText,
             onValueChange = { onSearchTextChange(it) },
-            label = { Text("Search") },
+            label = { Text(stringResource(id = R.string.search)) },
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(top = 64.dp, bottom = 16.dp, start = 16.dp, end = 16.dp),

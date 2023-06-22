@@ -49,7 +49,7 @@ fun SettingsScreen(
     val openAboutUsDialog = remember { mutableStateOf(false) }
     val openLanguageDialog = remember { mutableStateOf(false) }
 
-    var selectedTime by remember { mutableStateOf("Newer") }
+    var selectedTime by remember { mutableStateOf("Never") }
     val showAutoDeleteDialog = remember { mutableStateOf(false) }
 
     TransparentSystemBars()
