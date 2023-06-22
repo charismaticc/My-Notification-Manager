@@ -2,6 +2,7 @@ package com.sharipov.mynotificationmanager.ui.settings
 
 
 import android.annotation.SuppressLint
+import android.app.Activity
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
@@ -9,11 +10,13 @@ import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.currentBackStackEntryAsState
+import com.sharipov.mynotificationmanager.PreferencesManager
 import com.sharipov.mynotificationmanager.R
 import com.sharipov.mynotificationmanager.ui.drawer.AppDrawer
 import com.sharipov.mynotificationmanager.navigation.Screens
@@ -29,6 +32,7 @@ import com.sharipov.mynotificationmanager.ui.settings.components.languageDialog
 import com.sharipov.mynotificationmanager.ui.settings.components.privatePolicyDialog
 import com.sharipov.mynotificationmanager.ui.settings.components.selectAppsDialog
 import com.sharipov.mynotificationmanager.utils.TransparentSystemBars
+import com.sharipov.mynotificationmanager.utils.setLanguage
 import com.sharipov.mynotificationmanager.viewmodel.SettingsViewModel
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter", "CoroutineCreationDuringComposition")
@@ -139,6 +143,7 @@ fun SettingsScreen(
                         )
                     }
                 }
+                val context = LocalContext.current
                 when {
                     openAutoRemoveDialog.value -> openAutoRemoveDialog.value = autoRemoveDialog(
                         settingsViewModel = settingsViewModel,
@@ -146,12 +151,22 @@ fun SettingsScreen(
                         onTimeSelected = { selectedTime = it }
                     )
 
-                    openSelectAppsDialog.value -> openSelectAppsDialog.value =
-                        selectAppsDialog(settingsViewModel = settingsViewModel)
-                    openLanguageDialog.value -> openLanguageDialog.value = languageDialog()
+                    openSelectAppsDialog.value -> openSelectAppsDialog.value = selectAppsDialog(settingsViewModel)
                     openPrivatePolicyDialog.value -> openPrivatePolicyDialog.value = privatePolicyDialog()
                     openFeedbackDialog.value -> openFeedbackDialog.value = feedbackDialog()
                     openAboutUsDialog.value -> openAboutUsDialog.value = aboutUsDialog()
+                    openLanguageDialog.value -> languageDialog(
+                        onLanguageSelected = { selectedLanguage ->
+                            PreferencesManager.saveSelectedLanguage(context, selectedLanguage)
+                            setLanguage(context)
+                            if (context is Activity) {
+                                context.recreate()
+                            }
+                        },
+                        onDismiss = {
+                            openLanguageDialog.value = false
+                        }
+                    )
                 }
             }
         )

@@ -1,6 +1,5 @@
 package com.sharipov.mynotificationmanager.ui.settings.components
 
-import android.app.Activity
 import android.content.Intent
 import android.graphics.drawable.Drawable
 import android.net.Uri
@@ -57,7 +56,6 @@ import com.sharipov.mynotificationmanager.PreferencesManager
 import com.sharipov.mynotificationmanager.R
 import com.sharipov.mynotificationmanager.model.AppSettingsEntity
 import com.sharipov.mynotificationmanager.model.ExcludedAppEntity
-import com.sharipov.mynotificationmanager.utils.setLanguage
 import com.sharipov.mynotificationmanager.viewmodel.SettingsViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -410,18 +408,15 @@ fun aboutUsDialog(): Boolean {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun languageDialog(): Boolean {
+fun languageDialog(onLanguageSelected: (String) -> Unit, onDismiss: () -> Unit) {
     val context = LocalContext.current
     val languages = listOf("English", "Русский", "Тоҷикӣ")
     var selectedLanguage by remember { mutableStateOf(PreferencesManager.getSelectedLanguage(context) ?: "English") }
-    val openDialog = remember { mutableStateOf(true) }
-
 
     AlertDialog(
         onDismissRequest = {
-            openDialog.value = false
-        })
-    {
+            onDismiss.invoke()
+        }) {
         Surface(
             modifier = Modifier
                 .wrapContentWidth()
@@ -441,13 +436,15 @@ fun languageDialog(): Boolean {
                 Spacer(modifier = Modifier.height(16.dp))
 
                 languages.forEach { text ->
-                    Row(Modifier
-                        .selectable(
-                            selected = (text == selectedLanguage),
-                            onClick = { selectedLanguage = text }
-                        )
-                        .fillMaxWidth()
-                        .padding(16.dp)) {
+                    Row(
+                        Modifier
+                            .selectable(
+                                selected = (text == selectedLanguage),
+                                onClick = { selectedLanguage = text }
+                            )
+                            .fillMaxWidth()
+                            .padding(16.dp)
+                    ) {
                         RadioButton(
                             selected = (text == selectedLanguage),
                             onClick = null // null so that the processing is only on Row
@@ -461,11 +458,8 @@ fun languageDialog(): Boolean {
                 Button(
                     modifier = Modifier.fillMaxWidth(),
                     onClick = {
-                        PreferencesManager.saveSelectedLanguage(context, selectedLanguage)
-                        setLanguage(context)
-                        if (context is Activity) {
-                            context.recreate()
-                        }
+                        onDismiss.invoke()
+                        onLanguageSelected.invoke(selectedLanguage)
                     }
                 ) {
                     Text(stringResource(id = R.string.select))
@@ -473,8 +467,4 @@ fun languageDialog(): Boolean {
             }
         }
     }
-    return openDialog.value
 }
-
-
-
