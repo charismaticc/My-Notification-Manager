@@ -50,7 +50,7 @@ class MyNotificationListenerService : NotificationListenerService() {
 
                 // get user name
                 val extras = sbn.notification.extras
-                val user = extras.getString(Notification.EXTRA_TITLE).toString().replace("/", "-")
+                val user = extras.getString(Notification.EXTRA_TITLE)?.replace("/", "-") ?: "Unknown"
                 // We change '/' to '-' because the tail gives an error indicating the
                 // wrong path when switching to a user whose name contains this character
 
