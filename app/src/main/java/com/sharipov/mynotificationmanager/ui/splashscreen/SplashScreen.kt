@@ -27,14 +27,10 @@ fun SplashScreen(
     homeViewModel: HomeViewModel,
     settingsViewModel: SettingsViewModel
 ) {
-
-    var startAnimate by remember {
-        mutableStateOf(false)
-    }
-
-    val alphaAnimation = animateFloatAsState(
+    var startAnimate by remember { mutableStateOf(false) }
+    val alphaAnimation by animateFloatAsState(
         targetValue = if (startAnimate) 1f else 0f,
-        animationSpec = tween(durationMillis = 1000)
+        animationSpec = tween(durationMillis = 1500)
     )
 
     UpdateApplicationList(settingsViewModel = settingsViewModel)
@@ -42,21 +38,20 @@ fun SplashScreen(
 
     LaunchedEffect(key1 = true) {
         startAnimate = true
-        delay(1000)
+        delay(1500)
 
-        var autoDeleteTimeout = settingsViewModel.getAppSettings()?.autoDeleteTimeoutLong ?: 0L
+        val autoDeleteTimeout = settingsViewModel.getAppSettings()?.autoDeleteTimeoutLong ?: 0L
 
         if (autoDeleteTimeout != 0L) {
             val currentTime = System.currentTimeMillis()
-            autoDeleteTimeout = currentTime - autoDeleteTimeout
-            homeViewModel.deleteExpiredNotification(autoDeleteTimeout)
+            val deleteThreshold = currentTime - autoDeleteTimeout
+            homeViewModel.deleteExpiredNotification(deleteThreshold)
         }
-
 
         navController.navigate(Screens.Applications.route)
     }
 
-    Splash(alpha = alphaAnimation.value)
+    Splash(alpha = alphaAnimation)
 }
 
 @Composable
@@ -66,18 +61,10 @@ fun Splash(alpha: Float) {
         modifier = Modifier.fillMaxSize(),
         contentAlignment = Alignment.Center
     ) {
-//        Icon(
-//            modifier = Modifier
-//                .size(120.dp)
-//                .alpha(alpha),
-//            imageVector = appIcon,
-//            contentDescription = "",
-//            tint = MaterialTheme.colorScheme.primary
-//        )
         Image(
             painter = appIcon,
             contentDescription = "App icon",
-            modifier = Modifier.size(120.dp).alpha(alpha),
+            modifier = Modifier.size(150.dp).alpha(alpha)
         )
     }
 }
