@@ -52,7 +52,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewModelScope
 import com.google.accompanist.drawablepainter.rememberDrawablePainter
-import com.sharipov.mynotificationmanager.PreferencesManager
+import com.sharipov.mynotificationmanager.data.PreferencesManager
 import com.sharipov.mynotificationmanager.R
 import com.sharipov.mynotificationmanager.model.AppSettingsEntity
 import com.sharipov.mynotificationmanager.model.ExcludedAppEntity
@@ -71,9 +71,16 @@ fun autoRemoveDialog(
 ): Boolean {
     val context = LocalContext.current
     val openDialog = remember { mutableStateOf(true) }
-    val timeOptions = listOf("Never", "1 hour", "1 day", "1 week", "2 weeks", "1 month")
+    val timeOptions = listOf(
+        stringResource(R.string.never),
+        stringResource(R.string.one_hour),
+        stringResource(R.string.one_day),
+        stringResource(R.string.one_week),
+        stringResource(R.string.two_weeks),
+        stringResource(R.string.one_month)
+    )
 
-    var selectedTime = "Never"
+    var selectedTime = stringResource(R.string.never)
     var selectedTimeLong = 0L
 
     runBlocking {
@@ -81,6 +88,17 @@ fun autoRemoveDialog(
         if (appSettings != null) {
             selectedTime = appSettings.autoDeleteTimeoutString
             selectedTimeLong = appSettings.autoDeleteTimeoutLong
+            if (selectedTime !in timeOptions) {
+                selectedTime = when (selectedTimeLong) {
+                    0L -> context.getString(R.string.never)
+                    3600000L -> context.getString(R.string.one_hour)
+                    86400000L -> context.getString(R.string.one_day)
+                    604800000L -> context.getString(R.string.one_week)
+                    1209600000L -> context.getString(R.string.two_weeks)
+                    2592000000L -> context.getString(R.string.one_month)
+                    else -> context.getString(R.string.never)
+                }
+            }
         } else {
             settingsViewModel.saveAppSettings(AppSettingsEntity(0, selectedTimeLong, selectedTime))
         }
@@ -136,12 +154,12 @@ fun autoRemoveDialog(
                     modifier = Modifier.fillMaxWidth(),
                     onClick = {
                         selectedTimeLong = when (selectedOption) {
-                            "Never" -> 0L
-                            "1 hour" -> 1 * 60 * 60 * 1000L
-                            "1 day" -> 24 * 60 * 60 * 1000L
-                            "1 week" -> 7 * 24 * 60 * 60 * 1000L
-                            "2 weeks" -> 14 * 24 * 60 * 60 * 1000L
-                            "1 month" -> 30 * 24 * 60 * 60 * 1000L
+                            context.getString(R.string.never) -> 0L
+                            context.getString(R.string.one_hour) -> 3600000L
+                            context.getString(R.string.one_day) -> 86400000L
+                            context.getString(R.string.one_week) -> 604800000L
+                            context.getString(R.string.two_weeks) -> 1209600000L
+                            context.getString(R.string.one_month) -> 2592000000L
                             else -> 0L
                         }
 
@@ -265,6 +283,7 @@ fun AppListItem(
 @Composable
 fun privatePolicyDialog(): Boolean {
     val openDialog = remember { mutableStateOf(true) }
+    val launcher = rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) {}
     AlertDialog(
         onDismissRequest = {
             openDialog.value = false
@@ -289,6 +308,23 @@ fun privatePolicyDialog(): Boolean {
                     textAlign = TextAlign.Start,
                     style = MaterialTheme.typography.bodyLarge
                 )
+
+                Spacer(modifier = Modifier.padding(8.dp))
+
+                Button(
+                    onClick = {
+                        val telegramIntent = Intent(Intent.ACTION_VIEW).apply {
+                            data = Uri.parse("https://sites.google.com/view/my-notification-manager-privac")
+                        }
+                        launcher.launch(telegramIntent)
+                    },
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    Text(
+                        text = stringResource(id = R.string.private_policy),
+                        style = MaterialTheme.typography.titleMedium
+                    )
+                }
             }
         }
     }

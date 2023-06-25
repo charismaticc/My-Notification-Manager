@@ -2,14 +2,14 @@ package com.sharipov.mynotificationmanager.utils
 
 import android.content.Context
 import android.content.res.Configuration
-import com.sharipov.mynotificationmanager.PreferencesManager
+import com.sharipov.mynotificationmanager.data.PreferencesManager
 import java.util.Locale
 
 fun setLanguage(context: Context ) {
     val language = when (PreferencesManager.getSelectedLanguage(context)) {
         "English" -> "en"
         "Русский" -> "ru"
-        "Тоҷикӣ" -> "tj"
+        "Тоҷикӣ" -> "tg"
         else -> "en"
     }
 
