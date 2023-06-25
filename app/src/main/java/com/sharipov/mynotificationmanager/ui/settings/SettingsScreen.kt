@@ -25,10 +25,10 @@ import com.sharipov.mynotificationmanager.utils.Constants
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import com.sharipov.mynotificationmanager.ui.settings.components.ClickableListItem
+import com.sharipov.mynotificationmanager.ui.settings.components.LanguageDialog
 import com.sharipov.mynotificationmanager.ui.settings.components.aboutUsDialog
 import com.sharipov.mynotificationmanager.ui.settings.components.autoRemoveDialog
 import com.sharipov.mynotificationmanager.ui.settings.components.feedbackDialog
-import com.sharipov.mynotificationmanager.ui.settings.components.languageDialog
 import com.sharipov.mynotificationmanager.ui.settings.components.privatePolicyDialog
 import com.sharipov.mynotificationmanager.ui.settings.components.selectAppsDialog
 import com.sharipov.mynotificationmanager.utils.TransparentSystemBars
@@ -155,7 +155,7 @@ fun SettingsScreen(
                     openPrivatePolicyDialog.value -> openPrivatePolicyDialog.value = privatePolicyDialog()
                     openFeedbackDialog.value -> openFeedbackDialog.value = feedbackDialog()
                     openAboutUsDialog.value -> openAboutUsDialog.value = aboutUsDialog()
-                    openLanguageDialog.value -> languageDialog(
+                    openLanguageDialog.value -> LanguageDialog(
                         onLanguageSelected = { selectedLanguage ->
                             PreferencesManager.saveSelectedLanguage(context, selectedLanguage)
                             setLanguage(context)

@@ -245,7 +245,7 @@ fun AppListItem(
     icon: Drawable,
     appEntity: ExcludedAppEntity
 ) {
-    val isChecked = remember { mutableStateOf(appEntity.isExcluded) }
+    var isChecked = appEntity.isExcluded
 
     Row(
         verticalAlignment = Alignment.CenterVertically,
@@ -265,9 +265,9 @@ fun AppListItem(
             modifier = Modifier.weight(1f)
         )
         Checkbox(
-            checked = isChecked.value,
+            checked = isChecked,
             onCheckedChange = { newValue ->
-                isChecked.value = newValue
+                isChecked = newValue
                 settingsViewModel.viewModelScope.launch {
                     val newAppEntity = appEntity.copy(isExcluded = newValue)
                     withContext(Dispatchers.IO) {
@@ -444,7 +444,7 @@ fun aboutUsDialog(): Boolean {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun languageDialog(onLanguageSelected: (String) -> Unit, onDismiss: () -> Unit) {
+fun LanguageDialog(onLanguageSelected: (String) -> Unit, onDismiss: () -> Unit) {
     val context = LocalContext.current
     val languages = listOf("English", "Русский", "Тоҷикӣ")
     var selectedLanguage by remember { mutableStateOf(PreferencesManager.getSelectedLanguage(context) ?: "English") }
