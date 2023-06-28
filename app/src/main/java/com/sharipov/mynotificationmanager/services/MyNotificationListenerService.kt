@@ -47,13 +47,19 @@ class MyNotificationListenerService : NotificationListenerService() {
                 val pm = context.packageManager
                 val appName =
                     pm.getApplicationLabel(pm.getApplicationInfo(packageName, PackageManager.GET_META_DATA)).toString()
-
                 // get user name
                 val extras = sbn.notification.extras
-                val user = extras.getString(Notification.EXTRA_TITLE)?.replace("/", "-") ?: "Unknown"
+                var user = extras.getString(Notification.EXTRA_TITLE)?.replace("/", "-") ?: "Unknown"
                 // We change '/' to '-' because the tail gives an error indicating the
                 // wrong path when switching to a user whose name contains this character
-
+                // Separating the user name from the account name
+                if (appName == "Instagram" || appName == "Instander") {
+                    user = if (user.split(":").size == 2) {
+                        user.split(":")[1]
+                    } else {
+                        user
+                    }
+                }
                 // get notification text
                 var text = extras.getCharSequence(Notification.EXTRA_TEXT)?.toString() ?: ""
                 text += extras.getCharSequence(Notification.EXTRA_BIG_TEXT)?.toString() ?: ""
@@ -76,4 +82,3 @@ class MyNotificationListenerService : NotificationListenerService() {
         }
     }
 }
-
