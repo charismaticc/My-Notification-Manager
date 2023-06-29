@@ -1,7 +1,6 @@
 package com.sharipov.mynotificationmanager.ui.allapplication
 
 import android.annotation.SuppressLint
-import android.provider.Settings.Global.getString
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn

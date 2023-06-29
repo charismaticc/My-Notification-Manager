@@ -1,2 +1,2 @@
-# My notification manager 
+# Notification manager 
 Simple notification manager

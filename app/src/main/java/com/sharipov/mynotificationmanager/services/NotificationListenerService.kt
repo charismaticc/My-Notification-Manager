@@ -17,7 +17,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 
-class MyNotificationListenerService : NotificationListenerService() {
+class NotificationListenerService : NotificationListenerService() {
 
     private lateinit var notificationDao: NotificationDao
     private lateinit var excludedAppDao: ExcludedAppDao
