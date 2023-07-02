@@ -35,7 +35,6 @@ fun ApplicationItem(packageName: String, modifier: Modifier) {
             context.packageManager.getApplicationInfo(packageName, 0)
         ).toString()
     } catch (e: PackageManager.NameNotFoundException) {
-        // handle the error, e.g. show a placeholder name
         stringResource(id = R.string.unknown)
     }
 

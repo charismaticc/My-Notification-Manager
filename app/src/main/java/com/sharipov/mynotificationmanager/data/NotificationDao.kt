@@ -16,10 +16,12 @@ interface NotificationDao {
     fun getAllUserNotifications(user: String, packageName: String): Flow<List<NotificationEntity>>
 
     // Search for notifications by text for a specific user and package in reverse order
-    @Query("SELECT * FROM notification WHERE user = :user " +
-            "AND packageName = :packageName " +
-            "AND text LIKE '%' || :query || '%' " +
-            "ORDER BY id DESC")
+    @Query(
+        "SELECT * FROM notification WHERE user = :user " +
+                "AND packageName = :packageName " +
+                "AND text LIKE '%' || :query || '%' " +
+                "ORDER BY id DESC"
+    )
     fun searchUserNotifications(user: String, packageName: String, query: String): Flow<List<NotificationEntity>>
 
     // Search for notifications by text, user, or package name
@@ -40,8 +42,8 @@ interface NotificationDao {
     fun getApplications(): Flow<List<String>>
 
     // Get all notifications for a specific application package
-    @Query("SELECT * FROM notification WHERE packageName = :packageName")
-    fun getApplicationNotifications(packageName: String): Flow<List<NotificationEntity>>
+    @Query("SELECT DISTINCT user FROM notification WHERE packageName = :packageName")
+    fun getApplicationUserNames(packageName: String): Flow<List<String>>
 
     // Check if a notification already exists for a specific user, text, package name, and app name
     @Query(
@@ -56,6 +58,7 @@ interface NotificationDao {
     @Query("DELETE FROM notification WHERE user = :user AND packageName = :packageName")
     suspend fun deleteNotificationsForUser(user: String, packageName: String)
 
+    // Auto-delete notifications older than time limit
     @Query("DELETE FROM notification WHERE time < :autoDeleteTimeout")
     suspend fun deleteExpiredNotification(autoDeleteTimeout: Long)
 

@@ -47,5 +47,6 @@
     <string name="app_version_text">Версия приложения: </string>
 
     <string name="delete_chat">Удалить чат</string>
+    <string name="cancel">Отена</string>
 
 </resources>

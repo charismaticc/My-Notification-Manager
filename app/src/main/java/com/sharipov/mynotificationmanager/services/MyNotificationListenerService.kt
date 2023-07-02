@@ -17,7 +17,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 
-class NotificationListenerService : NotificationListenerService() {
+class MyNotificationListenerService : NotificationListenerService() {
 
     private lateinit var notificationDao: NotificationDao
     private lateinit var excludedAppDao: ExcludedAppDao
@@ -38,7 +38,6 @@ class NotificationListenerService : NotificationListenerService() {
     override fun onNotificationPosted(sbn: StatusBarNotification) {
         // get package Name
         val packageName = sbn.packageName
-
         val coroutineScope = CoroutineScope(Dispatchers.IO)
         coroutineScope.launch {
             val excludedApp = excludedAppDao.getExcludedAppByPackageName(packageName)

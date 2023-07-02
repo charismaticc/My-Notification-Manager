@@ -6,6 +6,7 @@ import android.content.SharedPreferences
 object PreferencesManager {
     private const val PREFS_NAME = "MyAppPreferences"
     private const val KEY_SELECTED_LANGUAGE = "selectedLanguage"
+    private const val KEY_BLOCK_NOTIFICATIONS = "blockNotifications"
 
     private fun getSharedPreferences(context: Context): SharedPreferences {
         return context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
@@ -22,4 +23,16 @@ object PreferencesManager {
         val sharedPreferences = getSharedPreferences(context)
         return sharedPreferences.getString(KEY_SELECTED_LANGUAGE, null)
     }
+//
+//    fun updateBlockNotificationStatus(context: Context, status: Boolean) {
+//        val sharedPreferences = getSharedPreferences(context)
+//        val editor = sharedPreferences.edit()
+//        editor.putBoolean(KEY_BLOCK_NOTIFICATIONS, status)
+//        editor.apply()
+//    }
+//
+//    fun getBlockNotification(context: Context): Boolean {
+//        val sharedPreferences = getSharedPreferences(context)
+//        return sharedPreferences.getBoolean(KEY_BLOCK_NOTIFICATIONS, false)
+//    }
 }
