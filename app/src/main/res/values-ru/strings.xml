@@ -42,4 +42,6 @@
     <string name="save_notifications">Сохранять уведомления</string>
     <string name="block_notifications">Блокировать уведомления</string>
     <string name="do_not_disturb_mode">Не беспокоить</string>
+    <string name="block_notifications_rules">Уведомления выбранных здесь приложений не будут показываться НО они будут сохраняться в приложении!</string>
+    <string name="save_notifications_rules">Уведомления приложений выбранных здесь будут сохраняться в приложении!</string>
 </resources>

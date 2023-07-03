@@ -54,4 +54,6 @@
     <string name="save_notifications">Save notifications</string>
     <string name="block_notifications">Block notifications</string>
     <string name="do_not_disturb_mode">Do not disturb mode</string>
+    <string name="block_notifications_rules">Notifications of the apps selected here will not be shown, BUT they will be saved in the app!</string>
+    <string name="save_notifications_rules">Notifications of apps selected here will be saved in the app!</string>
 </resources>

@@ -42,4 +42,6 @@
     <string name="save_notifications">Зберігати сповіщення</string>
     <string name="block_notifications">Блокувати повідомлення</string>
     <string name="do_not_disturb_mode">Режим не турбувати</string>
+    <string name="block_notifications_rules">Повідомлення обраних тут додатків не будуть показуватися але вони будуть зберігатися в додатку!</string>
+    <string name="save_notifications_rules">Повідомлення додатків обраних тут будуть зберігатися в додатку!</string>
 </resources>
