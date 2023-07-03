@@ -60,7 +60,7 @@ fun NotificationManagement(
     val currentNavBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = currentNavBackStackEntry?.destination?.route ?: Constants.Screens.APPLICATION_SCREEN
     val whichListIsDisplayed = remember { mutableStateOf(true) }
-    var searchQuery by remember { mutableStateOf("")}
+    var searchQuery by remember { mutableStateOf("") }
     val isChecked by remember { mutableStateOf(PreferencesManager.getBlockNotification(context)) }
     var searchVisible by remember { mutableStateOf(false) }
 
@@ -140,6 +140,7 @@ fun NotificationManagement(
                             Divider(color = Color.Gray, thickness = 1.dp)
                         }
                     }
+
                     items(apps) { app ->
                         val icon = context.packageManager.getApplicationIcon(app.packageName)
                         AppListItem(
