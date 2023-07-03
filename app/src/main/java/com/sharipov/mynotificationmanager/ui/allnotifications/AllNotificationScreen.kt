@@ -39,7 +39,6 @@ fun AllNotificationScreen(
     var searchText by remember { mutableStateOf("") }
     val currentNavBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = currentNavBackStackEntry?.destination?.route ?: Constants.Screens.APPLICATION_SCREEN
-
     val notificationFlow = if (searchText.isNotBlank()) {
         homeViewModel.searchNotifications(searchText).collectAsState(emptyList()).value
     } else {
@@ -74,57 +73,52 @@ fun AllNotificationScreen(
                     onSearchTextChange = { searchText = it }
                 )
             },
-            content = {
-                Column(
-                    modifier = Modifier.fillMaxSize(),
-                    verticalArrangement = Arrangement.Top,
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
+        ) {
+            Column(
+                modifier = Modifier.fillMaxSize(),
+                verticalArrangement = Arrangement.Top,
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
 
-                    Spacer(modifier = Modifier.padding(32.dp))
+                Spacer(modifier = Modifier.padding(32.dp))
 
-                    AnimatedVisibility(
-                        visible = !searchVisible
+                if(!searchVisible){
+                    Card(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(start = 16.dp, top = 16.dp, end = 16.dp, bottom = 8.dp)
                     ) {
-                        Card(
+                        Text(
+                            text = "${stringResource(id = R.string.count_of_your_notification)} " +
+                                    "${notificationFlow.size}",
                             modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(start = 16.dp, top = 16.dp, end = 16.dp, bottom = 8.dp)
-                        ) {
-                            Text(
-                                text = "${stringResource(id = R.string.count_of_your_notification)} " +
-                                        "${notificationFlow.size}",
-                                modifier = Modifier
-                                    .align(Alignment.CenterHorizontally)
-                                    .padding(8.dp)
+                                .align(Alignment.CenterHorizontally)
+                                .padding(8.dp)
+                        )
+                    }
+                }
+
+                if(searchVisible) {
+                    Spacer(modifier = Modifier.padding(32.dp))
+                }
+
+                AnimatedVisibility(
+                    visible = !searchVisible || searchText.isNotEmpty(),
+                ) {
+                    LazyColumn {
+                        items(notificationFlow.size) { index ->
+                            val notification = notificationFlow[index]
+                            NotificationItem(
+                                homeViewModel = homeViewModel,
+                                navController = navController,
+                                notification = notification,
+                                context = context,
                             )
                         }
-                    }
-
-                    AnimatedVisibility(
-                        visible = searchVisible
-                    ) {
-                        Spacer(modifier = Modifier.padding(32.dp))
-                    }
-
-                    AnimatedVisibility(
-                        visible = !searchVisible || searchText.isNotEmpty(),
-                    ) {
-                        LazyColumn {
-                            items(notificationFlow.size) { index ->
-                                val notification = notificationFlow[index]
-                                NotificationItem(
-                                    homeViewModel = homeViewModel,
-                                    navController = navController,
-                                    notification = notification,
-                                    context = context,
-                                )
-                            }
-                            item { Spacer(modifier = Modifier.height(16.dp)) }
-                        }
+                        item { Spacer(modifier = Modifier.height(16.dp)) }
                     }
                 }
             }
-        )
+        }
     }
 }
