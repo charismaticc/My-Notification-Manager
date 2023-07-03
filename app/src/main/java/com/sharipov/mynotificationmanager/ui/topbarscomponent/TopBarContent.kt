@@ -82,7 +82,7 @@ fun SearchTopBarContent(
         OutlinedTextField(
             value = searchText,
             onValueChange = { onSearchTextChange(it) },
-            label = { Text("Search") },
+            label = { Text(stringResource(id = R.string.search)) },
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(top = 64.dp, bottom = 16.dp, start = 16.dp, end = 16.dp),
