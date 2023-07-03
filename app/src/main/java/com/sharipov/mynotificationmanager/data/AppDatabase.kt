@@ -1,6 +1,7 @@
 package com.sharipov.mynotificationmanager.data
 
 import android.content.Context
+import androidx.room.AutoMigration
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
@@ -9,8 +10,17 @@ import com.sharipov.mynotificationmanager.model.ExcludedAppEntity
 import com.sharipov.mynotificationmanager.model.NotificationEntity
 
 
-@Database(entities = [NotificationEntity::class, AppSettingsEntity::class, ExcludedAppEntity::class],
-    version = 1,exportSchema = false
+@Database(
+    version = 2,
+    entities = [
+        NotificationEntity::class,
+        AppSettingsEntity::class,
+        ExcludedAppEntity::class
+    ],
+    autoMigrations = [
+        AutoMigration(from = 1, to = 2)
+    ],
+    exportSchema = true
 )
 abstract class AppDatabase :RoomDatabase() {
 

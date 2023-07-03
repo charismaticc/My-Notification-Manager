@@ -2,8 +2,6 @@ package com.sharipov.mynotificationmanager.ui.allnotifications
 
 import android.annotation.SuppressLint
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.*
@@ -18,7 +16,6 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import com.sharipov.mynotificationmanager.R
 import com.sharipov.mynotificationmanager.navigation.Screens
 import com.sharipov.mynotificationmanager.ui.allnotifications.component.NotificationItem
-import com.sharipov.mynotificationmanager.ui.allnotifications.component.updateNotification
 import com.sharipov.mynotificationmanager.ui.topbarscomponent.SearchTopBarContent
 import com.sharipov.mynotificationmanager.ui.drawer.AppDrawer
 import com.sharipov.mynotificationmanager.utils.TransparentSystemBars
@@ -29,7 +26,6 @@ import kotlinx.coroutines.launch
 
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun AllNotificationScreen(
     homeViewModel: HomeViewModel,
@@ -60,6 +56,7 @@ fun AllNotificationScreen(
                 navigateToAllNotifications = { navController.navigate(Screens.AllNotifications.route) },
                 navigateToSettings = { navController.navigate(Screens.Settings.route) },
                 navigateToFavorite = { navController.navigate(Screens.Favorite.route) },
+                navigateToNotificationManagement = { navController.navigate(Screens.NotificationManagement.route) },
                 closeDrawer = { coroutineScope.launch { drawerState.close() } },
                 modifier = Modifier
             )
@@ -89,7 +86,6 @@ fun AllNotificationScreen(
                     AnimatedVisibility(
                         visible = !searchVisible
                     ) {
-
                         Card(
                             modifier = Modifier
                                 .fillMaxWidth()
@@ -119,21 +115,9 @@ fun AllNotificationScreen(
                                 val notification = notificationFlow[index]
                                 NotificationItem(
                                     homeViewModel = homeViewModel,
+                                    navController = navController,
                                     notification = notification,
-                                    Modifier
-                                        .fillMaxSize()
-                                        .padding(16.dp, 16.dp, 16.dp)
-                                        .combinedClickable(
-                                            onClick = {
-                                                navController.navigate(
-                                                    Screens.Details.route +
-                                                            "/${notification.id.toString()}"
-                                                )
-                                            },
-                                            onLongClick = {
-                                                updateNotification(notification, homeViewModel, context)
-                                            }
-                                        )
+                                    context = context,
                                 )
                             }
                             item { Spacer(modifier = Modifier.height(16.dp)) }

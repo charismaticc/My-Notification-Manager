@@ -24,7 +24,8 @@ fun UpdateApplicationList(settingsViewModel: SettingsViewModel) {
         val app = ExcludedAppEntity(
             packageName = i.packageName.toString(),
             appName = appName,
-            isExcluded = true
+            isExcluded = true,
+            isBlocked = false
         )
         appListFromSource.add(app)
     }

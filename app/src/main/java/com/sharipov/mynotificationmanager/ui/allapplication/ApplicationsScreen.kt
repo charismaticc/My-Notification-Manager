@@ -50,6 +50,7 @@ fun ApplicationsScreen(
                 navigateToAllNotifications = { navController.navigate(Screens.AllNotifications.route) },
                 navigateToSettings = { navController.navigate(Screens.Settings.route) },
                 navigateToFavorite = { navController.navigate(Screens.Favorite.route) },
+                navigateToNotificationManagement = { navController.navigate(Screens.NotificationManagement.route) },
                 closeDrawer = { coroutineScope.launch { drawerState.close() } },
                 modifier = Modifier
             )

@@ -10,6 +10,7 @@ fun setLanguage(context: Context ) {
         "English" -> "en"
         "Русский" -> "ru"
         "Тоҷикӣ" -> "tg"
+        "Українська" -> "uk"
         else -> "en"
     }
 

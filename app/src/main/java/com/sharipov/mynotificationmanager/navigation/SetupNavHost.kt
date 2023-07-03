@@ -10,6 +10,7 @@ import com.sharipov.mynotificationmanager.ui.details.DetailsScreen
 import com.sharipov.mynotificationmanager.ui.favorite.FavoriteScreen
 import com.sharipov.mynotificationmanager.ui.allapplication.ApplicationsScreen
 import com.sharipov.mynotificationmanager.ui.chat.ChatScreen
+import com.sharipov.mynotificationmanager.ui.notificationmanagement.NotificationManagement
 import com.sharipov.mynotificationmanager.ui.settings.SettingsScreen
 import com.sharipov.mynotificationmanager.ui.splashscreen.SplashScreen
 import com.sharipov.mynotificationmanager.utils.Constants
@@ -26,6 +27,7 @@ sealed class Screens(val route: String){
     object Details: Screens(route = Constants.Screens.DETAILS_SCREEN)
     object AllNotifications: Screens(route = Constants.Screens.ALL_NOTIFICATIONS_SCREEN)
     object Favorite: Screens(route = Constants.Screens.FAVORITE_SCREEN)
+    object NotificationManagement: Screens(route = Constants.Screens.NOTIFICATION_MANAGEMENT_SCREEN)
 }
 @Composable
 fun SetupNavHost(
@@ -85,6 +87,13 @@ fun SetupNavHost(
 
         composable(route = Screens.Favorite.route) {
             FavoriteScreen(homeViewModel = homeViewModel, navController = navController)
+        }
+
+        composable(route = Screens.NotificationManagement.route) {
+            NotificationManagement(
+                settingsViewModel = settingsViewModel,
+                navController = navController
+            )
         }
     }
 }

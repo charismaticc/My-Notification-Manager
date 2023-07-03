@@ -22,6 +22,7 @@ fun AppDrawer(
     navigateToAllNotifications: () -> Unit = {},
     navigateToSettings: () -> Unit = {},
     navigateToFavorite: () -> Unit = {},
+    navigateToNotificationManagement: () -> Unit = {},
     closeDrawer: () -> Unit = {}
 ) {
     ModalDrawerSheet(modifier = Modifier) {
@@ -39,6 +40,7 @@ fun AppDrawer(
                 icon = painterResource(id = R.drawable.ic_apps),
             )
             Spacer(modifier = Modifier.padding(2.dp))
+
             MyNavigationDrawerItem(
                 label = stringResource(id = R.string.all_notification),
                 selected = route == Constants.Screens.ALL_NOTIFICATIONS_SCREEN,
@@ -49,6 +51,7 @@ fun AppDrawer(
                 icon = painterResource(id = R.drawable.ic_notifications),
             )
             Spacer(modifier = Modifier.padding(2.dp))
+
             MyNavigationDrawerItem(
                 label = stringResource(id = R.string.favorites),
                 selected = route == Constants.Screens.FAVORITE_SCREEN,
@@ -58,7 +61,17 @@ fun AppDrawer(
                 },
                 icon = painterResource(id = R.drawable.ic_star),
             )
+            Spacer(modifier = Modifier.padding(2.dp))
 
+            MyNavigationDrawerItem(
+                label = stringResource(id = R.string.notification_management),
+                selected = route == Constants.Screens.NOTIFICATION_MANAGEMENT_SCREEN,
+                onClick = {
+                    navigateToNotificationManagement()
+                    closeDrawer()
+                },
+                icon = painterResource(id = R.drawable.ic_rule),
+            )
             Spacer(modifier = Modifier.weight(1f))
 
             MyNavigationDrawerItem(

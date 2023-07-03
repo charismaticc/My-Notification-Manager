@@ -1,7 +1,6 @@
 package com.sharipov.mynotificationmanager.ui.favorite
 
 import android.annotation.SuppressLint
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
@@ -10,6 +9,7 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
@@ -33,10 +33,9 @@ fun FavoriteScreen(
     coroutineScope: CoroutineScope = rememberCoroutineScope(),
     drawerState: DrawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
 ) {
-
+    val context = LocalContext.current
     val currentNavBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = currentNavBackStackEntry?.destination?.route ?: Constants.Screens.FAVORITE_SCREEN
-
     val notificationListState = homeViewModel.getFavoriteNotifications().collectAsState(initial = listOf())
 
     TransparentSystemBars()
@@ -49,6 +48,7 @@ fun FavoriteScreen(
                 navigateToAllNotifications = { navController.navigate(Screens.AllNotifications.route) },
                 navigateToSettings = { navController.navigate(Screens.Settings.route) },
                 navigateToFavorite = { navController.navigate(Screens.Favorite.route) },
+                navigateToNotificationManagement = { navController.navigate(Screens.NotificationManagement.route) },
                 closeDrawer = { coroutineScope.launch { drawerState.close() } },
                 modifier = Modifier
             )
@@ -80,16 +80,9 @@ fun FavoriteScreen(
                             val notification = notificationListState.value[index]
                             NotificationItem(
                                 homeViewModel = homeViewModel,
+                                navController = navController,
                                 notification = notification,
-                                Modifier
-                                    .fillMaxSize()
-                                    .padding(16.dp, 16.dp, 16.dp)
-                                    .clickable {
-                                        navController.navigate(
-                                            Screens.Details.route +
-                                                    "/${notification.id.toString()}"
-                                        )
-                                    }
+                                context = context
                             )
                         }
                         item { Spacer(modifier = Modifier.height(16.dp)) }

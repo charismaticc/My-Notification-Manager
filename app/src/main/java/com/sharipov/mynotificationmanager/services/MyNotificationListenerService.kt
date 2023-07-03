@@ -11,6 +11,7 @@ import androidx.room.Room
 import com.sharipov.mynotificationmanager.data.AppDatabase
 import com.sharipov.mynotificationmanager.data.ExcludedAppDao
 import com.sharipov.mynotificationmanager.data.NotificationDao
+import com.sharipov.mynotificationmanager.data.PreferencesManager
 import com.sharipov.mynotificationmanager.model.NotificationEntity
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -39,6 +40,19 @@ class MyNotificationListenerService : NotificationListenerService() {
         // get package Name
         val packageName = sbn.packageName
         val coroutineScope = CoroutineScope(Dispatchers.IO)
+
+        coroutineScope.launch {
+            if(PreferencesManager.getBlockNotification(context)) {
+                cancelNotification(sbn.key)
+            }
+        }
+
+        coroutineScope.launch {
+            if (excludedAppDao.getExcludedAppByPackageName(packageName)!!.isBlocked) {
+                cancelNotification(sbn.key)
+            }
+        }
+
         coroutineScope.launch {
             val excludedApp = excludedAppDao.getExcludedAppByPackageName(packageName)
             if (excludedApp?.isExcluded!!) {

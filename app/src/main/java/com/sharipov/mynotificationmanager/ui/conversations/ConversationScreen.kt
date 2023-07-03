@@ -49,7 +49,7 @@ fun ConversationsScreen(
             LazyColumn(modifier = Modifier.fillMaxSize()) {
                 item { Spacer(modifier = Modifier.height(8.dp)) }
                 items(usersListState) { userName ->
-                    val modifier = Modifier.fillMaxSize().padding(16.dp)
+                    val modifier = Modifier.fillMaxSize().padding(16.dp, 16.dp, 16.dp)
                     UserItem(
                         homeViewModel = homeViewModel,
                         navController = navController,

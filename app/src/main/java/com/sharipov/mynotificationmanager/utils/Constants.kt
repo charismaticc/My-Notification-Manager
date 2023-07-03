@@ -10,6 +10,7 @@ class Constants {
         const val SETTINGS_SCREEN = "settings_screen"
         const val FAVORITE_SCREEN = "favorite_screen"
         const val ALL_NOTIFICATIONS_SCREEN = "all_notifications_favorite_screen"
+        const val NOTIFICATION_MANAGEMENT_SCREEN = "notification_management"
         const val CHAT_SCREEN = "chat_screen"
     }
 }

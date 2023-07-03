@@ -14,11 +14,19 @@ android {
         minSdk 25
         targetSdk 34
         versionCode 4
-        versionName "1.0.1"
+        versionName "1.0.2"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
             useSupportLibrary true
+        }
+
+        javaCompileOptions {
+            annotationProcessorOptions {
+                arguments += [
+                        "room.schemaLocation": "$projectDir/schemas".toString()
+                ]
+            }
         }
     }
 
@@ -97,4 +105,6 @@ dependencies {
 
     // Accompanist System UI ControllerAccompanist System UI Controller
     implementation "com.google.accompanist:accompanist-systemuicontroller:0.31.0-alpha"
+
+    implementation "me.saket.swipe:swipe:1.2.0"
 }
