@@ -2,6 +2,7 @@ package com.sharipov.mynotificationmanager.ui.notificationmanagement.component
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -26,7 +27,11 @@ fun ToggleDisplayMode(whichListIsDisplayed: MutableState<Boolean>) {
             modifier = Modifier
                 .weight(1f)
                 .background(
-                    if (whichListIsDisplayed.value) Color.DarkGray
+                    if (whichListIsDisplayed.value){
+                        if(isSystemInDarkTheme())
+                            Color.DarkGray
+                        else Color(android.graphics.Color.parseColor("#DCDCDC"))
+                    }
                     else MaterialTheme.colorScheme.background
                 )
                 .clickable {
@@ -45,7 +50,11 @@ fun ToggleDisplayMode(whichListIsDisplayed: MutableState<Boolean>) {
             modifier = Modifier
                 .weight(1f)
                 .background(
-                    if (!whichListIsDisplayed.value) Color.DarkGray
+                    if (!whichListIsDisplayed.value){
+                        if(isSystemInDarkTheme())
+                            Color.DarkGray
+                        else Color(android.graphics.Color.parseColor("#DCDCDC"))
+                    }
                     else MaterialTheme.colorScheme.background
                 )
                 .clickable {

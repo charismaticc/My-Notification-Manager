@@ -2,6 +2,7 @@ package com.sharipov.mynotificationmanager.ui.notificationmanagement.component
 
 import android.content.Context
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
@@ -18,6 +19,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -40,7 +42,8 @@ fun DoNotDisturbMode(initialChecked: Boolean, context: Context) {
         Image(
             painter = painterResource(id = R.drawable.ic_notifications_off),
             contentDescription = null,
-            modifier = Modifier.size(48.dp)
+            modifier = Modifier.size(48.dp),
+            colorFilter = ColorFilter.tint(if (isSystemInDarkTheme()) Color.White else Color.DarkGray)
         )
         Text(
             text = stringResource(id = R.string.do_not_disturb_mode),

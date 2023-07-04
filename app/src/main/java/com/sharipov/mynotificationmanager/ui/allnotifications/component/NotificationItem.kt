@@ -7,6 +7,7 @@ import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.combinedClickable
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Star
@@ -45,7 +46,8 @@ fun NotificationItem(
         icon = { Icon(
                 modifier = Modifier.size(40.dp),
                 painter = painterResource(id = R.drawable.ic_delete),
-                contentDescription = null
+                contentDescription = null,
+                tint = Color.White
             )},
         background = Color.Red,
         onSwipe = {
@@ -67,7 +69,11 @@ fun NotificationItem(
 
     Card(elevation = CardDefaults.cardElevation(), modifier = modifier) {
         Box(modifier = Modifier.fillMaxSize()) {
-            SwipeableActionsBox(swipeThreshold = 150.dp, endActions = listOf(delete)) {
+            SwipeableActionsBox(
+                swipeThreshold = 150.dp,
+                endActions = listOf(delete),
+                backgroundUntilSwipeThreshold = if(isSystemInDarkTheme()) Color.DarkGray else Color.Gray
+            ) {
                 NotificationItemContext(homeViewModel, notification)
             }
         }
