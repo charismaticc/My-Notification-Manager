@@ -48,14 +48,14 @@ class MyNotificationListenerService : NotificationListenerService() {
         }
 
         coroutineScope.launch {
-            if (excludedAppDao.getExcludedAppByPackageName(packageName)!!.isBlocked) {
+            if (excludedAppDao.getExcludedAppByPackageName(packageName).isBlocked) {
                 cancelNotification(sbn.key)
             }
         }
 
         coroutineScope.launch {
             val excludedApp = excludedAppDao.getExcludedAppByPackageName(packageName)
-            if (excludedApp?.isExcluded!!) {
+            if (excludedApp.isExcluded) {
                 // get application name
                 val pm = context.packageManager
                 val appName =
