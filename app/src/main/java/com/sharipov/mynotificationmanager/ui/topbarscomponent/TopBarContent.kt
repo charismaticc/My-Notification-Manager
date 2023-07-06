@@ -1,12 +1,15 @@
 package com.sharipov.mynotificationmanager.ui.topbarscomponent
 
+import android.graphics.drawable.Drawable
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.basicMarquee
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
@@ -30,6 +33,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
@@ -38,6 +42,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.google.accompanist.drawablepainter.rememberDrawablePainter
 import com.sharipov.mynotificationmanager.R
 import com.sharipov.mynotificationmanager.viewmodel.HomeViewModel
 
@@ -103,15 +108,25 @@ fun SearchTopBarContent(
 fun TopBarContent(
     title: String,
     icon: ImageVector,
+    appIcon: Drawable?,
     onNavigationClick: () -> Unit,
 ) {
     CenterAlignedTopAppBar(
         title = {
-            Text(
-                title,
-                maxLines = 1,
-                overflow = TextOverflow.Ellipsis
-            )
+            Row(
+                verticalAlignment = Alignment.CenterVertically) {
+                if(appIcon != null) {
+                    Image(
+                        painter = rememberDrawablePainter(appIcon),
+                        contentDescription = null,
+                        modifier = Modifier.size(48.dp).padding(end = 8.dp),
+                    )
+                }
+                Text(
+                    title,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis
+                )}
         },
         navigationIcon = {
             IconButton(onClick = { onNavigationClick() }) {

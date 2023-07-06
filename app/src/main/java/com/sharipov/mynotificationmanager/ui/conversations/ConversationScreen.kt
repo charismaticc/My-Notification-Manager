@@ -1,6 +1,7 @@
 package com.sharipov.mynotificationmanager.ui.conversations
 
 import android.annotation.SuppressLint
+import android.content.pm.PackageManager
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -10,10 +11,9 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import com.sharipov.mynotificationmanager.R
 import com.sharipov.mynotificationmanager.ui.topbarscomponent.TopBarContent
 import com.sharipov.mynotificationmanager.ui.conversations.component.UserItem
 import com.sharipov.mynotificationmanager.utils.TransparentSystemBars
@@ -30,12 +30,18 @@ fun ConversationsScreen(
 
     TransparentSystemBars()
 
+    val context = LocalContext.current
+    val pm = context.packageManager
+    // get app icon
+    val appIcon = pm.getApplicationIcon(packageName)
+    val appName = pm.getApplicationLabel(pm.getApplicationInfo(packageName, PackageManager.GET_META_DATA)).toString()
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         topBar = {
             TopBarContent(
-                title = stringResource(id = R.string.conversations),
+                title =  appName,
                 icon = Icons.Default.ArrowBack,
+                appIcon = appIcon,
                 onNavigationClick = { navController.navigateUp() }
             )
         },

@@ -62,6 +62,7 @@ fun ApplicationsScreen(
                 TopBarContent(
                     title = stringResource(id = R.string.applications),
                     icon = Icons.Default.Menu,
+                    appIcon = null,
                     onNavigationClick = { coroutineScope.launch { drawerState.open() } }
                 )
             },

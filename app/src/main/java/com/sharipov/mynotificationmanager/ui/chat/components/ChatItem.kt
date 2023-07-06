@@ -3,9 +3,13 @@ package com.sharipov.mynotificationmanager.ui.chat.components
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Star
+import androidx.compose.material.icons.outlined.Star
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Divider
@@ -21,12 +25,16 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.sharipov.mynotificationmanager.R
 import com.sharipov.mynotificationmanager.model.NotificationEntity
+import com.sharipov.mynotificationmanager.ui.allnotifications.component.updateNotification
 import com.sharipov.mynotificationmanager.viewmodel.HomeViewModel
 import java.text.SimpleDateFormat
 import java.util.*
@@ -39,6 +47,18 @@ fun ChatItem(homeViewModel: HomeViewModel, notification: NotificationEntity) {
     var expanded by remember { mutableStateOf(false) }
     val clipboardManager =
         LocalContext.current.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+
+    val context = LocalContext.current
+    val icon: ImageVector
+    val color: Color
+
+    if (notification.favorite) {
+        icon = Icons.Default.Star
+        color = MaterialTheme.colorScheme.primary
+    } else {
+        icon = Icons.Outlined.Star
+        color = MaterialTheme.colorScheme.inversePrimary
+    }
 
     Card(
         modifier = Modifier
@@ -60,7 +80,22 @@ fun ChatItem(homeViewModel: HomeViewModel, notification: NotificationEntity) {
                     modifier = Modifier.padding(8.dp),
                     style = MaterialTheme.typography.titleLarge,
                 )
-                Text(text = dateFormat.format(Date(notification.time)))
+                Row(
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    modifier = Modifier.fillMaxWidth()
+                ){
+                    Text(text = dateFormat.format(Date(notification.time)))
+                    Image(
+                        imageVector = icon,
+                        contentDescription = "",
+                        modifier = Modifier
+                            .size(32.dp)
+                            .clickable {
+                                updateNotification(notification, homeViewModel, context)
+                            },
+                        colorFilter = ColorFilter.tint(color)
+                    )
+                }
             }
 
         }
@@ -107,11 +142,12 @@ fun ChatItem(homeViewModel: HomeViewModel, notification: NotificationEntity) {
                                 .size(48.dp)
                                 .padding(end = 16.dp),
                             painter = painterResource(R.drawable.ic_star),
-                            contentDescription = "Add to favorite",
+                            contentDescription = "Add/Delete to/from favorite",
                         )
                         Spacer(Modifier.width(8.dp))
                         Text(
-                            text = stringResource(id = R.string.add_to_favorite),
+                            text = if(notification.favorite) stringResource(id = R.string.delete_from_favorite)
+                                else stringResource(id = R.string.add_to_favorite),
                             modifier = Modifier
                                 .weight(1f)
                                 .align(Alignment.CenterVertically)

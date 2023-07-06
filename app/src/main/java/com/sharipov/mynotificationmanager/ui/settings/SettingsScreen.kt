@@ -77,6 +77,7 @@ fun SettingsScreen(
                 TopBarContent(
                     title = stringResource(id = R.string.settings),
                     icon = Icons.Filled.Menu,
+                    appIcon = null,
                     onNavigationClick = { coroutineScope.launch { drawerState.open() } }
                 )
             },

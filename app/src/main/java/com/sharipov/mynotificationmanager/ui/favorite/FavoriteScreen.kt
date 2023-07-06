@@ -60,6 +60,7 @@ fun FavoriteScreen(
                 TopBarContent(
                     title = stringResource(id = R.string.favorites),
                     icon = Icons.Default.Menu,
+                    appIcon = null,
                     onNavigationClick = { coroutineScope.launch { drawerState.open() } }
                 )
             },
