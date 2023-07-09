@@ -37,7 +37,6 @@ fun ApplicationsScreen(
 
     val currentNavBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = currentNavBackStackEntry?.destination?.route ?: Constants.Screens.APPLICATION_SCREEN
-
     val applicationListState = homeViewModel.getApplications().collectAsState(initial = listOf())
 
     TransparentSystemBars()
@@ -88,10 +87,7 @@ fun ApplicationsScreen(
                                     .fillMaxSize()
                                     .padding(16.dp, 16.dp, 16.dp)
                                     .clickable {
-                                        navController.navigate(
-                                            Screens.Conversations.route +
-                                                    "/${packageName}"
-                                        )
+                                        navController.navigate(Screens.Conversations.route + "/$packageName")
                                     })
                         }
                         item { Spacer(modifier = Modifier.height(16.dp)) }

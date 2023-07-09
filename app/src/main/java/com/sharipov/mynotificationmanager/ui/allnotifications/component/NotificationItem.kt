@@ -148,6 +148,7 @@ fun updateNotification(
         id = notificationEntity.id,
         appName = notificationEntity.appName,
         packageName = notificationEntity.packageName,
+        group = notificationEntity.group,
         user = notificationEntity.user,
         text = notificationEntity.text,
         time = notificationEntity.time,

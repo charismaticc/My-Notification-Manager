@@ -143,6 +143,7 @@ fun TopBarContent(
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
 @Composable
 fun ChatTopBarContent(
+    group: String,
     userName: String,
     packageName: String,
     searchVisible: Boolean,
@@ -158,7 +159,7 @@ fun ChatTopBarContent(
     CenterAlignedTopAppBar(
         title = {
             Text(
-                text = userName,
+                text = if(group == "not_group") userName else group,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
                 modifier = Modifier.basicMarquee()
@@ -219,7 +220,7 @@ fun ChatTopBarContent(
                         }
                     },
                     onClick = {
-                        homeViewModel.deleteNotificationsForUser(userName, packageName)
+                        homeViewModel.deleteNotificationsForUser(group, userName, packageName)
                         navController.navigateUp()
                         expanded = false
                     }

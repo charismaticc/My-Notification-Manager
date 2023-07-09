@@ -23,6 +23,7 @@ class MyNotificationListenerService : NotificationListenerService() {
     private lateinit var notificationDao: NotificationDao
     private lateinit var excludedAppDao: ExcludedAppDao
     private lateinit var context: Context
+    private val instagramMods = listOf("Instagram", "Instander")
     override fun onCreate() {
         super.onCreate()
         val database = Room.databaseBuilder(
@@ -41,19 +42,19 @@ class MyNotificationListenerService : NotificationListenerService() {
         val packageName = sbn.packageName
         val coroutineScope = CoroutineScope(Dispatchers.IO)
 
-        coroutineScope.launch {
+        coroutineScope.launch(Dispatchers.IO) {
             if(PreferencesManager.getBlockNotification(context)) {
                 cancelNotification(sbn.key)
             }
         }
 
-        coroutineScope.launch {
+        coroutineScope.launch(Dispatchers.IO) {
             if (excludedAppDao.getExcludedAppByPackageName(packageName).isBlocked) {
                 cancelNotification(sbn.key)
             }
         }
 
-        coroutineScope.launch {
+        coroutineScope.launch(Dispatchers.IO) {
             val excludedApp = excludedAppDao.getExcludedAppByPackageName(packageName)
             if (excludedApp.isExcluded) {
                 // get application name
@@ -62,34 +63,56 @@ class MyNotificationListenerService : NotificationListenerService() {
                     pm.getApplicationLabel(pm.getApplicationInfo(packageName, PackageManager.GET_META_DATA)).toString()
                 // get user name
                 val extras = sbn.notification.extras
+                var group = extras.getString(Notification.EXTRA_CONVERSATION_TITLE) ?: "not_group"
                 var user = extras.getString(Notification.EXTRA_TITLE)?.replace("/", "-") ?: "Unknown"
+
+                if (user.trim() == ""){
+                    user = "Unknown"
+                }
                 // We change '/' to '-' because the tail gives an error indicating the
                 // wrong path when switching to a user whose name contains this character
-                // Separating the user name from the account name
-                if (appName == "Instagram" || appName == "Instander") {
+
+                // Separating the user name from the account name because instagram is shit
+                if (appName in instagramMods ) {
                     user = if (user.split(":").size == 2) {
-                        user.split(":")[1]
+                        user.split(":")[1].trim()
                     } else {
-                        user
+                        user.trim()
                     }
+
+                    if (group != "not_group") {
+                        group = group.replace(group.split(" ")[0], "")
+                        group = group.trim()
+                    }
+                } else if(group != "not_group") {
+                    user = user.replace("$group:", "").trim()
                 }
+
+                if(group == user) {
+                    group = "not_group"
+                }
+
                 // get notification text
                 var text = extras.getCharSequence(Notification.EXTRA_TEXT)?.toString() ?: ""
-                text += extras.getCharSequence(Notification.EXTRA_BIG_TEXT)?.toString() ?: ""
+                val bigText = extras.getCharSequence(Notification.EXTRA_BIG_TEXT)?.toString() ?: ""
+                text.takeUnless { it == bigText }?.let { text += "\n$bigText" }
 
-                val count = notificationDao.checkNotificationExists(user, text, packageName, appName)
-                if (count == 0) {
-                    val notificationEntity =
-                        NotificationEntity(
-                            null,
-                            appName,
-                            packageName,
-                            user,
-                            text,
-                            System.currentTimeMillis(),
-                            false
-                        )
-                    notificationDao.insert(notificationEntity)
+                if (text.isNotEmpty() && group.isNotEmpty()) {
+                    val count = notificationDao.checkNotificationExists(user, text, packageName, appName)
+                    if(count == 0) {
+                        val notificationEntity =
+                            NotificationEntity(
+                                id = null,
+                                appName = appName,
+                                packageName = packageName,
+                                group = group,
+                                user = user,
+                                text = text,
+                                time = System.currentTimeMillis(),
+                                favorite = false
+                            )
+                        notificationDao.insert(notificationEntity)
+                    }
                 }
             }
         }

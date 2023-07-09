@@ -31,7 +31,10 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import androidx.wear.compose.material3.ContentAlpha
 import com.sharipov.mynotificationmanager.R
 import com.sharipov.mynotificationmanager.model.NotificationEntity
 import com.sharipov.mynotificationmanager.ui.allnotifications.component.updateNotification
@@ -74,17 +77,31 @@ fun ChatItem(homeViewModel: HomeViewModel, notification: NotificationEntity) {
         elevation = CardDefaults.cardElevation(),
     ) {
         Box(modifier = Modifier.fillMaxSize()) {
-            Column(modifier = Modifier.padding(8.dp, 16.dp, 16.dp, 16.dp)) {
+            Column(modifier = Modifier.padding(8.dp, 16.dp, 16.dp, 8.dp)) {
+                if(notification.group != "not_group") {
+                    Text(
+                        text = notification.user,
+                        modifier = Modifier.padding(start = 8.dp),
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 18.sp,
+                        color = MaterialTheme.colorScheme.primary
+                    )
+                }
                 Text(
                     text = notification.text,
-                    modifier = Modifier.padding(8.dp),
-                    style = MaterialTheme.typography.titleLarge,
+                    modifier = Modifier.padding(start = 8.dp, bottom = 8.dp),
+                    fontSize = 16.sp
                 )
                 Row(
                     horizontalArrangement = Arrangement.SpaceBetween,
-                    modifier = Modifier.fillMaxWidth()
+                    verticalAlignment = Alignment.CenterVertically,
+                    modifier = Modifier.fillMaxWidth().padding(start = 8.dp)
                 ){
-                    Text(text = dateFormat.format(Date(notification.time)))
+                    Text(
+                        text = dateFormat.format(Date(notification.time)),
+                        fontSize = 14.sp,
+                        color = MaterialTheme.colorScheme.onSurface.copy(alpha = ContentAlpha.medium)
+                    )
                     Image(
                         imageVector = icon,
                         contentDescription = "",
@@ -106,7 +123,7 @@ fun ChatItem(homeViewModel: HomeViewModel, notification: NotificationEntity) {
 
             DropdownMenuItem(
                 text = {
-                    Row() {
+                    Row{
                         Icon(
                             modifier = Modifier
                                 .size(48.dp)
@@ -136,7 +153,7 @@ fun ChatItem(homeViewModel: HomeViewModel, notification: NotificationEntity) {
 
             DropdownMenuItem(
                 text = {
-                    Row() {
+                    Row{
                         Icon(
                             modifier = Modifier
                                 .size(48.dp)
@@ -161,6 +178,7 @@ fun ChatItem(homeViewModel: HomeViewModel, notification: NotificationEntity) {
                             id = notification.id,
                             appName = notification.appName,
                             packageName = notification.packageName,
+                            group = notification.group,
                             user = notification.user,
                             text = notification.text,
                             time = notification.time,
@@ -175,7 +193,7 @@ fun ChatItem(homeViewModel: HomeViewModel, notification: NotificationEntity) {
 
             DropdownMenuItem(
                 text = {
-                    Row() {
+                    Row{
                         Icon(
                             modifier = Modifier
                                 .size(48.dp)

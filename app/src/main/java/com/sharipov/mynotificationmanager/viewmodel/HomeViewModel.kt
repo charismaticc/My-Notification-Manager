@@ -3,6 +3,7 @@ package com.sharipov.mynotificationmanager.viewmodel
 import androidx.lifecycle.ViewModel
 import com.sharipov.mynotificationmanager.data.repository.NotificationRepository
 import com.sharipov.mynotificationmanager.model.NotificationEntity
+import com.sharipov.mynotificationmanager.model.UserGroup
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -13,16 +14,18 @@ import javax.inject.Inject
 interface HomeViewModelAbstract {
 
     val notificationListFlow: Flow<List<NotificationEntity>>
-    fun getAllUserNotifications(userName: String, packageName: String): Flow<List<NotificationEntity>>
-    fun searchUserNotifications(userName: String, packageName: String, query: String): Flow<List<NotificationEntity>>
+    fun getAllNotificationsInGroup(group: String, packageName: String): Flow<List<NotificationEntity>>
+    fun searchNotificationsInGroup(group: String, packageName: String, query: String): Flow<List<NotificationEntity>>
+    fun getAllUserNotifications(group: String, userName: String, packageName: String): Flow<List<NotificationEntity>>
+    fun searchUserNotifications(group: String, userName: String, packageName: String, query: String): Flow<List<NotificationEntity>>
     fun getApplications(): Flow<List<String>>
-    fun getApplicationUserNames(packageName: String): Flow<List<String>>
+    fun getApplicationUserNames(packageName: String): Flow<List<UserGroup>>
     fun getFavoriteNotifications(): Flow<List<NotificationEntity>>
     fun searchNotifications(query: String): Flow<List<NotificationEntity>>
     fun addNotification(notification: NotificationEntity)
     fun upgradeNotification(notification: NotificationEntity)
     fun deleteNotification(notification: NotificationEntity)
-    fun deleteNotificationsForUser(user: String, packageName: String)
+    fun deleteNotificationsForUser(group: String, user: String, packageName: String)
     fun deleteExpiredNotification(autoDeleteTimeout: Long)
 }
 
@@ -37,11 +40,17 @@ class HomeViewModel
     override val notificationListFlow: Flow<List<NotificationEntity>> =
         notificationRepository.getAllFlow()
 
-    override fun getAllUserNotifications(userName: String, packageName: String) =
-        notificationRepository.getAllUserNotifications(userName, packageName)
+    override fun getAllNotificationsInGroup(group: String, packageName: String) =
+        notificationRepository.getAllNotificationsInGroup(group, packageName)
 
-    override fun searchUserNotifications(userName: String, packageName: String, query: String) =
-        notificationRepository.searchUserNotifications(userName, packageName, query)
+    override fun searchNotificationsInGroup(group: String, packageName: String, query: String) =
+        notificationRepository.searchNotificationsInGroup(group, packageName, query)
+
+    override fun getAllUserNotifications(group: String, userName: String, packageName: String) =
+        notificationRepository.getAllUserNotifications(group, userName, packageName)
+
+    override fun searchUserNotifications(group: String, userName: String, packageName: String, query: String) =
+        notificationRepository.searchUserNotifications(group, userName, packageName, query)
 
     override fun getApplications() =
         notificationRepository.getApplications()
@@ -73,9 +82,9 @@ class HomeViewModel
         }
     }
 
-    override fun deleteNotificationsForUser(user: String, packageName: String) {
+    override fun deleteNotificationsForUser(group: String, user: String, packageName: String) {
         ioScope.launch {
-            notificationRepository.deleteNotificationsForUser(user, packageName)
+            notificationRepository.deleteNotificationsForUser(group, user, packageName)
         }
     }
 

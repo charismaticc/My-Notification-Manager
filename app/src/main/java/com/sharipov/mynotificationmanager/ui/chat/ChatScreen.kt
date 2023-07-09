@@ -21,15 +21,27 @@ fun ChatScreen(
     homeViewModel: HomeViewModel,
     navController: NavController,
     userName: String,
-    packageName: String
+    packageName: String,
+    group: String
 ) {
+
     var searchVisible by remember { mutableStateOf(false) }
     var searchText by remember { mutableStateOf("") }
 
     val notificationFlow = if (searchText.isNotBlank()) {
-        homeViewModel.searchUserNotifications(userName, packageName, searchText).collectAsState(emptyList()).value
+        if(group == "not_group") {
+            homeViewModel.searchUserNotifications(group, userName, packageName, searchText)
+                .collectAsState(emptyList()).value
+        } else {
+            homeViewModel.searchNotificationsInGroup(group, packageName, searchText)
+                .collectAsState(emptyList()).value
+        }
     } else {
-        homeViewModel.getAllUserNotifications(userName, packageName).collectAsState(emptyList()).value
+        if(group == "not_group") {
+            homeViewModel.getAllUserNotifications(group, userName, packageName).collectAsState(emptyList()).value
+        } else {
+            homeViewModel.getAllNotificationsInGroup(group, packageName).collectAsState(emptyList()).value
+        }
     }
 
     TransparentSystemBars()
@@ -38,6 +50,7 @@ fun ChatScreen(
         modifier = Modifier.fillMaxSize(),
         topBar = {
             ChatTopBarContent(
+                group = group,
                 userName = userName,
                 packageName = packageName,
                 searchText = searchText,

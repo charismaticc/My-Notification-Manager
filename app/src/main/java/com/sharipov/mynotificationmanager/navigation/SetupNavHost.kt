@@ -72,12 +72,13 @@ fun SetupNavHost(
             )
         }
 
-        composable(route = Screens.Chat.route + "/{user}/{packageName}") { backStackEntry ->
+        composable(route = Screens.Chat.route + "/{user}/{packageName}/{group}") { backStackEntry ->
             ChatScreen(
                 homeViewModel = homeViewModel,
                 navController = navController,
                 userName =  backStackEntry.arguments?.getString("user") ?: "0",
-                packageName =  backStackEntry.arguments?.getString("packageName") ?: ""
+                packageName =  backStackEntry.arguments?.getString("packageName") ?: "",
+                group = backStackEntry.arguments?.getString("group") ?: "not_group",
             )
         }
 

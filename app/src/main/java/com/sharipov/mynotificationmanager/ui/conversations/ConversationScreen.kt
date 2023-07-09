@@ -18,7 +18,10 @@ import com.sharipov.mynotificationmanager.ui.topbarscomponent.TopBarContent
 import com.sharipov.mynotificationmanager.ui.conversations.component.UserItem
 import com.sharipov.mynotificationmanager.utils.TransparentSystemBars
 import com.sharipov.mynotificationmanager.viewmodel.HomeViewModel
-@SuppressLint("FlowOperatorInvokedInComposition", "UnusedMaterial3ScaffoldPaddingParameter")
+
+@SuppressLint("FlowOperatorInvokedInComposition", "UnusedMaterial3ScaffoldPaddingParameter", "SuspiciousIndentation",
+    "RememberReturnType", "UnrememberedMutableState"
+)
 @Composable
 fun ConversationsScreen(
     homeViewModel: HomeViewModel,
@@ -27,6 +30,8 @@ fun ConversationsScreen(
 ) {
     val userNamesFlow = homeViewModel.getApplicationUserNames(packageName)
     val usersListState by userNamesFlow.collectAsState(initial = listOf())
+    val allChats = (usersListState.filter { it.group != "not_group" }.distinctBy { it.group }) +
+            (usersListState.filter { it.group == "not_group" })
 
     TransparentSystemBars()
 
@@ -54,16 +59,22 @@ fun ConversationsScreen(
             Spacer(modifier = Modifier.height(48.dp))
             LazyColumn(modifier = Modifier.fillMaxSize()) {
                 item { Spacer(modifier = Modifier.height(8.dp)) }
-                items(usersListState) { userName ->
+
+                items(allChats) { userGroup ->
                     val modifier = Modifier.fillMaxSize().padding(16.dp, 16.dp, 16.dp)
+                    val userName = userGroup.user
+                    val group = userGroup.group
+
                     UserItem(
                         homeViewModel = homeViewModel,
                         navController = navController,
+                        group = group,
                         userName = userName,
                         packageName = packageName,
-                        userCount = usersListState.size-1,
+                        userCount = usersListState.size - 1,
                         modifier = modifier
                     )
+
                 }
                 item { Spacer(modifier = Modifier.height(16.dp)) }
             }
