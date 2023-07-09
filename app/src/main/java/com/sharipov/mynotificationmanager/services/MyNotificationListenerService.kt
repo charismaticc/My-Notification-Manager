@@ -6,6 +6,7 @@ import android.content.pm.PackageManager
 import android.os.Build
 import android.service.notification.NotificationListenerService
 import android.service.notification.StatusBarNotification
+import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.room.Room
 import com.sharipov.mynotificationmanager.data.AppDatabase
@@ -95,7 +96,11 @@ class MyNotificationListenerService : NotificationListenerService() {
                 // get notification text
                 var text = extras.getCharSequence(Notification.EXTRA_TEXT)?.toString() ?: ""
                 val bigText = extras.getCharSequence(Notification.EXTRA_BIG_TEXT)?.toString() ?: ""
-                text.takeUnless { it == bigText }?.let { text += "\n$bigText" }
+               if(text.trim() == "") {
+                   text = bigText
+               }else if(bigText.trim() != "" && text.trim() != "") {
+                   text = bigText
+               }
 
                 if (text.isNotEmpty() && group.isNotEmpty()) {
                     val count = notificationDao.checkNotificationExists(user, text, packageName, appName)
