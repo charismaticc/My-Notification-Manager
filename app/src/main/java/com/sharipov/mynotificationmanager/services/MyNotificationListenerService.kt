@@ -6,7 +6,6 @@ import android.content.pm.PackageManager
 import android.os.Build
 import android.service.notification.NotificationListenerService
 import android.service.notification.StatusBarNotification
-import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.room.Room
 import com.sharipov.mynotificationmanager.data.AppDatabase
@@ -61,20 +60,22 @@ class MyNotificationListenerService : NotificationListenerService() {
                 // get application name
                 val pm = context.packageManager
                 val appName =
-                    pm.getApplicationLabel(pm.getApplicationInfo(packageName, PackageManager.GET_META_DATA)).toString()
+                    pm.getApplicationLabel(
+                        pm.getApplicationInfo(packageName, PackageManager.GET_META_DATA)
+                    ).toString()
                 // get user name
                 val extras = sbn.notification.extras
                 var group = extras.getString(Notification.EXTRA_CONVERSATION_TITLE) ?: "not_group"
                 var user = extras.getString(Notification.EXTRA_TITLE)?.replace("/", "-") ?: "Unknown"
 
-                if (user.trim() == ""){
+                if (user.trim() == "") {
                     user = "Unknown"
                 }
                 // We change '/' to '-' because the tail gives an error indicating the
                 // wrong path when switching to a user whose name contains this character
 
                 // Separating the user name from the account name because instagram is shit
-                if (appName in instagramMods ) {
+                if (appName in instagramMods) {
                     user = if (user.split(":").size == 2) {
                         user.split(":")[1].trim()
                     } else {
@@ -85,26 +86,26 @@ class MyNotificationListenerService : NotificationListenerService() {
                         group = group.replace(group.split(" ")[0], "")
                         group = group.trim()
                     }
-                } else if(group != "not_group") {
+                } else if (group != "not_group") {
                     user = user.replace("$group:", "").trim()
                 }
 
-                if(group == user) {
+                if (group == user) {
                     group = "not_group"
                 }
 
                 // get notification text
                 var text = extras.getCharSequence(Notification.EXTRA_TEXT)?.toString() ?: ""
                 val bigText = extras.getCharSequence(Notification.EXTRA_BIG_TEXT)?.toString() ?: ""
-               if(text.trim() == "") {
-                   text = bigText
-               }else if(bigText.trim() != "" && text.trim() != "") {
-                   text = bigText
-               }
+                if (text.trim() == "") {
+                    text = bigText
+                } else if (bigText.trim() != "" && text.trim() != "") {
+                    text = bigText
+                }
 
                 if (text.isNotEmpty() && group.isNotEmpty()) {
                     val count = notificationDao.checkNotificationExists(user, text, packageName, appName)
-                    if(count == 0) {
+                    if (count == 0) {
                         val notificationEntity =
                             NotificationEntity(
                                 id = null,
