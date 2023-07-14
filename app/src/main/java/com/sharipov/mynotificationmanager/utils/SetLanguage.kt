@@ -5,7 +5,7 @@ import android.content.res.Configuration
 import com.sharipov.mynotificationmanager.data.PreferencesManager
 import java.util.Locale
 
-fun setLanguage(context: Context ) {
+fun setChanges(context: Context ) {
     val language = when (PreferencesManager.getSelectedLanguage(context)) {
         "English" -> "en"
         "Русский" -> "ru"
@@ -16,7 +16,6 @@ fun setLanguage(context: Context ) {
 
     val locale = Locale(language)
     Locale.setDefault(locale)
-
     val resources = context.resources
     val configuration = Configuration(resources.configuration)
     configuration.setLocale(locale)

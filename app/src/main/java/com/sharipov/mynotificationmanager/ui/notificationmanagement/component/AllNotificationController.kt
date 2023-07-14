@@ -1,6 +1,5 @@
 package com.sharipov.mynotificationmanager.ui.notificationmanagement.component
 
-import android.content.Context
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
@@ -26,12 +25,14 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.sharipov.mynotificationmanager.R
-import com.sharipov.mynotificationmanager.data.PreferencesManager
+import com.sharipov.mynotificationmanager.viewmodel.SettingsViewModel
 
 @Composable
-fun DoNotDisturbMode(initialChecked: Boolean, context: Context) {
-    var isChecked by remember { mutableStateOf(initialChecked) }
-
+fun AllApplication(
+    settingsViewModel: SettingsViewModel,
+    whichListIsDisplayed: Boolean
+) {
+    var isChecked by remember { mutableStateOf(false) }
     Row(
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically,
@@ -40,7 +41,8 @@ fun DoNotDisturbMode(initialChecked: Boolean, context: Context) {
             .padding(16.dp)
     ) {
         Image(
-            painter = painterResource(id = R.drawable.ic_notifications_off),
+            painter = if (whichListIsDisplayed) painterResource(id = R.drawable.ic_notifications)
+                    else painterResource(id = R.drawable.ic_notifications_off),
             contentDescription = null,
             modifier = Modifier.size(48.dp),
             colorFilter = ColorFilter.tint(if (isSystemInDarkTheme()) Color.White else Color.DarkGray)
@@ -55,7 +57,11 @@ fun DoNotDisturbMode(initialChecked: Boolean, context: Context) {
             checked = isChecked,
             onCheckedChange = { newValue ->
                 isChecked = newValue
-                PreferencesManager.updateBlockNotificationStatus(context, newValue)
+                if(whichListIsDisplayed) {
+                    settingsViewModel.setExcludedStatusForAllNotifications(isChecked)
+                } else {
+                    settingsViewModel.setBlockedStatusForAllNotifications(isBlocked = isChecked)
+                }
             }
         )
     }

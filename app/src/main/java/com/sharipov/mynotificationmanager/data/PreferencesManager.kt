@@ -36,15 +36,15 @@ object PreferencesManager {
         return sharedPreferences.getBoolean(KEY_BLOCK_NOTIFICATIONS, false)
     }
 
-//    fun updateThemeStyle(context: Context, status: String) {
-//        val sharedPreferences = getSharedPreferences(context)
-//        val editor = sharedPreferences.edit()
-//        editor.putString(KEY_THEME_STYLE, status)
-//        editor.apply()
-//    }
+    fun updateThemeStyle(context: Context, status: String) {
+        val sharedPreferences = getSharedPreferences(context)
+        val editor = sharedPreferences.edit()
+        editor.putString(KEY_THEME_STYLE, status)
+        editor.apply()
+    }
 
-//    fun getThemeStyle(context: Context): String {
-//        val sharedPreferences = getSharedPreferences(context)
-//        return sharedPreferences.getString(KEY_THEME_STYLE, "system").toString()
-//    }
+    fun getThemeStyle(context: Context): String {
+        val sharedPreferences = getSharedPreferences(context)
+        return sharedPreferences.getString(KEY_THEME_STYLE, "system_theme").toString()
+    }
 }

@@ -22,6 +22,12 @@ interface ExcludedAppDao {
     @Query("DELETE FROM excluded_apps WHERE packageName = :packageName")
     suspend fun deleteExcludedAppByPackageName(packageName: String)
 
+    @Query("UPDATE excluded_apps SET isExcluded = :isExcluded")
+    suspend fun setExcludedStatusForAllNotifications(isExcluded: Boolean)
+
+    @Query("UPDATE excluded_apps SET isBlocked = :isBlocked")
+    suspend fun setBlockedStatusForAllNotifications(isBlocked: Boolean)
+
     @Query("SELECT * FROM excluded_apps WHERE appName LIKE '%' || :query || '%' ORDER BY appName ASC")
     fun searchApplication(query: String): Flow<List<ExcludedAppEntity>>
 

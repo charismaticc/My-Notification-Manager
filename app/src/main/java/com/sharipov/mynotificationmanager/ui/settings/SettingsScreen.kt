@@ -30,8 +30,9 @@ import com.sharipov.mynotificationmanager.ui.settings.components.aboutUsDialog
 import com.sharipov.mynotificationmanager.ui.settings.components.autoRemoveDialog
 import com.sharipov.mynotificationmanager.ui.settings.components.feedbackDialog
 import com.sharipov.mynotificationmanager.ui.settings.components.privatePolicyDialog
+import com.sharipov.mynotificationmanager.ui.settings.components.SelectThemeDialog
 import com.sharipov.mynotificationmanager.utils.TransparentSystemBars
-import com.sharipov.mynotificationmanager.utils.setLanguage
+import com.sharipov.mynotificationmanager.utils.setChanges
 import com.sharipov.mynotificationmanager.viewmodel.SettingsViewModel
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter", "CoroutineCreationDuringComposition")
@@ -49,7 +50,7 @@ fun SettingsScreen(
     val openFeedbackDialog = remember { mutableStateOf(false) }
     val openAboutUsDialog = remember { mutableStateOf(false) }
     val openLanguageDialog = remember { mutableStateOf(false) }
-//    val openThemeDialog = remember { mutableStateOf(false) }
+    val openThemeDialog = remember { mutableStateOf(false) }
 
     var selectedTime by remember { mutableStateOf("Never") }
     val showAutoDeleteDialog = remember { mutableStateOf(false) }
@@ -97,15 +98,15 @@ fun SettingsScreen(
                             }
                         )
                     }
-//                    item {
-//                        ClickableListItem(
-//                            text = stringResource(id = R.string.select_theme),
-//                            icon = painterResource(id = R.drawable.ic_dark_mode),
-//                            onClick = {
-//                                openThemeDialog.value = true
-//                            }
-//                        )
-//                    }
+                    item {
+                        ClickableListItem(
+                            text = stringResource(id = R.string.select_theme),
+                            icon = painterResource(id = R.drawable.ic_dark_mode),
+                            onClick = {
+                                openThemeDialog.value = true
+                            }
+                        )
+                    }
                     item {
                         ClickableListItem(
                             text = stringResource(id = R.string.select_language),
@@ -156,7 +157,7 @@ fun SettingsScreen(
                     openLanguageDialog.value -> LanguageDialog(
                         onLanguageSelected = { selectedLanguage ->
                             PreferencesManager.saveSelectedLanguage(context, selectedLanguage)
-                            setLanguage(context)
+                            setChanges(context)
                             if (context is Activity) {
                                 context.recreate()
                             }
@@ -165,27 +166,19 @@ fun SettingsScreen(
                             openLanguageDialog.value = false
                         }
                     )
-//                    openThemeDialog.value -> selectThemeDialog(
-//                        onThemeSelected = { selectThemeDialog ->
-//                            PreferencesManager.updateThemeStyle(context, selectThemeDialog)
-//                            setTheme(context)
-//                        },
-//                        onDismiss = {
-//                            openThemeDialog.value = false
-//                        }
-//                    )
+                    openThemeDialog.value -> SelectThemeDialog(
+                        onThemeSelected = { selectThemeDialog ->
+                            PreferencesManager.updateThemeStyle(context, selectThemeDialog)
+                            if (context is Activity) {
+                                context.recreate()
+                            }
+                        },
+                        onDismiss = {
+                            openThemeDialog.value = false
+                        }
+                    )
                 }
             }
         )
     }
 }
-
-//fun setTheme(context: Context) {
-//    val selectedTheme = when (PreferencesManager.getThemeStyle(context)) {
-//        "System", "Системный" -> AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM
-//        "Dark theme", "Тёмная тема" -> AppCompatDelegate.MODE_NIGHT_YES
-//        "Light theme", "Светлая тема" -> AppCompatDelegate.MODE_NIGHT_NO
-//        else -> AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM
-//    }
-//    AppCompatDelegate.setDefaultNightMode(selectedTheme)
-//}

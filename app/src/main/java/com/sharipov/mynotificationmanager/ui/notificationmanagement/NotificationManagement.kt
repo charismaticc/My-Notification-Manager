@@ -35,11 +35,10 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.sharipov.mynotificationmanager.R
-import com.sharipov.mynotificationmanager.data.PreferencesManager
 import com.sharipov.mynotificationmanager.navigation.Screens
 import com.sharipov.mynotificationmanager.ui.drawer.AppDrawer
+import com.sharipov.mynotificationmanager.ui.notificationmanagement.component.AllApplication
 import com.sharipov.mynotificationmanager.ui.notificationmanagement.component.AppListItem
-import com.sharipov.mynotificationmanager.ui.notificationmanagement.component.DoNotDisturbMode
 import com.sharipov.mynotificationmanager.ui.notificationmanagement.component.ToggleDisplayMode
 import com.sharipov.mynotificationmanager.ui.topbarscomponent.SearchTopBarContent
 import com.sharipov.mynotificationmanager.utils.Constants
@@ -61,7 +60,7 @@ fun NotificationManagement(
     val currentRoute = currentNavBackStackEntry?.destination?.route ?: Constants.Screens.APPLICATION_SCREEN
     val whichListIsDisplayed = remember { mutableStateOf(true) }
     var searchQuery by remember { mutableStateOf("") }
-    val isChecked by remember { mutableStateOf(PreferencesManager.getBlockNotification(context)) }
+//    val isChecked by remember { mutableStateOf(PreferencesManager.getBlockNotification(context)) }
     var searchVisible by remember { mutableStateOf(false) }
 
     val apps = if (searchQuery.isNotBlank()) {
@@ -126,8 +125,6 @@ fun NotificationManagement(
                             )
                             Spacer(modifier = Modifier.height(8.dp))
                             Divider(color = Color.Gray, thickness = 1.dp)
-
-                            DoNotDisturbMode(isChecked, context)
                         }
                     } else if(!searchVisible) {
                         item{
@@ -140,7 +137,9 @@ fun NotificationManagement(
                             Divider(color = Color.Gray, thickness = 1.dp)
                         }
                     }
-
+                    item {
+                        AllApplication(settingsViewModel, whichListIsDisplayed.value)
+                    }
                     items(apps) { app ->
                         val icon = context.packageManager.getApplicationIcon(app.packageName)
                         AppListItem(

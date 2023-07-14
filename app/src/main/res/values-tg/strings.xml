@@ -45,4 +45,8 @@
     <string name="do_not_disturb_mode">Халал нарасонед</string>
     <string name="block_notifications_rules">Огоҳиҳои барномаҳои интихобшуда дар ин ҷо нишон дода намешаванд аммо онҳо дар барнома захира карда мешаванд!</string>
     <string name="save_notifications_rules">Огоҳиҳои барномаҳои дар ин ҷо интихобшуда дар барнома захира карда мешаванд!</string>
+    <string name="dark_theme">Темаи торик</string>
+    <string name="light_theme">Темаи равшан</string>
+    <string name="system_theme">Темаи система</string>
+    <string name="settings_take_effect">Танзимот ҳангоми воридшавии навбатӣ ба барномаҳо эътибор пайдо мекунад</string>
 </resources>

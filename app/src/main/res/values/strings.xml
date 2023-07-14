@@ -57,4 +57,10 @@
     <string name="do_not_disturb_mode">Do not disturb mode</string>
     <string name="block_notifications_rules">Notifications of the apps selected here will not be shown, BUT they will be saved in the app!</string>
     <string name="save_notifications_rules">Notifications of apps selected here will be saved in the app!</string>
+    
+    <string name="dark_theme">Dark theme</string>
+    <string name="light_theme">Light theme</string>
+    <string name="system_theme">System theme</string>
+
+    <string name="settings_take_effect">The settings will take effect the next time you log in to the application</string>
 </resources>

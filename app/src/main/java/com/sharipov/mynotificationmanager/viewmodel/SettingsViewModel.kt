@@ -29,6 +29,10 @@ interface SettingsViewModelAbstract {
     fun searchApplication(query: String): Flow<List<ExcludedAppEntity>>
 
     fun deleteExcludedAppByPackageName(packageName: String)
+
+    fun setExcludedStatusForAllNotifications(isExcluded: Boolean)
+
+    fun setBlockedStatusForAllNotifications(isExcluded: Boolean)
 }
 
 
@@ -72,6 +76,16 @@ class SettingsViewModel
     override fun deleteExcludedAppByPackageName(packageName: String) {
         ioScope.launch {
             excludedAppRepository.deleteExcludedAppByPackageName(packageName = packageName)
+        }
+    }
+    override fun setExcludedStatusForAllNotifications(isExcluded: Boolean) {
+        ioScope.launch {
+            excludedAppRepository.setExcludedStatusForAllNotifications(isExcluded)
+        }
+    }
+    override fun setBlockedStatusForAllNotifications(isBlocked: Boolean) {
+        ioScope.launch {
+            excludedAppRepository.setBlockedStatusForAllNotifications(isBlocked)
         }
     }
 }

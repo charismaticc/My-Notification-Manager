@@ -8,16 +8,18 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.annotation.RequiresApi
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
 import androidx.core.app.NotificationManagerCompat
 import androidx.navigation.compose.rememberNavController
+import com.sharipov.mynotificationmanager.data.PreferencesManager
 import com.sharipov.mynotificationmanager.ui.theme.MyNotificationManagerTheme
 import com.sharipov.mynotificationmanager.viewmodel.HomeViewModel
 import com.sharipov.mynotificationmanager.navigation.SetupNavHost
-import com.sharipov.mynotificationmanager.utils.setLanguage
+import com.sharipov.mynotificationmanager.utils.setChanges
 import com.sharipov.mynotificationmanager.viewmodel.SettingsViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -33,13 +35,21 @@ class MainActivity : ComponentActivity() {
             startActivity(intent)
         }
 
-        setLanguage(this)
+        setChanges(this)
 
         val homeViewModel: HomeViewModel by viewModels()
         val settingsViewModel: SettingsViewModel by viewModels()
 
         setContent {
-            MyNotificationManagerTheme {
+
+            val theme = when (PreferencesManager.getThemeStyle(this)) {
+                "dark_theme" -> true
+                "light_theme" -> false
+                "system_theme" -> isSystemInDarkTheme()
+                else -> isSystemInDarkTheme()
+            }
+
+            MyNotificationManagerTheme(theme) {
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background

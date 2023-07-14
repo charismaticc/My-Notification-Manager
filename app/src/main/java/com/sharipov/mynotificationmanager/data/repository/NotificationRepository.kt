@@ -10,7 +10,6 @@ class NotificationRepository(
 ) {
     fun getAllFlow(): Flow<List<NotificationEntity>> =
         notificationDao.getAllFlow()
-
     fun getAllNotificationsInGroup(group: String, packageName: String): Flow<List<NotificationEntity>> =
         notificationDao.getAllNotificationsInGroup(group, packageName)
     fun searchNotificationsInGroup(group: String, packageName: String, query: String): Flow<List<NotificationEntity>> =

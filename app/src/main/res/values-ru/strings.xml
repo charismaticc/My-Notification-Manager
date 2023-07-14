@@ -45,4 +45,8 @@
     <string name="do_not_disturb_mode">Не беспокоить</string>
     <string name="block_notifications_rules">Уведомления выбранных здесь приложений не будут показываться НО они будут сохраняться в приложении!</string>
     <string name="save_notifications_rules">Уведомления приложений выбранных здесь будут сохраняться в приложении!</string>
+    <string name="dark_theme">Темная тема</string>
+    <string name="light_theme">Светлая тема</string>
+    <string name="system_theme">Системная тема</string>
+    <string name="settings_take_effect">Настройки вступит в силу при следующем входе в приложения</string>
 </resources>

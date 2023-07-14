@@ -17,4 +17,8 @@ class ExcludedAppRepository(
         excludedApp.updateExcludedApp(excludedApp = app)
     suspend fun deleteExcludedAppByPackageName(packageName: String) =
         excludedApp.deleteExcludedAppByPackageName(packageName = packageName)
+    suspend fun setExcludedStatusForAllNotifications(isExcluded: Boolean) =
+        excludedApp.setExcludedStatusForAllNotifications(isExcluded)
+    suspend fun setBlockedStatusForAllNotifications(isBlocked: Boolean) =
+        excludedApp.setBlockedStatusForAllNotifications(isBlocked)
 }
