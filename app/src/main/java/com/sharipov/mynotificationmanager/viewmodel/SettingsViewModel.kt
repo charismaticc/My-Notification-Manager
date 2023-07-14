@@ -32,7 +32,7 @@ interface SettingsViewModelAbstract {
 
     fun setExcludedStatusForAllNotifications(isExcluded: Boolean)
 
-    fun setBlockedStatusForAllNotifications(isExcluded: Boolean)
+    fun setBlockedStatusForAllNotifications(isBlocked: Boolean)
 }
 
 
