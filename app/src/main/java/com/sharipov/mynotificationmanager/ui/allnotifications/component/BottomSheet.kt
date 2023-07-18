@@ -100,7 +100,7 @@ fun BottomSheetContent(
                 },
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
-            Text(stringResource(id = R.string.from) + " " + fromDate.value)
+            Text("${stringResource(id = R.string.from)}  ${fromDate.value}")
             Icon(
                 modifier = Modifier.size(24.dp),
                 imageVector = Icons.Default.DateRange,
@@ -116,7 +116,7 @@ fun BottomSheetContent(
                 },
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
-            Text(stringResource(id = R.string.to) + " " + toDate.value)
+            Text("${stringResource(id = R.string.to)}  ${toDate.value}")
             Icon(
                 modifier = Modifier.size(24.dp),
                 imageVector = Icons.Default.DateRange,
