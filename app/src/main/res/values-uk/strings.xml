@@ -14,7 +14,6 @@
     <string name="delete">Видалити</string>
     <string name="unknown">Невідомий</string>
     <string name="conversations">Чати</string>
-    <string name="from">Від:</string>
     <string name="in_app">У додатку: </string>
     <string name="time">Час:</string>
     <string name="time_is_null">Час невідомий</string>
@@ -49,4 +48,7 @@
     <string name= "light_theme">Світла тема</string>
     <string name= "system_theme">Системна тема</string>
     <string name="settings_take_effect">Налаштування вступить в силу при наступному вході в додатки</string>
+    <string name="from">Від:</string>
+    <string name="to">Дo: </string>
+
 </resources>

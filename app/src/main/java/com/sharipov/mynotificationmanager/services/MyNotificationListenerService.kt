@@ -42,82 +42,78 @@ class MyNotificationListenerService : NotificationListenerService() {
         val packageName = sbn.packageName
         val coroutineScope = CoroutineScope(Dispatchers.IO)
 
-        coroutineScope.launch(Dispatchers.IO) {
+        coroutineScope.launch {
             if(PreferencesManager.getBlockNotification(context)) {
                 cancelNotification(sbn.key)
             }
-        }
-
-        coroutineScope.launch(Dispatchers.IO) {
-            if (excludedAppDao.getExcludedAppByPackageName(packageName).isBlocked) {
+            else if (excludedAppDao.getExcludedAppByPackageName(packageName).isBlocked) {
                 cancelNotification(sbn.key)
             }
-        }
+            else {
+                val excludedApp = excludedAppDao.getExcludedAppByPackageName(packageName)
+                if (excludedApp.isExcluded) {
+                    // get application name
+                    val pm = context.packageManager
+                    val appName =
+                        pm.getApplicationLabel(
+                            pm.getApplicationInfo(packageName, PackageManager.GET_META_DATA)
+                        ).toString()
+                    // get user name
+                    val extras = sbn.notification.extras
+                    var group = extras.getString(Notification.EXTRA_CONVERSATION_TITLE) ?: "not_group"
+                    var user = extras.getString(Notification.EXTRA_TITLE)?.replace("/", "-") ?: "Unknown"
 
-        coroutineScope.launch(Dispatchers.IO) {
-            val excludedApp = excludedAppDao.getExcludedAppByPackageName(packageName)
-            if (excludedApp.isExcluded) {
-                // get application name
-                val pm = context.packageManager
-                val appName =
-                    pm.getApplicationLabel(
-                        pm.getApplicationInfo(packageName, PackageManager.GET_META_DATA)
-                    ).toString()
-                // get user name
-                val extras = sbn.notification.extras
-                var group = extras.getString(Notification.EXTRA_CONVERSATION_TITLE) ?: "not_group"
-                var user = extras.getString(Notification.EXTRA_TITLE)?.replace("/", "-") ?: "Unknown"
+                    if (user.trim() == "") {
+                        user = "Unknown"
+                    }
+                    // We change '/' to '-' because the tail gives an error indicating the
+                    // wrong path when switching to a user whose name contains this character
 
-                if (user.trim() == "") {
-                    user = "Unknown"
-                }
-                // We change '/' to '-' because the tail gives an error indicating the
-                // wrong path when switching to a user whose name contains this character
+                    // Separating the user name from the account name because instagram is shit
+                    if (appName in instagramMods) {
+                        user = if (user.split(":").size == 2) {
+                            user.split(":")[1].trim()
+                        } else {
+                            user.trim()
+                        }
 
-                // Separating the user name from the account name because instagram is shit
-                if (appName in instagramMods) {
-                    user = if (user.split(":").size == 2) {
-                        user.split(":")[1].trim()
-                    } else {
-                        user.trim()
+                        if (group != "not_group") {
+                            group = group.replace(group.split(" ")[0], "")
+                            group = group.trim()
+                        }
+                    } else if (group != "not_group") {
+                        user = user.replace("$group:", "").trim()
                     }
 
-                    if (group != "not_group") {
-                        group = group.replace(group.split(" ")[0], "")
-                        group = group.trim()
+                    if (group == user) {
+                        group = "not_group"
                     }
-                } else if (group != "not_group") {
-                    user = user.replace("$group:", "").trim()
-                }
 
-                if (group == user) {
-                    group = "not_group"
-                }
+                    // get notification text
+                    var text = extras.getCharSequence(Notification.EXTRA_TEXT)?.toString() ?: ""
+                    val bigText = extras.getCharSequence(Notification.EXTRA_BIG_TEXT)?.toString() ?: ""
+                    if (text.trim() == "") {
+                        text = bigText
+                    } else if (bigText.trim() != "" && text.trim() != "") {
+                        text = bigText
+                    }
 
-                // get notification text
-                var text = extras.getCharSequence(Notification.EXTRA_TEXT)?.toString() ?: ""
-                val bigText = extras.getCharSequence(Notification.EXTRA_BIG_TEXT)?.toString() ?: ""
-                if (text.trim() == "") {
-                    text = bigText
-                } else if (bigText.trim() != "" && text.trim() != "") {
-                    text = bigText
-                }
-
-                if (text.isNotEmpty() && group.isNotEmpty()) {
-                    val count = notificationDao.checkNotificationExists(user, text, packageName, appName)
-                    if (count == 0) {
-                        val notificationEntity =
-                            NotificationEntity(
-                                id = null,
-                                appName = appName,
-                                packageName = packageName,
-                                group = group,
-                                user = user,
-                                text = text,
-                                time = System.currentTimeMillis(),
-                                favorite = false
-                            )
-                        notificationDao.insert(notificationEntity)
+                    if (text.isNotEmpty() && group.isNotEmpty()) {
+                        val count = notificationDao.checkNotificationExists(user, text, packageName, appName)
+                        if (count == 0) {
+                            val notificationEntity =
+                                NotificationEntity(
+                                    id = null,
+                                    appName = appName,
+                                    packageName = packageName,
+                                    group = group,
+                                    user = user,
+                                    text = text,
+                                    time = System.currentTimeMillis(),
+                                    favorite = false
+                                )
+                            notificationDao.insert(notificationEntity)
+                        }
                     }
                 }
             }

@@ -14,7 +14,6 @@
     <string name="delete">Нест кардан</string>
     <string name="unknown">Номаълум</string>
     <string name="conversations">Сӯҳбатҳо</string>
-    <string name="from">Аз: </string>
     <string name="in_app">Дар барномаи: </string>
     <string name="time">Вақт: </string>
     <string name="time_is_null">Вақт маълум нест</string>
@@ -49,4 +48,6 @@
     <string name="light_theme">Темаи равшан</string>
     <string name="system_theme">Темаи система</string>
     <string name="settings_take_effect">Танзимот ҳангоми воридшавии навбатӣ ба барномаҳо эътибор пайдо мекунад</string>
+    <string name="from">Аз: </string>
+    <string name="to">То: </string>
 </resources>

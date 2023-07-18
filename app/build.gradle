@@ -13,8 +13,8 @@ android {
         applicationId "com.sharipov.mynotificationmanager"
         minSdk 25
         targetSdk 34
-        versionCode 11
-        versionName "1.0.3"
+        versionCode 12
+        versionName "1.0.4"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
@@ -107,4 +107,7 @@ dependencies {
     implementation "com.google.accompanist:accompanist-systemuicontroller:0.31.0-alpha"
 
     implementation "me.saket.swipe:swipe:1.2.0"
+
+    // Material 3 - CALENDAR
+    implementation "com.maxkeppeler.sheets-compose-dialogs:calendar:1.0.2"
 }

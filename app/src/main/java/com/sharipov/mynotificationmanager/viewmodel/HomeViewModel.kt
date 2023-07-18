@@ -22,6 +22,7 @@ interface HomeViewModelAbstract {
     fun getApplicationUserNames(packageName: String): Flow<List<UserGroup>>
     fun getFavoriteNotifications(): Flow<List<NotificationEntity>>
     fun searchNotifications(query: String): Flow<List<NotificationEntity>>
+    fun getNotificationsFromData(fromDate: Long?, toDate: Long?): Flow<List<NotificationEntity>>
     fun addNotification(notification: NotificationEntity)
     fun upgradeNotification(notification: NotificationEntity)
     fun deleteNotification(notification: NotificationEntity)
@@ -60,6 +61,9 @@ class HomeViewModel
 
     override fun searchNotifications(query: String): Flow<List<NotificationEntity>> =
         notificationRepository.searchNotifications(query)
+
+    override fun getNotificationsFromData(fromDate: Long?, toDate: Long?): Flow<List<NotificationEntity>> =
+        notificationRepository.getNotificationsFromData(fromDate, toDate)
 
     override fun getApplicationUserNames(packageName: String) =
         notificationRepository.getApplicationUserNames(packageName)

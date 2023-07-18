@@ -150,9 +150,6 @@ fun autoRemoveDialog(
                         runBlocking {
                             settingsViewModel.updateSettings(AppSettingsEntity(0, selectedTimeLong, selectedOption))
                         }
-
-                        Toast.makeText(context, selectedOption, Toast.LENGTH_LONG).show()
-
                         onTimeSelected(selectedOption)
                         onDismiss()
                     }
@@ -398,18 +395,16 @@ fun SelectThemeDialog(
     onDismiss: () -> Unit
 ) {
     val context = LocalContext.current
-
-    val themes = listOf(
-        stringResource(id = R.string.dark_theme),
-        stringResource(id = R.string.light_theme),
-        stringResource(id = R.string.system_theme)
-    )
+    val darkTheme = stringResource(id = R.string.dark_theme)
+    val lightTheme = stringResource(id = R.string.light_theme)
+    val systemTheme = stringResource(id = R.string.system_theme)
+    val themes = listOf(darkTheme, lightTheme, systemTheme)
 
     val currentTheme = when(PreferencesManager.getThemeStyle(context)) {
-        "dark_theme" -> stringResource(id = R.string.dark_theme)
-        "light_theme" -> stringResource(id = R.string.light_theme)
-        "system_theme" -> stringResource(id = R.string.system_theme)
-        else -> stringResource(id = R.string.system_theme)
+        "dark_theme" -> darkTheme
+        "light_theme" -> lightTheme
+        "system_theme" -> systemTheme
+        else -> systemTheme
     }
 
     var selectedTheme by remember { mutableStateOf(currentTheme) }
@@ -456,9 +451,6 @@ fun SelectThemeDialog(
                         )
                     }
                 }
-                val darkTheme = stringResource(id = R.string.dark_theme)
-                val lightTheme = stringResource(id = R.string.light_theme)
-                val systemTheme = stringResource(id = R.string.system_theme)
                 Button(
                     modifier = Modifier.fillMaxWidth(),
                     onClick = {
@@ -470,7 +462,6 @@ fun SelectThemeDialog(
                             else -> "system_theme"
                         }
                         onThemeSelected.invoke(theme)
-
                     }
                 ) {
                     Text(stringResource(id = R.string.select))

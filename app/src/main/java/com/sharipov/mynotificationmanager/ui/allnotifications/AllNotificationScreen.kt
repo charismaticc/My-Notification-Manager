@@ -1,6 +1,8 @@
 package com.sharipov.mynotificationmanager.ui.allnotifications
 
 import android.annotation.SuppressLint
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -15,16 +17,19 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.sharipov.mynotificationmanager.R
 import com.sharipov.mynotificationmanager.navigation.Screens
+import com.sharipov.mynotificationmanager.ui.allnotifications.component.MyFloatingActionButton
 import com.sharipov.mynotificationmanager.ui.allnotifications.component.NotificationItem
+import com.sharipov.mynotificationmanager.ui.allnotifications.component.bottomSheet
 import com.sharipov.mynotificationmanager.ui.topbarscomponent.SearchTopBarContent
 import com.sharipov.mynotificationmanager.ui.drawer.AppDrawer
 import com.sharipov.mynotificationmanager.utils.TransparentSystemBars
 import com.sharipov.mynotificationmanager.utils.Constants
+import com.sharipov.mynotificationmanager.utils.dateConverter
 import com.sharipov.mynotificationmanager.viewmodel.HomeViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
-
+@RequiresApi(Build.VERSION_CODES.O)
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter", "RememberReturnType")
 @Composable
 fun AllNotificationScreen(
@@ -37,13 +42,21 @@ fun AllNotificationScreen(
     val context = LocalContext.current
     var searchVisible by remember { mutableStateOf(false) }
     var searchText by remember { mutableStateOf("") }
+    var data by remember { mutableStateOf("") }
+    var fromDate by remember { mutableStateOf("") }
+    var toDate by remember { mutableStateOf("") }
     val currentNavBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = currentNavBackStackEntry?.destination?.route ?: Constants.Screens.APPLICATION_SCREEN
     val notificationFlow = if (searchText.isNotBlank()) {
         homeViewModel.searchNotifications(searchText).collectAsState(emptyList()).value
-    } else {
+    } else if(fromDate.isNotBlank() || toDate.isNotBlank()) {
+        val fromDateLongValue = dateConverter(fromDate)
+        val toDateLongValue = dateConverter(toDate)
+        homeViewModel.getNotificationsFromData(fromDateLongValue, toDateLongValue).collectAsState(emptyList()).value
+    }else {
         homeViewModel.notificationListFlow.collectAsState(emptyList()).value
     }
+    var showFilters by remember { mutableStateOf(false) }
 
     TransparentSystemBars()
 
@@ -73,6 +86,10 @@ fun AllNotificationScreen(
                     onSearchTextChange = { searchText = it }
                 )
             },
+            floatingActionButton = {
+                MyFloatingActionButton(onFiltersClick = { showFilters = !showFilters })
+            },
+            floatingActionButtonPosition = FabPosition.End
         ) {
             Column(
                 modifier = Modifier.fillMaxSize(),
@@ -82,7 +99,7 @@ fun AllNotificationScreen(
 
                 Spacer(modifier = Modifier.padding(32.dp))
 
-                if(!searchVisible){
+                if (!searchVisible) {
                     Card(
                         modifier = Modifier
                             .fillMaxWidth()
@@ -98,14 +115,17 @@ fun AllNotificationScreen(
                     }
                 }
 
-                if(searchVisible) {
+                if (searchVisible) {
                     Spacer(modifier = Modifier.padding(32.dp))
                 }
 
                 AnimatedVisibility(
                     visible = !searchVisible || searchText.isNotEmpty(),
                 ) {
-                    LazyColumn {
+                    LazyColumn(
+                        modifier = Modifier
+                            .fillMaxSize()
+                    ) {
                         items(notificationFlow.size) { index ->
                             val notification = notificationFlow[index]
                             NotificationItem(
@@ -118,6 +138,9 @@ fun AllNotificationScreen(
                         item { Spacer(modifier = Modifier.height(16.dp)) }
                     }
                 }
+                data = bottomSheet(showFilters) { showFilters = false }
+                fromDate = data.split(":")[0]
+                toDate = data.split(":")[1]
             }
         }
     }

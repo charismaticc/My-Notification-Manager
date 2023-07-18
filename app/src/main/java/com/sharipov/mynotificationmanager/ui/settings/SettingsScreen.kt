@@ -51,9 +51,8 @@ fun SettingsScreen(
     val openAboutUsDialog = remember { mutableStateOf(false) }
     val openLanguageDialog = remember { mutableStateOf(false) }
     val openThemeDialog = remember { mutableStateOf(false) }
-
-    var selectedTime by remember { mutableStateOf("Never") }
     val showAutoDeleteDialog = remember { mutableStateOf(false) }
+    var selectedTime by remember { mutableStateOf("Never") }
 
     TransparentSystemBars()
 
@@ -81,92 +80,95 @@ fun SettingsScreen(
                     appIcon = null,
                     onNavigationClick = { coroutineScope.launch { drawerState.open() } }
                 )
-            },
-            content = {
-                LazyColumn(
-                    verticalArrangement = Arrangement.spacedBy(8.dp)
-                ) {
+            }
+        ) {
+            LazyColumn(
+                verticalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
 
-                    item { Spacer(modifier = Modifier.height(64.dp)) }
+                item { Spacer(modifier = Modifier.height(64.dp)) }
 
-                    item {
-                        ClickableListItem(
-                            text = stringResource(id = R.string.automatic_deletion_of_notifications),
-                            icon = painterResource(id = R.drawable.ic_auto_delete),
-                            onClick = {
-                                openAutoRemoveDialog.value = true
-                            }
-                        )
-                    }
-                    item {
-                        ClickableListItem(
-                            text = stringResource(id = R.string.select_theme),
-                            icon = painterResource(id = R.drawable.ic_dark_mode),
-                            onClick = {
-                                openThemeDialog.value = true
-                            }
-                        )
-                    }
-                    item {
-                        ClickableListItem(
-                            text = stringResource(id = R.string.select_language),
-                            icon = painterResource(id = R.drawable.ic_language),
-                            onClick = {
-                                openLanguageDialog.value = true
-                            }
-                        )
-                    }
-                    item {
-                        ClickableListItem(
-                            text = stringResource(id = R.string.private_policy),
-                            icon = painterResource(id = R.drawable.ic_policy),
-                            onClick = {
-                                openPrivatePolicyDialog.value = true
-                            }
-                        )
-                    }
-                    item {
-                        ClickableListItem(
-                            text = stringResource(id = R.string.feedback),
-                            icon = painterResource(id = R.drawable.ic_comment),
-                            onClick = {
-                                openFeedbackDialog.value = true
-                            }
-                        )
-                    }
-                    item {
-                        ClickableListItem(
-                            text = stringResource(id = R.string.about_us),
-                            icon = painterResource(id = R.drawable.ic_about),
-                            onClick = {
-                                openAboutUsDialog.value = true
-                            }
-                        )
-                    }
-                }
-                val context = LocalContext.current
-                when {
-                    openPrivatePolicyDialog.value -> openPrivatePolicyDialog.value = privatePolicyDialog()
-                    openFeedbackDialog.value -> openFeedbackDialog.value = feedbackDialog()
-                    openAboutUsDialog.value -> openAboutUsDialog.value = aboutUsDialog()
-                    openAutoRemoveDialog.value -> openAutoRemoveDialog.value = autoRemoveDialog(
-                        settingsViewModel = settingsViewModel,
-                        onDismiss = { showAutoDeleteDialog.value = false },
-                        onTimeSelected = { selectedTime = it }
-                    )
-                    openLanguageDialog.value -> LanguageDialog(
-                        onLanguageSelected = { selectedLanguage ->
-                            PreferencesManager.saveSelectedLanguage(context, selectedLanguage)
-                            setChanges(context)
-                            if (context is Activity) {
-                                context.recreate()
-                            }
-                        },
-                        onDismiss = {
-                            openLanguageDialog.value = false
+                item {
+                    ClickableListItem(
+                        text = stringResource(id = R.string.automatic_deletion_of_notifications),
+                        icon = painterResource(id = R.drawable.ic_auto_delete),
+                        onClick = {
+                            openAutoRemoveDialog.value = true
                         }
                     )
-                    openThemeDialog.value -> SelectThemeDialog(
+                }
+                item {
+                    ClickableListItem(
+                        text = stringResource(id = R.string.select_theme),
+                        icon = painterResource(id = R.drawable.ic_dark_mode),
+                        onClick = {
+                            openThemeDialog.value = true
+                        }
+                    )
+                }
+                item {
+                    ClickableListItem(
+                        text = stringResource(id = R.string.select_language),
+                        icon = painterResource(id = R.drawable.ic_language),
+                        onClick = {
+                            openLanguageDialog.value = true
+                        }
+                    )
+                }
+                item {
+                    ClickableListItem(
+                        text = stringResource(id = R.string.private_policy),
+                        icon = painterResource(id = R.drawable.ic_policy),
+                        onClick = {
+                            openPrivatePolicyDialog.value = true
+                        }
+                    )
+                }
+                item {
+                    ClickableListItem(
+                        text = stringResource(id = R.string.feedback),
+                        icon = painterResource(id = R.drawable.ic_comment),
+                        onClick = {
+                            openFeedbackDialog.value = true
+                        }
+                    )
+                }
+                item {
+                    ClickableListItem(
+                        text = stringResource(id = R.string.about_us),
+                        icon = painterResource(id = R.drawable.ic_about),
+                        onClick = {
+                            openAboutUsDialog.value = true
+                        }
+                    )
+                }
+            }
+            val context = LocalContext.current
+            when {
+                openPrivatePolicyDialog.value -> openPrivatePolicyDialog.value = privatePolicyDialog()
+                openFeedbackDialog.value -> openFeedbackDialog.value = feedbackDialog()
+                openAboutUsDialog.value -> openAboutUsDialog.value = aboutUsDialog()
+                openAutoRemoveDialog.value -> openAutoRemoveDialog.value = autoRemoveDialog(
+                    settingsViewModel = settingsViewModel,
+                    onDismiss = { showAutoDeleteDialog.value = false },
+                    onTimeSelected = { selectedTime = it }
+                )
+
+                openLanguageDialog.value -> LanguageDialog(
+                    onLanguageSelected = { selectedLanguage ->
+                        PreferencesManager.saveSelectedLanguage(context, selectedLanguage)
+                        setChanges(context)
+                        if (context is Activity) {
+                            context.recreate()
+                        }
+                    },
+                    onDismiss = {
+                        openLanguageDialog.value = false
+                    }
+                )
+
+                openThemeDialog.value -> {
+                    SelectThemeDialog(
                         onThemeSelected = { selectThemeDialog ->
                             PreferencesManager.updateThemeStyle(context, selectThemeDialog)
                             if (context is Activity) {
@@ -179,6 +181,6 @@ fun SettingsScreen(
                     )
                 }
             }
-        )
+        }
     }
 }

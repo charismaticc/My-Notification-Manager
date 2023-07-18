@@ -13,26 +13,28 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.sharipov.mynotificationmanager.R
+import com.sharipov.mynotificationmanager.data.PreferencesManager
 
 @Composable
 fun ToggleDisplayMode(whichListIsDisplayed: MutableState<Boolean>) {
+    val context = LocalContext.current
     Row(modifier = Modifier.fillMaxWidth()) {
         Box(
             modifier = Modifier
                 .weight(1f)
                 .background(
-                    if (whichListIsDisplayed.value){
-                        if(isSystemInDarkTheme())
+                    if (whichListIsDisplayed.value) {
+                        if (PreferencesManager.getThemeStyle(context)  != "light_theme" && isSystemInDarkTheme()) {
                             Color.DarkGray
-                        else Color(android.graphics.Color.parseColor("#DCDCDC"))
-                    }
-                    else MaterialTheme.colorScheme.background
+                        } else Color(android.graphics.Color.parseColor("#DCDCDC"))
+                    } else MaterialTheme.colorScheme.background
                 )
                 .clickable {
                     whichListIsDisplayed.value = true
@@ -51,9 +53,9 @@ fun ToggleDisplayMode(whichListIsDisplayed: MutableState<Boolean>) {
                 .weight(1f)
                 .background(
                     if (!whichListIsDisplayed.value){
-                        if(isSystemInDarkTheme())
+                        if (PreferencesManager.getThemeStyle(context) != "light_theme" && isSystemInDarkTheme()) {
                             Color.DarkGray
-                        else Color(android.graphics.Color.parseColor("#DCDCDC"))
+                        } else Color(android.graphics.Color.parseColor("#DCDCDC"))
                     }
                     else MaterialTheme.colorScheme.background
                 )

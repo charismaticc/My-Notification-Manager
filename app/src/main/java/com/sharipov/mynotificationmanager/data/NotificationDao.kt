@@ -4,6 +4,7 @@ import androidx.room.*
 import com.sharipov.mynotificationmanager.model.NotificationEntity
 import com.sharipov.mynotificationmanager.model.UserGroup
 import kotlinx.coroutines.flow.Flow
+import androidx.annotation.Nullable
 
 @Dao
 interface NotificationDao {
@@ -13,10 +14,12 @@ interface NotificationDao {
     fun getAllFlow(): Flow<List<NotificationEntity>>
 
     // Get all notifications for a specific user and package in reverse order
-    @Query("SELECT * FROM notification WHERE `group` = :group " +
-            "AND user = :user " +
-            "AND packageName = :packageName " +
-            "ORDER BY id DESC")
+    @Query(
+        "SELECT * FROM notification WHERE `group` = :group " +
+                "AND user = :user " +
+                "AND packageName = :packageName " +
+                "ORDER BY id DESC"
+    )
     fun getAllUserNotifications(group: String, user: String, packageName: String): Flow<List<NotificationEntity>>
 
     // Search for notifications by text for a specific user and package in reverse order
@@ -29,9 +32,11 @@ interface NotificationDao {
     fun searchNotificationsInGroup(group: String, packageName: String, query: String): Flow<List<NotificationEntity>>
 
     // Get all notifications for a specific group and package in reverse order
-    @Query("SELECT * FROM notification WHERE `group` = :group " +
-            "AND packageName = :packageName " +
-            "ORDER BY id DESC")
+    @Query(
+        "SELECT * FROM notification WHERE `group` = :group " +
+                "AND packageName = :packageName " +
+                "ORDER BY id DESC"
+    )
     fun getAllNotificationsInGroup(group: String, packageName: String): Flow<List<NotificationEntity>>
 
     // Search for notifications by text for a specific group, user and package in reverse order
@@ -41,7 +46,12 @@ interface NotificationDao {
                 "AND text LIKE '%' || :query || '%' " +
                 "ORDER BY id DESC"
     )
-    fun searchUserNotifications(group: String, user: String, packageName: String, query: String): Flow<List<NotificationEntity>>
+    fun searchUserNotifications(
+        group: String,
+        user: String,
+        packageName: String,
+        query: String
+    ): Flow<List<NotificationEntity>>
 
     // Search for notifications by text, user, or package name
     @Query(
@@ -52,6 +62,13 @@ interface NotificationDao {
                 "packageName LIKE '%' || :query || '%'"
     )
     fun searchNotifications(query: String): Flow<List<NotificationEntity>>
+
+    @Query(
+        "SELECT * FROM notification WHERE " +
+                "(:fromDate IS NULL OR time >= :fromDate) AND " +
+                "(:toDate IS NULL OR time <= :toDate) ORDER BY id DESC"
+    )
+    fun getNotificationsFromData(@Nullable fromDate: Long?, @Nullable toDate: Long?): Flow<List<NotificationEntity>>
 
     // Get all favorite notifications
     @Query("SELECT * FROM notification WHERE favorite = 1")
