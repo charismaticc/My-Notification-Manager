@@ -2,6 +2,7 @@ package com.sharipov.mynotificationmanager.ui.allnotifications
 
 import android.annotation.SuppressLint
 import android.os.Build
+import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.*
@@ -50,8 +51,9 @@ fun AllNotificationScreen(
     val notificationFlow = if (searchText.isNotBlank()) {
         homeViewModel.searchNotifications(searchText).collectAsState(emptyList()).value
     } else if(fromDate.isNotBlank() || toDate.isNotBlank()) {
-        val fromDateLongValue = dateConverter(fromDate)
-        val toDateLongValue = dateConverter(toDate)
+        val fromDateLongValue = dateConverter("from", fromDate)
+        val toDateLongValue = dateConverter("to", toDate)
+        Log.d("TAG", "from: $fromDateLongValue, to: $toDateLongValue")
         homeViewModel.getNotificationsFromData(fromDateLongValue, toDateLongValue).collectAsState(emptyList()).value
     }else {
         homeViewModel.notificationListFlow.collectAsState(emptyList()).value
