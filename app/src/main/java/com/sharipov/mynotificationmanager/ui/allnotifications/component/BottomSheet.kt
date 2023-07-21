@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.DateRange
+import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.ModalBottomSheet
@@ -122,6 +123,17 @@ fun BottomSheetContent(
                 imageVector = Icons.Default.DateRange,
                 contentDescription = null
             )
+        }
+        Button(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 8.dp),
+            onClick = { 
+                toDate.value = ""
+                fromDate.value = ""
+            }
+        ) {
+            Text(stringResource(id = R.string.reset))
         }
     }
 }

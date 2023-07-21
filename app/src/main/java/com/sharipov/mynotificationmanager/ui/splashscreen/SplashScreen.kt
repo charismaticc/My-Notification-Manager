@@ -22,6 +22,9 @@ import kotlinx.coroutines.delay
 import com.sharipov.mynotificationmanager.utils.TransparentSystemBars
 import com.sharipov.mynotificationmanager.utils.UpdateApplicationList
 import com.sharipov.mynotificationmanager.R
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 @Composable
 fun SplashScreen(
@@ -34,7 +37,6 @@ fun SplashScreen(
         targetValue = if (startAnimate) 1f else 0f,
         animationSpec = tween(durationMillis = 1500)
     )
-
     UpdateApplicationList(settingsViewModel = settingsViewModel)
     TransparentSystemBars()
 
@@ -47,10 +49,12 @@ fun SplashScreen(
         if (autoDeleteTimeout != 0L) {
             val currentTime = System.currentTimeMillis()
             val deleteThreshold = currentTime - autoDeleteTimeout
-            homeViewModel.deleteExpiredNotification(deleteThreshold)
+            CoroutineScope(Dispatchers.IO).launch {
+                homeViewModel.deleteExpiredNotification(deleteThreshold)
+            }
         }
 
-        navController.navigate(Screens.Applications.route)
+        navController.navigate(Screens.AllNotifications.route)
     }
 
     Splash(alpha = alphaAnimation)

@@ -50,5 +50,5 @@
     <string name="settings_take_effect">Налаштування вступить в силу при наступному вході в додатки</string>
     <string name="from">Від:</string>
     <string name="to">Дo: </string>
-
+    <string name="reset">Скинути</string>
 </resources>

@@ -50,4 +50,5 @@
     <string name="settings_take_effect">Настройки вступит в силу при следующем входе в приложения</string>
     <string name="from">От: </string>
     <string name="to">До: </string>
+    <string name="reset">Сбросить</string>
 </resources>

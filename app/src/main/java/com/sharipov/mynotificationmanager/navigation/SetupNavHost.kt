@@ -1,5 +1,7 @@
 package com.sharipov.mynotificationmanager.navigation
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -29,6 +31,8 @@ sealed class Screens(val route: String){
     object Favorite: Screens(route = Constants.Screens.FAVORITE_SCREEN)
     object NotificationManagement: Screens(route = Constants.Screens.NOTIFICATION_MANAGEMENT_SCREEN)
 }
+
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun SetupNavHost(
     homeViewModel: HomeViewModel,

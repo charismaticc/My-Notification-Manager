@@ -12,9 +12,10 @@ android {
     defaultConfig {
         applicationId "com.sharipov.mynotificationmanager"
         minSdk 25
-        targetSdk 34
-        versionCode 13
-        versionName "1.0.4"
+        //noinspection OldTargetApi
+        targetSdk 33
+        versionCode 14
+        versionName "1.0.5"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
@@ -110,4 +111,7 @@ dependencies {
 
     // Material 3 - CALENDAR
     implementation "com.maxkeppeler.sheets-compose-dialogs:calendar:1.0.2"
+    // Navigation Compose
+    implementation "androidx.navigation:navigation-compose:2.7.0-beta02"
+
 }
