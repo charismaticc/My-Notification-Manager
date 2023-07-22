@@ -73,7 +73,6 @@ fun FavoriteScreen(
                     val notification = notificationListState.value[index]
                     NotificationItem(
                         homeViewModel = homeViewModel,
-                        navController = navController,
                         notification = notification,
                         context = context
                     )
