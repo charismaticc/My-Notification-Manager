@@ -26,7 +26,6 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
 import com.google.accompanist.drawablepainter.rememberDrawablePainter
 import com.sharipov.mynotificationmanager.R
 import com.sharipov.mynotificationmanager.model.NotificationEntity
