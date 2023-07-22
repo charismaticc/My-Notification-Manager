@@ -5,7 +5,6 @@ import android.os.Build
 import androidx.activity.compose.BackHandler
 import androidx.annotation.RequiresApi
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.*
@@ -31,7 +30,6 @@ import com.sharipov.mynotificationmanager.utils.dateConverter
 import com.sharipov.mynotificationmanager.viewmodel.HomeViewModel
 import kotlin.system.exitProcess
 
-@OptIn(ExperimentalFoundationApi::class)
 @RequiresApi(Build.VERSION_CODES.O)
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter", "RememberReturnType")
 @Composable
@@ -123,7 +121,6 @@ fun AllNotificationScreen(
                         val notification = notificationFlow[index]
                         NotificationItem(
                             homeViewModel = homeViewModel,
-                            navController = navController,
                             notification = notification,
                             context = context,
                         )

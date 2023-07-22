@@ -21,7 +21,7 @@ fun MyFloatingActionButton(
 ) {
     BoxWithConstraints {
         val fabSize = 56.dp
-        val fabMargin = 16.dp
+        val fabMargin = 8.dp
         val maxWidth = maxWidth - fabMargin * 2
         val maxHeight = maxHeight - fabMargin * 2
 
@@ -43,7 +43,6 @@ fun MyFloatingActionButton(
                     imageVector = Icons.Default.DateRange,
                     contentDescription = "filter"
                 )
-
             }
         }
     }

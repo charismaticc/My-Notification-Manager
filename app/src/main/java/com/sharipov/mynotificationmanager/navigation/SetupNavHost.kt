@@ -8,7 +8,6 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.sharipov.mynotificationmanager.ui.allnotifications.AllNotificationScreen
 import com.sharipov.mynotificationmanager.ui.conversations.ConversationsScreen
-import com.sharipov.mynotificationmanager.ui.details.DetailsScreen
 import com.sharipov.mynotificationmanager.ui.favorite.FavoriteScreen
 import com.sharipov.mynotificationmanager.ui.allapplication.ApplicationsScreen
 import com.sharipov.mynotificationmanager.ui.chat.ChatScreen
@@ -26,7 +25,6 @@ sealed class Screens(val route: String){
     object Settings: Screens(route = Constants.Screens.SETTINGS_SCREEN)
     object Conversations: Screens(route = Constants.Screens.CONVERSATION_SCREEN)
     object Chat: Screens(route = Constants.Screens.CHAT_SCREEN)
-    object Details: Screens(route = Constants.Screens.DETAILS_SCREEN)
     object AllNotifications: Screens(route = Constants.Screens.ALL_NOTIFICATIONS_SCREEN)
     object Favorite: Screens(route = Constants.Screens.FAVORITE_SCREEN)
     object NotificationManagement: Screens(route = Constants.Screens.NOTIFICATION_MANAGEMENT_SCREEN)
@@ -65,14 +63,6 @@ fun SetupNavHost(
                 homeViewModel = homeViewModel,
                 navController = navController,
                 packageName = backStackEntry.arguments?.getString("packageName") ?: ""
-            )
-        }
-
-        composable(route = Screens.Details.route + "/{Id}") { backStackEntry ->
-            DetailsScreen(
-                homeViewModel = homeViewModel,
-                navController = navController,
-                notificationId = backStackEntry.arguments?.getString("Id") ?: "0"
             )
         }
 

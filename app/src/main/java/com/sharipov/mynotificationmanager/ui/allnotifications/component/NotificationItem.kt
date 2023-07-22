@@ -14,6 +14,10 @@ import androidx.compose.material.icons.filled.Star
 import androidx.compose.material.icons.outlined.Star
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -26,7 +30,6 @@ import androidx.navigation.NavController
 import com.google.accompanist.drawablepainter.rememberDrawablePainter
 import com.sharipov.mynotificationmanager.R
 import com.sharipov.mynotificationmanager.model.NotificationEntity
-import com.sharipov.mynotificationmanager.navigation.Screens
 import com.sharipov.mynotificationmanager.viewmodel.HomeViewModel
 import me.saket.swipe.SwipeAction
 import me.saket.swipe.SwipeableActionsBox
@@ -38,10 +41,11 @@ import java.util.*
 @Composable
 fun NotificationItem(
     homeViewModel: HomeViewModel,
-    navController: NavController,
     notification: NotificationEntity,
     context: Context
 ) {
+    var showNotification by remember { mutableStateOf(false) }
+
     val delete = SwipeAction(
         icon = { Icon(
                 modifier = Modifier.size(40.dp),
@@ -60,7 +64,7 @@ fun NotificationItem(
             .padding(16.dp, 16.dp, 16.dp)
             .combinedClickable(
                 onClick = {
-                    navController.navigate(Screens.Details.route + "/${notification.id.toString()}")
+                    showNotification = !showNotification
                 },
                 onLongClick = {
                     updateNotification(notification, homeViewModel, context)
@@ -77,6 +81,12 @@ fun NotificationItem(
                 NotificationItemContext(homeViewModel, notification)
             }
         }
+    }
+    NotificationDetailsBottomSheet(
+        showNotification = showNotification,
+        homeViewModel = homeViewModel,
+        notificationId = notification.id.toString()) {
+        showNotification = !showNotification
     }
 }
 
