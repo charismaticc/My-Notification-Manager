@@ -132,7 +132,7 @@ class MainActivity : ComponentActivity() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if(resultCode != RESULT_OK) {
-            println("Something went wrong")
+            println("Something went wrong...")
         }
     }
 
