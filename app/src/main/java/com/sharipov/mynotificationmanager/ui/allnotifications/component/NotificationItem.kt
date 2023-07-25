@@ -2,6 +2,8 @@ package com.sharipov.mynotificationmanager.ui.allnotifications.component
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.pm.PackageManager
+import android.graphics.drawable.Drawable
 import android.widget.Toast
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
@@ -26,6 +28,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import androidx.core.content.ContextCompat
 import com.google.accompanist.drawablepainter.rememberDrawablePainter
 import com.sharipov.mynotificationmanager.R
 import com.sharipov.mynotificationmanager.model.NotificationEntity
@@ -95,10 +98,15 @@ fun NotificationItemContext(
     notification: NotificationEntity,
 ) {
     val context = LocalContext.current
-    val appIconDrawable = context.packageManager.getApplicationIcon(notification.packageName)
     val dateFormat = SimpleDateFormat("dd.MM.yyyy HH:mm:ss", Locale.getDefault())
     val icon: ImageVector
     val color: Color
+
+    val appIconDrawable : Drawable? = try {
+        context.packageManager.getApplicationIcon(notification.packageName)
+    } catch (e: PackageManager.NameNotFoundException) {
+        ContextCompat.getDrawable(context, R.drawable.ic_android)
+    }
 
     if (notification.favorite) {
         icon = Icons.Default.Star

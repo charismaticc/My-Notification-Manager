@@ -13,7 +13,7 @@ android {
         applicationId "com.sharipov.mynotificationmanager"
         minSdk 25
         targetSdk 34
-        versionCode 16
+        versionCode 19
         versionName "1.0.5"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"

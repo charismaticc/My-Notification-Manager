@@ -1,10 +1,9 @@
 package com.sharipov.mynotificationmanager.ui.conversations.component
 
 import android.content.pm.PackageManager
+import android.graphics.drawable.Drawable
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -12,6 +11,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.core.content.ContextCompat
 import com.google.accompanist.drawablepainter.rememberDrawablePainter
 import com.sharipov.mynotificationmanager.R
 
@@ -22,11 +22,10 @@ fun ApplicationItem(packageName: String, modifier: Modifier) {
     val context = LocalContext.current
 
     // get app icon
-    val appIconDrawable = try {
+    val appIconDrawable : Drawable? = try {
         context.packageManager.getApplicationIcon(packageName)
     } catch (e: PackageManager.NameNotFoundException) {
-        // handle the error, e.g. show a placeholder image
-        null
+        ContextCompat.getDrawable(context, R.drawable.ic_android)
     }
 
     // get app name
@@ -44,20 +43,12 @@ fun ApplicationItem(packageName: String, modifier: Modifier) {
     ) {
         Box(modifier = Modifier.fillMaxSize()) {
             Row(modifier = Modifier.padding(8.dp, 16.dp, 16.dp, 16.dp)) {
-                if (appIconDrawable != null) {
-                    Image(
-                        painter = rememberDrawablePainter(appIconDrawable),
-                        contentDescription = "App icon",
-                        modifier = Modifier.size(48.dp)
-                    )
-                } else {
-                    Icon(
-                        imageVector = Icons.Default.Notifications,
-                        contentDescription = "Error icon",
-                        tint = MaterialTheme.colorScheme.error,
-                        modifier = Modifier.size(48.dp)
-                    )
-                }
+
+                Image(
+                    painter = rememberDrawablePainter(appIconDrawable),
+                    contentDescription = "App icon",
+                    modifier = Modifier.size(48.dp)
+                )
 
                 Text(
                     text = appName,

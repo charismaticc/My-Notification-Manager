@@ -2,6 +2,7 @@ package com.sharipov.mynotificationmanager.ui.conversations
 
 import android.annotation.SuppressLint
 import android.content.pm.PackageManager
+import android.graphics.drawable.Drawable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -12,8 +13,11 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.core.content.ContextCompat
 import androidx.navigation.NavController
+import com.sharipov.mynotificationmanager.R
 import com.sharipov.mynotificationmanager.ui.topbarscomponent.TopBarContent
 import com.sharipov.mynotificationmanager.ui.conversations.component.UserItem
 import com.sharipov.mynotificationmanager.utils.TransparentSystemBars
@@ -28,6 +32,7 @@ fun ConversationsScreen(
     navController: NavController,
     packageName: String,
 ) {
+    val context = LocalContext.current
     val userNamesFlow = homeViewModel.getApplicationUserNames(packageName)
     val usersListState by userNamesFlow.collectAsState(initial = listOf())
     val allChats = (usersListState.filter { it.group != "not_group" }.distinctBy { it.group }) +
@@ -35,18 +40,29 @@ fun ConversationsScreen(
 
     TransparentSystemBars()
 
-    val context = LocalContext.current
-    val pm = context.packageManager
     // get app icon
-    val appIcon = pm.getApplicationIcon(packageName)
-    val appName = pm.getApplicationLabel(pm.getApplicationInfo(packageName, PackageManager.GET_META_DATA)).toString()
+    val appIconDrawable : Drawable? = try {
+        context.packageManager.getApplicationIcon(packageName)
+    } catch (e: PackageManager.NameNotFoundException) {
+        ContextCompat.getDrawable(context, R.drawable.ic_android)
+    }
+
+    // get app name
+    val appName = try {
+        context.packageManager.getApplicationLabel(
+            context.packageManager.getApplicationInfo(packageName, 0)
+        ).toString()
+    } catch (e: PackageManager.NameNotFoundException) {
+        stringResource(id = R.string.unknown)
+    }
+
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         topBar = {
             TopBarContent(
                 title =  appName,
                 icon = Icons.Default.ArrowBack,
-                appIcon = appIcon,
+                appIcon = appIconDrawable,
                 onNavigationClick = { navController.navigateUp() }
             )
         },
@@ -74,7 +90,6 @@ fun ConversationsScreen(
                         userCount = usersListState.size - 1,
                         modifier = modifier
                     )
-
                 }
                 item { Spacer(modifier = Modifier.height(16.dp)) }
             }

@@ -61,7 +61,7 @@ class MainActivity : ComponentActivity() {
         val homeViewModel: HomeViewModel by viewModels()
         val settingsViewModel: SettingsViewModel by viewModels()
 
-        setContent {
+        setContent  {
 
             val theme = when (PreferencesManager.getThemeStyle(this)) {
                 "dark_theme" -> true
@@ -109,7 +109,7 @@ class MainActivity : ComponentActivity() {
             ).show()
             lifecycleScope.launch {
                 delay(5.seconds)
-               appUpdateManager.completeUpdate()
+                appUpdateManager.completeUpdate()
             }
         }
     }
