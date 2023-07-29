@@ -47,10 +47,10 @@ class MyNotificationListenerService : NotificationListenerService() {
                 if(PreferencesManager.getBlockNotification(context)) {
                     cancelNotification(sbn.key)
                 }
-                else if (excludedApp.isBlocked) {
-                    cancelNotification(sbn.key)
-                }
-                else {
+                else if (excludedApp != null) {
+                    if(excludedApp.isBlocked) {
+                        cancelNotification(sbn.key)
+                    }
                     if (excludedApp.isExcluded) {
                         // get application name
                         val pm = context.packageManager

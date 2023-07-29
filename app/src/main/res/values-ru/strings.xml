@@ -20,6 +20,7 @@
     <string name="favorites">Избранное</string>
     <string name="settings">Настройки</string>
     <string name="automatic_deletion_of_notifications">Автоматическое удаление уведомлений</string>
+    <string name="exporting_and_importing_notifications">Экспорт и импорт уведомлений</string>
     <string name="private_policy">Политика конфиденциальности</string>
     <string name="select_theme">Выберать тему</string>
     <string name="feedback">Обратная связь</string>
@@ -51,4 +52,20 @@
     <string name="from">От: </string>
     <string name="to">До: </string>
     <string name="reset">Сбросить</string>
+    <string name="export_rules">Все ваши уведомления будут записаны в файл и сохранены в качестве резервной копии в папке \"/Documents/Notification manager/backup\". Вы можете отправить его (например, на Google Диск или перенести на другое устройство)</string>
+    <string name="status">Статус: </string>
+    <string name="import_">Импорт</string>
+    <string name="export">Экспорт</string>
+    <string name="click_on_the_import_button">2. Нажмите на кнопку импорта</string>
+    <string name="selected_file">Выбранный файл</string>
+    <string name="select_file">Выбрать файл</string>
+    <string name="select_the_backup_file">1. Выберите файл (…_backup_notification.json), из которого будут загружаться уведомления"</string>
+    <string name="success">УСПЕХ</string>
+    <string name="no_done">НЕ ВЫПОЛНЕНО</string>
+    <string name="file_not_selected">Файл НЕ выбран</string>
+    <string name="select_another_file">Выберите другой файл</string>
+    <string name="data_backup_save_in">Резервная копия базы данных, сохраненная в папке \"/Documents/Notification manager/backup\"</string>
+    <string name="external_storage_not_available">Внешнее хранилище недоступно</string>
+    <string name="notification_imported">Импортированные уведомления!</string>
+    <string name="error_the_file_is_corrupted">Ошибка: файл поврежден</string>
 </resources>

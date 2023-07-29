@@ -20,6 +20,7 @@
     <string name="favorites">Интихобшуда</string>
     <string name="settings">Танзимот</string>
     <string name="automatic_deletion_of_notifications">Ба таври худкор нест шудани огоҳиномаҳо</string>
+    <string name="exporting_and_importing_notifications">Содирот ва воридоти огоҳиномаҳо</string>
     <string name="private_policy">Сиёсати махфият</string>
     <string name="select_theme">Интихоб кардани тема</string>
     <string name="feedback">Бо мо дар тамос бошед</string>
@@ -51,4 +52,20 @@
     <string name="from">Аз: </string>
     <string name="to">То: </string>
     <string name="reset">Тоза кардан</string>
+    <string name= "export_rules">ҳама огоҳиномаҳои шумо ба файл навишта мешаванд ва ҳамчун нусхаи эҳтиёти дар папкаи \"/Documents/Notification manager/backup\" захира карда мешаванд. Шумо метавонед онҳоро фиристед (масалан, ба Google Drive ё ба дастгоҳи дигар интиқол диҳед)</string>
+    <string name="status">ҳолат: </string>
+    <string name= "import_" >Воридот </string>
+    <string name="export">Содирот</string>
+    <string name= "click_on_the_import_button">2. Тугмаи воридотро пахш кунед </string>
+    <string name="selected_file">Файли интихобшуда</string>
+    <string name="select_file">Файлро интихоб кардан</string>
+    <string name= "select_the_backup_file">1. Файлро интихоб кунед (…_backup_notification.json), ки аз он огоҳиномаҳо бор карда мешаванд</string>
+    <string name="success">МУВАФФАҚИЯТ </string>
+    <string name="no_done">ИҶРО НАШУД </string>
+    <string name="file_not_selected">Файл интихоб НАШУДААСТ</string>
+    <string name="select_another_file">Файли дигарро интихоб кунед</string>
+    <string name= "data_backup_save_in">Нусхаи эҳтиети дар папкаи \"/Documents/Notification manager/backup\" захира шуданд</string>
+    <string name= "external_storage_not_available" >Хотираи беруна дастрас нест</string>
+    <string name="notification_imported">Огоҳиномаҳо воридот шуданд!</string>
+    <string name= "error_the_file_is_corrupted">Хатоги: Файл вайрон шудааст</string>
 </resources>

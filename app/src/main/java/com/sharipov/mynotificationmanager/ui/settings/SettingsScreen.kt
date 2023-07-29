@@ -19,28 +19,32 @@ import com.sharipov.mynotificationmanager.ui.bottombarcomponent.BottomBar
 import com.sharipov.mynotificationmanager.data.PreferencesManager
 import com.sharipov.mynotificationmanager.R
 import com.sharipov.mynotificationmanager.navigation.Screens
+import com.sharipov.mynotificationmanager.ui.settings.components.dialogs.LanguageDialog
+import com.sharipov.mynotificationmanager.ui.settings.components.dialogs.SelectThemeDialog
+import com.sharipov.mynotificationmanager.ui.settings.components.dialogs.aboutUsDialog
+import com.sharipov.mynotificationmanager.ui.settings.components.dialogs.autoRemoveDialog
+import com.sharipov.mynotificationmanager.ui.settings.components.dialogs.exportImportDialog
+import com.sharipov.mynotificationmanager.ui.settings.components.dialogs.feedbackDialog
+import com.sharipov.mynotificationmanager.ui.settings.components.dialogs.privatePolicyDialog
 import com.sharipov.mynotificationmanager.utils.Constants
 import com.sharipov.mynotificationmanager.ui.settings.components.ClickableListItem
-import com.sharipov.mynotificationmanager.ui.settings.components.LanguageDialog
-import com.sharipov.mynotificationmanager.ui.settings.components.aboutUsDialog
-import com.sharipov.mynotificationmanager.ui.settings.components.autoRemoveDialog
-import com.sharipov.mynotificationmanager.ui.settings.components.feedbackDialog
-import com.sharipov.mynotificationmanager.ui.settings.components.privatePolicyDialog
-import com.sharipov.mynotificationmanager.ui.settings.components.SelectThemeDialog
 import com.sharipov.mynotificationmanager.utils.TransparentSystemBars
 import com.sharipov.mynotificationmanager.utils.setChanges
+import com.sharipov.mynotificationmanager.viewmodel.HomeViewModel
 import com.sharipov.mynotificationmanager.viewmodel.SettingsViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter", "CoroutineCreationDuringComposition")
 @Composable
 fun SettingsScreen(
+    homeViewModel: HomeViewModel,
     settingsViewModel: SettingsViewModel,
     navController: NavController,
 ) {
     val currentNavBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = currentNavBackStackEntry?.destination?.route ?: Constants.Screens.SETTINGS_SCREEN
     val openAutoRemoveDialog = remember { mutableStateOf(false) }
+    val openExportImportDialog = remember { mutableStateOf(false) }
     val openPrivatePolicyDialog = remember { mutableStateOf(false) }
     val openFeedbackDialog = remember { mutableStateOf(false) }
     val openAboutUsDialog = remember { mutableStateOf(false) }
@@ -86,6 +90,15 @@ fun SettingsScreen(
                     icon = painterResource(id = R.drawable.ic_auto_delete),
                     onClick = {
                         openAutoRemoveDialog.value = true
+                    }
+                )
+            }
+            item {
+                ClickableListItem(
+                    text = stringResource(id = R.string.exporting_and_importing_notifications),
+                    icon = painterResource(id = R.drawable.ic_move_to_inbox),
+                    onClick = {
+                        openExportImportDialog.value = true
                     }
                 )
             }
@@ -171,6 +184,10 @@ fun SettingsScreen(
                         openThemeDialog.value = false
                     }
                 )
+            }
+
+            openExportImportDialog.value -> {
+                openExportImportDialog.value = exportImportDialog(context, homeViewModel)
             }
         }
     }

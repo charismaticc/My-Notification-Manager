@@ -77,7 +77,7 @@ fun SetupNavHost(
         }
 
         composable(route = Screens.Settings.route) {
-            SettingsScreen(settingsViewModel = settingsViewModel, navController = navController)
+            SettingsScreen(homeViewModel = homeViewModel, settingsViewModel = settingsViewModel, navController = navController)
         }
 
         composable(route = Screens.Favorite.route) {

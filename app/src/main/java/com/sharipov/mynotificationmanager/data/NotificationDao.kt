@@ -4,7 +4,6 @@ import androidx.room.*
 import com.sharipov.mynotificationmanager.model.NotificationEntity
 import com.sharipov.mynotificationmanager.model.UserGroup
 import kotlinx.coroutines.flow.Flow
-import androidx.annotation.Nullable
 
 @Dao
 interface NotificationDao {
@@ -68,7 +67,7 @@ interface NotificationDao {
                 "(:fromDate IS NULL OR time >= :fromDate) AND " +
                 "(:toDate IS NULL OR time <= :toDate) ORDER BY id DESC"
     )
-    fun getNotificationsFromData(@Nullable fromDate: Long?, @Nullable toDate: Long?): Flow<List<NotificationEntity>>
+    fun getNotificationsFromData(fromDate: Long?, toDate: Long?): Flow<List<NotificationEntity>>
 
     // Get all favorite notifications
     @Query("SELECT * FROM notification WHERE favorite = 1")
@@ -96,11 +95,11 @@ interface NotificationDao {
     suspend fun deleteNotificationsForUser(group: String, user: String, packageName: String)
 
     // Auto-delete notifications older than time limit
-    @Query("DELETE FROM notification WHERE time < :autoDeleteTimeout")
+    @Query("DELETE FROM notification WHERE time < :autoDeleteTimeout AND favorite != 1")
     suspend fun deleteExpiredNotification(autoDeleteTimeout: Long)
 
     // Insert a new notification
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(notification: NotificationEntity)
 
     // Update an existing notification

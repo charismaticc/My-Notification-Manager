@@ -17,7 +17,7 @@ interface ExcludedAppDao {
     fun getAllExcludedApps(): Flow<List<ExcludedAppEntity>>
 
     @Query("SELECT * FROM excluded_apps WHERE packageName = :packageName")
-    suspend fun getExcludedAppByPackageName(packageName: String): ExcludedAppEntity
+    suspend fun getExcludedAppByPackageName(packageName: String): ExcludedAppEntity?
 
     @Query("DELETE FROM excluded_apps WHERE packageName = :packageName")
     suspend fun deleteExcludedAppByPackageName(packageName: String)

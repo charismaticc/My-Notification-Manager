@@ -20,6 +20,7 @@
     <string name="favorites">Вибране</string>
     <string name="settings">Налаштування</string>
     <string name="automatic_deletion_of_notifications">Автоматичне видалення повідомлень</string>
+    <string name="exporting_and_importing_notifications">Експорт та імпорт повідомлень</string>
     <string name="private_policy">Політика конфіденційності</string>
     <string name="select_theme">Вибирати тему</string>
     <string name="feedback">Зворотній звязок</string>
@@ -51,4 +52,20 @@
     <string name="from">Від:</string>
     <string name="to">Дo: </string>
     <string name="reset">Скинути</string>
+    <string name = "export_rules">Всі ваші повідомлення будуть записані в файл і збережені в якості резервної копії в папці \"/Documents/Notification manager/backup\". Ви можете надіслати його (наприклад, на Google Диск або перенести на інший пристрій)</string>
+    <string name= "status"> Статус: </string>
+    <string name= "import_">Iмпорт</string>
+    <string name= "export">Eкспорт</string>
+    <string name= "click_on_the_import_button"> 2. Натисніть на кнопку імпорту</string>
+    <string name= "selected_file">Вибраний файл</string>
+    <string name="select_file">Вибрати файл</string>
+    <string name= "select_the_backup_file">1. Виберіть файл (…_backup_notification.json), з якого будуть завантажуватися повідомлення"</string>
+    <string name= "success">УСПIХ</string>
+    <string name= "no_done">НЕ ВИКОНАНО</string>
+    <string name= "file_not_selected">Файл не вибрано</string>
+    <string name= "select_another_file">Виберіть інший файл</string>
+    <string name= "data_backup_save_in">Резервна копія бази даних, збережена в папці \"/Documents/Notification manager/backup\"</string>
+    <string name= "external_storage_not_available" >Зовнішнє сховище недоступне</string>
+    <string name= "notification_imported">Iмпортовані сповіщення!</string>
+    <string name= "error_the_file_is_corrupted">Помилка: файл пошкоджений</string>
 </resources>
