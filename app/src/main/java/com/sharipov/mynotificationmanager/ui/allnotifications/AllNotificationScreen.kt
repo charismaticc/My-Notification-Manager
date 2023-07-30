@@ -2,17 +2,23 @@ package com.sharipov.mynotificationmanager.ui.allnotifications
 
 import android.annotation.SuppressLint
 import android.os.Build
+import android.util.Log
 import androidx.activity.compose.BackHandler
 import androidx.annotation.RequiresApi
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.foundation.Canvas
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.currentBackStackEntryAsState
@@ -28,6 +34,9 @@ import com.sharipov.mynotificationmanager.utils.TransparentSystemBars
 import com.sharipov.mynotificationmanager.utils.Constants
 import com.sharipov.mynotificationmanager.utils.dateConverter
 import com.sharipov.mynotificationmanager.viewmodel.HomeViewModel
+import java.text.SimpleDateFormat
+import java.util.Calendar
+import java.util.Locale
 import kotlin.system.exitProcess
 
 @RequiresApi(Build.VERSION_CODES.O)
@@ -48,6 +57,9 @@ fun AllNotificationScreen(
     val currentRoute = currentNavBackStackEntry?.destination?.route ?: Constants.Screens.APPLICATION_SCREEN
     val notificationFlow = getNotificationFlow(homeViewModel, searchText, fromDate, toDate)
     var showFilters by remember { mutableStateOf(false) }
+    var showStatistic by remember { mutableStateOf(false) }
+    val dates = getWeekDays()
+    val dummyData = getDummy(homeViewModel)
 
     TransparentSystemBars()
 
@@ -100,6 +112,9 @@ fun AllNotificationScreen(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(start = 16.dp, top = 8.dp, end = 16.dp, bottom = 8.dp)
+                        .clickable {
+                            showStatistic = !showStatistic
+                        }
                 ) {
                     Text(
                         text = "${stringResource(id = R.string.count_of_your_notification)} " +
@@ -108,6 +123,11 @@ fun AllNotificationScreen(
                             .align(Alignment.CenterHorizontally)
                             .padding(8.dp)
                     )
+                    AnimatedVisibility(
+                        visible = showStatistic
+                    ) {
+                        BarChart(dates, dummyData)
+                    }
                 }
             }
 
@@ -141,6 +161,24 @@ fun AllNotificationScreen(
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
+fun getDummy(homeViewModel: HomeViewModel): List<Int> {
+    val dateList = mutableListOf<Int>()
+    val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+    val calendar = Calendar.getInstance()
+    calendar.add(Calendar.DAY_OF_MONTH, -7)
+    for (i in 0..6) {
+        calendar.add(Calendar.DAY_OF_MONTH, 1)
+        val data = dateFormat.format(calendar.time)
+        Log.d("TAG", data)
+        dateList += getNotificationFlow(homeViewModel, "", data, data).size
+    }
+
+    Log.d("TAG", dateList.toString())
+    return dateList
+}
+
+@RequiresApi(Build.VERSION_CODES.O)
+@Composable
 fun getNotificationFlow(
     homeViewModel: HomeViewModel,
     searchText: String,
@@ -155,5 +193,84 @@ fun getNotificationFlow(
         homeViewModel.getNotificationsFromData(fromDateLongValue, toDateLongValue).collectAsState(emptyList()).value
     }else {
         homeViewModel.notificationListFlow.collectAsState(emptyList()).value
+    }
+}
+
+fun getWeekDays(): List<String> {
+    val calendar = Calendar.getInstance()
+    val dateFormat = SimpleDateFormat("EE", Locale.getDefault())
+
+    val daysOfWeek = mutableListOf<String>()
+
+    for (i in 0 until 7) {
+        daysOfWeek.add(dateFormat.format(calendar.time))
+        calendar.add(Calendar.DAY_OF_WEEK, -1)
+    }
+    return daysOfWeek.reversed()
+}
+@Composable
+fun BarChart(dates: List<String>, data: List<Int>, modifier: Modifier = Modifier) {
+    var maxCount by remember { mutableIntStateOf(0) }
+    val color = MaterialTheme.colorScheme.primary
+
+    data.forEach { count ->
+        if (count > maxCount) {
+            maxCount = count
+        }
+    }
+
+    Column(
+        modifier = modifier
+    ) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(start = 16.dp, top = 8.dp, end = 16.dp),
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            data.forEachIndexed { _, date ->
+                Text(
+                    text = date.toString(),
+                    style = MaterialTheme.typography.bodyMedium,
+                    textAlign = TextAlign.Center,
+                    color = color
+                )
+            }
+        }
+        Canvas(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 8.dp)
+                .height(300.dp) // Set the height of the chart
+        ) {
+            val barWidth = size.width / (data.size * 2) // Width of each bar
+            val spaceBetweenBars = size.width / (data.size * 4) // Space between bars
+
+            data.forEachIndexed { index, count ->
+                val barHeight = size.height * count / maxCount
+                val startX = (index * (barWidth * 2)) + spaceBetweenBars
+                val startY = size.height - barHeight
+                drawRect(
+                    color = color,
+                    size = Size(barWidth, barHeight),
+                    topLeft = Offset(startX, startY),
+                )
+            }
+        }
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(start = 16.dp, top = 8.dp, bottom = 8.dp, end = 16.dp),
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            dates.forEachIndexed { _, date ->
+                Text(
+                    text = date,
+                    style = MaterialTheme.typography.bodyMedium,
+                    textAlign = TextAlign.Center,
+                    color = color
+                )
+            }
+        }
     }
 }
