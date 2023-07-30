@@ -4,6 +4,7 @@ import android.app.Notification
 import android.content.Context
 import android.content.pm.PackageManager
 import android.os.Build
+import android.os.Bundle
 import android.service.notification.NotificationListenerService
 import android.service.notification.StatusBarNotification
 import androidx.annotation.RequiresApi
@@ -23,7 +24,6 @@ class MyNotificationListenerService : NotificationListenerService() {
     private lateinit var notificationDao: NotificationDao
     private lateinit var excludedAppDao: ExcludedAppDao
     private lateinit var context: Context
-    private val instagramMods = listOf("Instagram", "Instander")
     override fun onCreate() {
         super.onCreate()
         val database = Room.databaseBuilder(
@@ -58,45 +58,13 @@ class MyNotificationListenerService : NotificationListenerService() {
                             pm.getApplicationLabel(
                                 pm.getApplicationInfo(packageName, PackageManager.GET_META_DATA)
                             ).toString()
-                        // get user name
                         val extras = sbn.notification.extras
-                        var group = extras.getString(Notification.EXTRA_CONVERSATION_TITLE) ?: "not_group"
-                        var user = extras.getString(Notification.EXTRA_TITLE)?.replace("/", "-") ?: "Unknown"
 
-                        if (user.trim() == "") {
-                            user = "Unknown"
-                        }
-                        // We change '/' to '-' because the tail gives an error indicating the
-                        // wrong path when switching to a user whose name contains this character
-
-                        // Separating the user name from the account name because instagram is shit
-                        if (appName in instagramMods) {
-                            user = if (user.split(":").size == 2) {
-                                user.split(":")[1].trim()
-                            } else {
-                                user.trim()
-                            }
-
-                            if (group != "not_group") {
-                                group = group.replace(group.split(" ")[0], "")
-                                group = group.trim()
-                            }
-                        } else if (group != "not_group") {
-                            user = user.replace("$group:", "").trim()
-                        }
-
-                        if (group == user) {
-                            group = "not_group"
-                        }
+                        // get user name
+                        val (user, group) = getUserAndGroup(appName, extras)
 
                         // get notification text
-                        var text = extras.getCharSequence(Notification.EXTRA_TEXT)?.toString() ?: ""
-                        val bigText = extras.getCharSequence(Notification.EXTRA_BIG_TEXT)?.toString() ?: ""
-                        if (text.trim() == "") {
-                            text = bigText
-                        } else if (bigText.trim() != "" && text.trim() != "") {
-                            text = bigText
-                        }
+                        val text = getText(extras)
 
                         if (text.isNotEmpty() && group.isNotEmpty()) {
                             val count = notificationDao.checkNotificationExists(user, text, packageName, appName)
@@ -122,4 +90,48 @@ class MyNotificationListenerService : NotificationListenerService() {
             e.printStackTrace()
         }
     }
+}
+
+fun getText(extras: Bundle): String {
+    var text = extras.getCharSequence(Notification.EXTRA_TEXT)?.toString() ?: ""
+    val bigText = extras.getCharSequence(Notification.EXTRA_BIG_TEXT)?.toString() ?: ""
+    if (text.trim() == "") {
+        text = bigText
+    } else if (bigText.trim() != "" && text.trim() != "") {
+        text = bigText
+    }
+    return text
+}
+
+fun getUserAndGroup(appName: String, extras: Bundle): Pair<String, String> {
+    val instagramMods = listOf("Instagram", "Instander")
+    var group = extras.getString(Notification.EXTRA_CONVERSATION_TITLE) ?: "not_group"
+    var user = extras.getString(Notification.EXTRA_TITLE)?.replace("/", "-") ?: "Unknown"
+
+    if (user.trim() == "") {
+        user = "Unknown"
+    }
+    // We change '/' to '-' because the tail gives an error indicating the
+    // wrong path when switching to a user whose name contains this character
+
+    // Separating the user name from the account name because instagram is shit
+    if (appName in instagramMods) {
+        user = if (user.split(":").size == 2) {
+            user.split(":")[1].trim()
+        } else {
+            user.trim()
+        }
+
+        if (group != "not_group") {
+            group = group.replace(group.split(" ")[0], "")
+            group = group.trim()
+        }
+    } else if (group != "not_group") {
+        user = user.replace("$group:", "").trim()
+    }
+
+    if (group == user) {
+        group = "not_group"
+    }
+    return Pair(user, group)
 }
