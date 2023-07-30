@@ -3,7 +3,6 @@ package com.sharipov.mynotificationmanager.ui.settings.components.dialogs
 import android.annotation.SuppressLint
 import android.content.Context
 import android.net.Uri
-import android.util.Log
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -115,7 +114,7 @@ fun ImportScreen(context: Context, homeViewModel: HomeViewModel) {
     ) {
         Text(
             text = stringResource(id = R.string.select_the_backup_file),
-            modifier = Modifier.padding(top = 16.dp, bottom = 16.dp)
+            modifier = Modifier.padding(bottom = 16.dp)
         )
         Row {
             Text(
@@ -125,6 +124,7 @@ fun ImportScreen(context: Context, homeViewModel: HomeViewModel) {
             Text(
                 text = selectedFileName,
                 modifier = Modifier.basicMarquee(),
+                color = MaterialTheme.colorScheme.inversePrimary
             )
         }
         if(importButtonStatus) {
@@ -170,6 +170,7 @@ fun ImportScreen(context: Context, homeViewModel: HomeViewModel) {
     }
 }
 
+@OptIn(ExperimentalFoundationApi::class)
 @SuppressLint("IntentReset")
 @Composable
 fun ExportScreen(context: Context, homeViewModel: HomeViewModel) {
@@ -200,15 +201,27 @@ fun ExportScreen(context: Context, homeViewModel: HomeViewModel) {
                 color = MaterialTheme.colorScheme.primary,
                 thickness = 5.dp
             )
-            Row(modifier = Modifier
-                .fillMaxWidth()
-                .align(alignment = Alignment.End)
-            ) {
-                Text(text = stringResource(id = R.string.status))
+            Column {
+                Row(modifier = Modifier
+                    .fillMaxWidth()
+                    .align(alignment = Alignment.End)
+                ) {
+                    Text(text = stringResource(id = R.string.status))
+                    if(exportStatus.first) {
+                        Text(text = stringResource(id = R.string.success), color = Color.Green)
+                    } else {
+                        Text(text = stringResource(id = R.string.no_done), color = Color.Red)
+                    }
+                }
                 if(exportStatus.first) {
-                    Text(text = stringResource(id = R.string.success), color = Color.Green)
-                } else {
-                    Text(text = stringResource(id = R.string.no_done), color = Color.Red)
+                    Row{
+                        Text(text = stringResource(id = R.string.file_name))
+                        Text(
+                            text = "${exportStatus.second}_backup.json",
+                            modifier = Modifier.basicMarquee(),
+                            maxLines = 1
+                        )
+                    }
                 }
             }
         }
