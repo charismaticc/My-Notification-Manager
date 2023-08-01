@@ -63,7 +63,7 @@ dependencies {
 
     // Hilt
     implementation 'com.google.dagger:hilt-android:2.45'
-    implementation 'androidx.wear.compose:compose-material3:1.0.0-alpha07'
+    implementation 'androidx.wear.compose:compose-material3:1.0.0-alpha08'
     implementation 'com.google.android.material:material:1.9.0'
     implementation 'com.google.android.engage:engage-core:1.2.0'
     kapt 'com.google.dagger:hilt-compiler:2.45'
@@ -86,7 +86,7 @@ dependencies {
     implementation 'androidx.activity:activity-compose:1.7.2'
     implementation "androidx.compose.ui:ui:1.4.3"
     implementation "androidx.compose.ui:ui-tooling-preview:1.4.3"
-    implementation 'androidx.compose.material3:material3:1.2.0-alpha03'
+    implementation 'androidx.compose.material3:material3:1.2.0-alpha04'
     implementation "androidx.compose.runtime:runtime:1.4.3"
 
     // unit tests
@@ -111,7 +111,7 @@ dependencies {
     implementation "com.maxkeppeler.sheets-compose-dialogs:calendar:1.0.2"
 
     // Navigation Compose
-    implementation "androidx.navigation:navigation-compose:2.7.0-beta02"
+    implementation "androidx.navigation:navigation-compose:2.7.0-rc01"
 
     // This dependency is downloaded from the Google’s Maven repository.
     // So, make sure you also include that repository in your project's build.gradle file.
