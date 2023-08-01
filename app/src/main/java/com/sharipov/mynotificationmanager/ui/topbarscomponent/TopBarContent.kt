@@ -29,6 +29,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -36,6 +37,8 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
@@ -74,25 +77,7 @@ fun SearchTopBarContent(
             }
         },
     )
-
-    if (searchVisible) {
-        OutlinedTextField(
-            value = searchText,
-            onValueChange = { onSearchTextChange(it) },
-            label = { Text(stringResource(id = R.string.search)) },
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(top = 64.dp, bottom = 16.dp, start = 16.dp, end = 16.dp),
-            keyboardOptions = KeyboardOptions(
-                imeAction = ImeAction.Done
-            ),
-            keyboardActions = KeyboardActions(
-                onDone = {
-                    onSearchClick()
-                }
-            )
-        )
-    }
+    SearchOutlineTextFiled(searchVisible, searchText, onSearchTextChange, onSearchClick)
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -220,14 +205,31 @@ fun ChatTopBarContent(
             }
         }
     )
+    SearchOutlineTextFiled(searchVisible, searchText, onSearchTextChange, onSearchClick)
+}
 
-    if (searchVisible) {
+@Composable
+fun SearchOutlineTextFiled(
+    visibility: Boolean,
+    text: String,
+    onSearchTextChange: (String) -> Unit,
+    onSearchClick: () -> Unit,
+    ) {
+
+    val focusRequester = remember { FocusRequester() }
+
+    if (visibility) {
+        LaunchedEffect(true) {
+            focusRequester.requestFocus()
+        }
+
         OutlinedTextField(
-            value = searchText,
+            value = text,
             onValueChange = { onSearchTextChange(it) },
             label = { Text(stringResource(id = R.string.search)) },
             modifier = Modifier
                 .fillMaxWidth()
+                .focusRequester(focusRequester = focusRequester)
                 .padding(top = 64.dp, bottom = 16.dp, start = 16.dp, end = 16.dp),
             keyboardOptions = KeyboardOptions(
                 imeAction = ImeAction.Done
@@ -237,6 +239,7 @@ fun ChatTopBarContent(
                     onSearchClick()
                 }
             ),
+            singleLine = true
         )
     }
 }

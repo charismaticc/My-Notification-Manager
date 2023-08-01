@@ -89,11 +89,12 @@ fun AllNotificationScreen(
         floatingActionButtonPosition = FabPosition.End
     ) {
         BackHandler {
-            if(navController.currentBackStackEntry?.destination?.route == Screens.AllNotifications.route
-                && !searchVisible) {
-                exitProcess(0)
-            } else if(searchVisible) {
+            if(searchVisible) {
                 searchVisible = false
+            } else if(showStatistic) {
+                showStatistic = false
+            } else if(navController.currentBackStackEntry?.destination?.route == Screens.AllNotifications.route) {
+                exitProcess(0)
             }
             else {
                 navController.popBackStack()
