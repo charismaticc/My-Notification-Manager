@@ -18,8 +18,8 @@ import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
-import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Tab
@@ -39,8 +39,8 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.sharipov.mynotificationmanager.R
-import com.sharipov.mynotificationmanager.exportDatabase
-import com.sharipov.mynotificationmanager.importDatabase
+import com.sharipov.mynotificationmanager.utils.exportDatabase
+import com.sharipov.mynotificationmanager.utils.importDatabase
 import com.sharipov.mynotificationmanager.utils.getFileNameFromUri
 import com.sharipov.mynotificationmanager.viewmodel.HomeViewModel
 
@@ -148,7 +148,7 @@ fun ImportScreen(context: Context, homeViewModel: HomeViewModel) {
             }
         }
         if(importStatus.second != "") {
-            Divider(
+            HorizontalDivider(
                 modifier = Modifier.padding(top = 16.dp, bottom = 16.dp),
                 color = MaterialTheme.colorScheme.primary,
                 thickness = 5.dp
@@ -196,7 +196,7 @@ fun ExportScreen(context: Context, homeViewModel: HomeViewModel) {
                 Text(text = stringResource(id = R.string.export))
             }
         } else {
-            Divider(
+            HorizontalDivider(
                 modifier = Modifier.padding(top = 16.dp, bottom = 16.dp),
                 color = MaterialTheme.colorScheme.primary,
                 thickness = 5.dp

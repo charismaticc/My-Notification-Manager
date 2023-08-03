@@ -2,7 +2,6 @@ package com.sharipov.mynotificationmanager.ui.allnotifications
 
 import android.annotation.SuppressLint
 import android.os.Build
-import android.util.Log
 import androidx.activity.compose.BackHandler
 import androidx.annotation.RequiresApi
 import androidx.compose.animation.AnimatedVisibility
@@ -170,11 +169,8 @@ fun getDummy(homeViewModel: HomeViewModel): List<Int> {
     for (i in 0..6) {
         calendar.add(Calendar.DAY_OF_MONTH, 1)
         val data = dateFormat.format(calendar.time)
-        Log.d("TAG", data)
         dateList += getNotificationFlow(homeViewModel, "", data, data).size
     }
-
-    Log.d("TAG", dateList.toString())
     return dateList
 }
 

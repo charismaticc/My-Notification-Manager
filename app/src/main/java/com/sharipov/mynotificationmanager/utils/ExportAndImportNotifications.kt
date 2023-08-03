@@ -1,4 +1,4 @@
-package com.sharipov.mynotificationmanager
+package com.sharipov.mynotificationmanager.utils
 
 import android.content.ContentResolver
 import android.content.Context
@@ -7,6 +7,7 @@ import android.os.Environment
 import android.widget.Toast
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
+import com.sharipov.mynotificationmanager.R
 import com.sharipov.mynotificationmanager.model.NotificationEntity
 import com.sharipov.mynotificationmanager.viewmodel.HomeViewModel
 import kotlinx.coroutines.flow.first
