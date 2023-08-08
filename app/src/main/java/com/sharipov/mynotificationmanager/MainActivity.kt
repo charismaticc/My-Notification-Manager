@@ -1,8 +1,12 @@
 package com.sharipov.mynotificationmanager
 
+import android.annotation.SuppressLint
+import android.content.Context
 import android.content.Intent
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.os.PowerManager
 import android.provider.Settings
 import android.widget.Toast
 import androidx.activity.ComponentActivity
@@ -54,6 +58,10 @@ class MainActivity : ComponentActivity() {
         if (!NotificationManagerCompat.getEnabledListenerPackages(this).contains(packageName)) {
             val intent = Intent(Settings.ACTION_NOTIFICATION_LISTENER_SETTINGS)
             startActivity(intent)
+        }
+
+        if (!isBatteryOptimizationIgnored()) {
+            requestBatteryOptimization()
         }
 
         setChanges(this)
@@ -141,5 +149,19 @@ class MainActivity : ComponentActivity() {
         if (updateType == AppUpdateType.FLEXIBLE) {
             appUpdateManager.unregisterListener(installStateUpdateListener)
         }
+    }
+
+    private val REQUEST_BATTERY_OPTIMIZATION = 1
+
+    private fun isBatteryOptimizationIgnored(): Boolean {
+        val powerManager = getSystemService(Context.POWER_SERVICE) as PowerManager
+        return powerManager.isIgnoringBatteryOptimizations(packageName)
+    }
+
+    @SuppressLint("BatteryLife")
+    private fun requestBatteryOptimization() {
+        val intent = Intent(Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS)
+        intent.data = Uri.parse("package:$packageName")
+        startActivityForResult(intent, REQUEST_BATTERY_OPTIMIZATION)
     }
 }

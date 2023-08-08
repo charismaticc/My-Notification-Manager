@@ -1,12 +1,13 @@
 package com.sharipov.mynotificationmanager.ui.settings.components.dialogs
 
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentWidth
-import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -21,24 +22,41 @@ import com.sharipov.mynotificationmanager.R
 @Composable
 fun aboutUsDialog(): Boolean {
     val openDialog = remember { mutableStateOf(true) }
-    AlertDialog(
-        onDismissRequest = {
-            openDialog.value = false
-        }
-    ) {
-        Surface(
-            modifier = Modifier
-                .wrapContentWidth()
-                .wrapContentHeight(),
-            shape = MaterialTheme.shapes.large
+    if (openDialog.value) {
+        ModalBottomSheet(
+            onDismissRequest = {
+                openDialog.value = false
+            },
         ) {
-            Column(modifier = Modifier.padding(16.dp)) {
-                Text(text = stringResource(id = R.string.app_name))
-                Text(text = stringResource(id = R.string.developer))
-                Text(text = "${stringResource(R.string.app_version_text)} ${stringResource(R.string.app_version)}")
-
+            Surface(
+                modifier = Modifier
+                    .wrapContentWidth()
+                    .wrapContentHeight(),
+                shape = MaterialTheme.shapes.large
+            ) {
+                AboutUsDialogContent()
             }
         }
     }
     return openDialog.value
+}
+
+@Composable
+fun AboutUsDialogContent() {
+    Column(modifier = Modifier.padding(16.dp)) {
+        Text(
+            text = stringResource(id = R.string.app_name),
+            style = MaterialTheme.typography.titleMedium
+        )
+        Text(
+            text = stringResource(id = R.string.developer),
+            style = MaterialTheme.typography.titleMedium
+        )
+        Text(
+            text = "${stringResource(R.string.app_version_text)} " +
+                    stringResource(R.string.app_version),
+            style = MaterialTheme.typography.titleMedium
+        )
+        Spacer(modifier = Modifier.padding(32.dp))
+    }
 }

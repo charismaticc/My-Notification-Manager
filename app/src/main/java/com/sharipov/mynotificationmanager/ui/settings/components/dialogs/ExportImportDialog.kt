@@ -11,16 +11,17 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.basicMarquee
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
-import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Tab
 import androidx.compose.material3.TabRow
@@ -44,60 +45,67 @@ import com.sharipov.mynotificationmanager.utils.importDatabase
 import com.sharipov.mynotificationmanager.utils.getFileNameFromUri
 import com.sharipov.mynotificationmanager.viewmodel.HomeViewModel
 
-@OptIn(ExperimentalFoundationApi::class, ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun exportImportDialog(context: Context, homeViewModel: HomeViewModel): Boolean {
     val openDialog = remember { mutableStateOf(true) }
-    AlertDialog(
-        onDismissRequest = {
-            openDialog.value = false
-        }
-    ) {
-        val pagerState = rememberPagerState(pageCount = {2}, initialPage = 0)
-        var selectedTabIndex by remember { mutableIntStateOf(pagerState.currentPage) }
-
-        Surface(
-            modifier = Modifier.wrapContentSize(),
-            shape = MaterialTheme.shapes.large
+    if (openDialog.value) {
+        ModalBottomSheet(
+            onDismissRequest = {
+                openDialog.value = false
+            },
         ) {
-            Column(modifier = Modifier.wrapContentSize()) {
-                TabRow(
-                    selectedTabIndex = selectedTabIndex,
-                    modifier = Modifier.background(Color.Gray)
-                ) {
-                    Tab(
-                        text = { Text(stringResource(id = R.string.export)) },
-                        selected = selectedTabIndex == 0,
-                        onClick = { selectedTabIndex = 0 }
-                    )
-                    Tab(
-                        text = { Text(stringResource(id = R.string.import_)) },
-                        selected =  selectedTabIndex == 1,
-                        onClick = { selectedTabIndex = 1 }
-                    )
-                }
-
-                LaunchedEffect(selectedTabIndex) {
-                    pagerState.animateScrollToPage(selectedTabIndex)
-                }
-
-                LaunchedEffect(pagerState.currentPage) {
-                    selectedTabIndex = pagerState.currentPage
-                }
-
-                HorizontalPager(
-                    state = pagerState
-                ) { page ->
-                    when (page) {
-                        0 -> ExportScreen(context, homeViewModel)
-                        1 -> ImportScreen(context, homeViewModel)
-                        else -> ImportScreen(context, homeViewModel)
-                    }
-                }
+            Surface(
+                modifier = Modifier.wrapContentSize(),
+            ) {
+                ExportImportModalBottomSheetContent(context, homeViewModel)
             }
         }
     }
     return openDialog.value
+}
+
+@OptIn(ExperimentalFoundationApi::class)
+@Composable
+fun ExportImportModalBottomSheetContent(context: Context, homeViewModel: HomeViewModel) {
+    val pagerState = rememberPagerState(pageCount = { 2 }, initialPage = 0)
+    var selectedTabIndex by remember { mutableIntStateOf(pagerState.currentPage) }
+
+    Column(modifier = Modifier.wrapContentSize()) {
+        TabRow(
+            selectedTabIndex = selectedTabIndex,
+            modifier = Modifier.background(Color.Gray)
+        ) {
+            Tab(
+                text = { Text(stringResource(id = R.string.export)) },
+                selected = selectedTabIndex == 0,
+                onClick = { selectedTabIndex = 0 }
+            )
+            Tab(
+                text = { Text(stringResource(id = R.string.import_)) },
+                selected = selectedTabIndex == 1,
+                onClick = { selectedTabIndex = 1 }
+            )
+        }
+
+        LaunchedEffect(selectedTabIndex) {
+            pagerState.animateScrollToPage(selectedTabIndex)
+        }
+
+        LaunchedEffect(pagerState.currentPage) {
+            selectedTabIndex = pagerState.currentPage
+        }
+
+        HorizontalPager(
+            state = pagerState
+        ) { page ->
+            when (page) {
+                0 -> ExportScreen(context, homeViewModel)
+                1 -> ImportScreen(context, homeViewModel)
+                else -> ImportScreen(context, homeViewModel)
+            }
+        }
+    }
 }
 
 @OptIn(ExperimentalFoundationApi::class)
@@ -225,6 +233,7 @@ fun ExportScreen(context: Context, homeViewModel: HomeViewModel) {
                 }
             }
         }
+        Spacer(modifier = Modifier.padding(12.dp))
     }
 }
 

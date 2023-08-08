@@ -20,7 +20,6 @@ import com.sharipov.mynotificationmanager.data.PreferencesManager
 import com.sharipov.mynotificationmanager.R
 import com.sharipov.mynotificationmanager.navigation.Screens
 import com.sharipov.mynotificationmanager.ui.settings.components.dialogs.LanguageDialog
-import com.sharipov.mynotificationmanager.ui.settings.components.dialogs.SelectThemeDialog
 import com.sharipov.mynotificationmanager.ui.settings.components.dialogs.aboutUsDialog
 import com.sharipov.mynotificationmanager.ui.settings.components.dialogs.autoRemoveDialog
 import com.sharipov.mynotificationmanager.ui.settings.components.dialogs.exportImportDialog
@@ -28,6 +27,7 @@ import com.sharipov.mynotificationmanager.ui.settings.components.dialogs.feedbac
 import com.sharipov.mynotificationmanager.ui.settings.components.dialogs.privatePolicyDialog
 import com.sharipov.mynotificationmanager.utils.Constants
 import com.sharipov.mynotificationmanager.ui.settings.components.ClickableListItem
+import com.sharipov.mynotificationmanager.ui.settings.components.dialogs.selectThemeDialog
 import com.sharipov.mynotificationmanager.utils.TransparentSystemBars
 import com.sharipov.mynotificationmanager.utils.setChanges
 import com.sharipov.mynotificationmanager.viewmodel.HomeViewModel
@@ -79,7 +79,8 @@ fun SettingsScreen(
         },
     ) {
         LazyColumn(
-            verticalArrangement = Arrangement.spacedBy(8.dp)
+            verticalArrangement = Arrangement.spacedBy(8.dp),
+            userScrollEnabled = true
         ) {
 
             item { Spacer(modifier = Modifier.height(48.dp)) }
@@ -147,6 +148,9 @@ fun SettingsScreen(
                     }
                 )
             }
+            item {
+                Spacer(modifier = Modifier.padding(32.dp))
+            }
         }
         val context = LocalContext.current
         when {
@@ -155,7 +159,9 @@ fun SettingsScreen(
             openAboutUsDialog.value -> openAboutUsDialog.value = aboutUsDialog()
             openAutoRemoveDialog.value -> openAutoRemoveDialog.value = autoRemoveDialog(
                 settingsViewModel = settingsViewModel,
-                onDismiss = { showAutoDeleteDialog.value = false },
+                onDismiss = {
+                    showAutoDeleteDialog.value = false
+                },
                 onTimeSelected = { selectedTime = it }
             )
 
@@ -173,7 +179,7 @@ fun SettingsScreen(
             )
 
             openThemeDialog.value -> {
-                SelectThemeDialog(
+                openThemeDialog.value = selectThemeDialog(
                     onThemeSelected = { selectThemeDialog ->
                         PreferencesManager.updateThemeStyle(context, selectThemeDialog)
                         if (context is Activity) {

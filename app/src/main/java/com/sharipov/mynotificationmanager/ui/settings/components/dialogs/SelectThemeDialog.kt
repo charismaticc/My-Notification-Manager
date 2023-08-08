@@ -31,7 +31,31 @@ import com.sharipov.mynotificationmanager.data.PreferencesManager
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SelectThemeDialog(
+fun selectThemeDialog(
+    onThemeSelected: (String) -> Unit,
+    onDismiss: () -> Unit
+): Boolean {
+    val openDialog = remember { mutableStateOf(true) }
+
+    AlertDialog(
+        onDismissRequest = {
+            openDialog.value = false
+        }
+    ) {
+        Surface(
+            modifier = Modifier
+                .wrapContentWidth()
+                .wrapContentHeight(),
+            shape = MaterialTheme.shapes.large
+        ) {
+            SelectThemeDialogContent(onThemeSelected, onDismiss)
+        }
+    }
+    return openDialog.value
+}
+
+@Composable
+fun SelectThemeDialogContent(
     onThemeSelected: (String) -> Unit,
     onDismiss: () -> Unit
 ) {
@@ -50,64 +74,52 @@ fun SelectThemeDialog(
 
     var selectedTheme by remember { mutableStateOf(currentTheme) }
 
-    AlertDialog(
-        onDismissRequest = {
-            onDismiss.invoke()
-        }) {
-        Surface(
-            modifier = Modifier
-                .wrapContentWidth()
-                .wrapContentHeight(),
-            shape = MaterialTheme.shapes.large
-        ) {
-            Column(
-                modifier = Modifier
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(16.dp)
+    ) {
+        Text(
+            modifier = Modifier.align(Alignment.CenterHorizontally),
+            text = stringResource(id = R.string.select_theme),
+            style = MaterialTheme.typography.titleLarge
+        )
+        Spacer(modifier = Modifier.height(16.dp))
+
+        themes.forEach { text ->
+            Row(
+                Modifier
+                    .selectable(
+                        selected = (text == selectedTheme),
+                        onClick = { selectedTheme = text }
+                    )
                     .fillMaxWidth()
                     .padding(16.dp)
             ) {
-                Text(
-                    modifier = Modifier.align(Alignment.CenterHorizontally),
-                    text = stringResource(id = R.string.select_theme),
-                    style = MaterialTheme.typography.titleMedium
+                RadioButton(
+                    selected = (text == selectedTheme),
+                    onClick = null // null so that the processing is only on Row
                 )
-                Spacer(modifier = Modifier.height(16.dp))
-
-                themes.forEach { text ->
-                    Row(
-                        Modifier
-                            .selectable(
-                                selected = (text == selectedTheme),
-                                onClick = { selectedTheme = text }
-                            )
-                            .fillMaxWidth()
-                            .padding(16.dp)
-                    ) {
-                        RadioButton(
-                            selected = (text == selectedTheme),
-                            onClick = null // null so that the processing is only on Row
-                        )
-                        Text(
-                            text = text,
-                            modifier = Modifier.padding(start = 8.dp)
-                        )
-                    }
-                }
-                Button(
-                    modifier = Modifier.fillMaxWidth(),
-                    onClick = {
-                        onDismiss.invoke()
-                        val theme = when(selectedTheme) {
-                            darkTheme -> "dark_theme"
-                            lightTheme -> "light_theme"
-                            systemTheme -> "system_theme"
-                            else -> "system_theme"
-                        }
-                        onThemeSelected.invoke(theme)
-                    }
-                ) {
-                    Text(stringResource(id = R.string.select))
-                }
+                Text(
+                    text = text,
+                    modifier = Modifier.padding(start = 8.dp)
+                )
             }
+        }
+        Button(
+            modifier = Modifier.fillMaxWidth(),
+            onClick = {
+                onDismiss.invoke()
+                val theme = when (selectedTheme) {
+                    darkTheme -> "dark_theme"
+                    lightTheme -> "light_theme"
+                    systemTheme -> "system_theme"
+                    else -> "system_theme"
+                }
+                onThemeSelected.invoke(theme)
+            }
+        ) {
+            Text(stringResource(id = R.string.select))
         }
     }
 }

@@ -7,16 +7,15 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -32,50 +31,58 @@ import com.sharipov.mynotificationmanager.R
 @Composable
 fun privatePolicyDialog(): Boolean {
     val openDialog = remember { mutableStateOf(true) }
-    val launcher = rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) {}
-    AlertDialog(
-        onDismissRequest = {
-            openDialog.value = false
-        }
-    ) {
-        Surface(
-            modifier = Modifier
-                .wrapContentWidth()
-                .wrapContentHeight(),
-            shape = MaterialTheme.shapes.large
+    if (openDialog.value) {
+        ModalBottomSheet(
+            onDismissRequest = {
+                openDialog.value = false
+            },
         ) {
-            Column(
+            Surface(
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .heightIn(max = 400.dp)
-                    .padding(16.dp)
-                    .verticalScroll(rememberScrollState())
+                    .wrapContentWidth()
+                    .wrapContentHeight(),
+                shape = MaterialTheme.shapes.large
             ) {
-                Text(
-                    text = stringResource(id = R.string.private_policy_text),
-                    modifier = Modifier.fillMaxWidth(),
-                    textAlign = TextAlign.Start,
-                    style = MaterialTheme.typography.bodyLarge
-                )
-
-                Spacer(modifier = Modifier.padding(8.dp))
-
-                Button(
-                    onClick = {
-                        val telegramIntent = Intent(Intent.ACTION_VIEW).apply {
-                            data = Uri.parse("https://sites.google.com/view/my-notification-manager-privac")
-                        }
-                        launcher.launch(telegramIntent)
-                    },
-                    modifier = Modifier.fillMaxWidth()
-                ) {
-                    Text(
-                        text = stringResource(id = R.string.private_policy),
-                        style = MaterialTheme.typography.titleMedium
-                    )
-                }
+                PrivatePolicyDialogContext()
             }
         }
     }
     return openDialog.value
+}
+
+@Composable
+fun PrivatePolicyDialogContext() {
+    val launcher =
+        rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) {}
+
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(16.dp)
+            .verticalScroll(rememberScrollState())
+    ) {
+        Text(
+            text = stringResource(id = R.string.private_policy_text),
+            modifier = Modifier.fillMaxWidth(),
+            textAlign = TextAlign.Start,
+            style = MaterialTheme.typography.bodyLarge
+        )
+
+        Spacer(modifier = Modifier.padding(8.dp))
+
+        Button(
+            onClick = {
+                val telegramIntent = Intent(Intent.ACTION_VIEW).apply {
+                    data = Uri.parse("https://sites.google.com/view/my-notification-manager-privac")
+                }
+                launcher.launch(telegramIntent)
+            },
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Text(
+                text = stringResource(id = R.string.private_policy),
+                style = MaterialTheme.typography.titleMedium
+            )
+        }
+    }
 }

@@ -38,8 +38,33 @@ fun autoRemoveDialog(
     onDismiss: () -> Unit,
     onTimeSelected: (String) -> Unit
 ): Boolean {
-    val context = LocalContext.current
     val openDialog = remember { mutableStateOf(true) }
+
+    AlertDialog(
+        onDismissRequest = {
+            openDialog.value = false
+        }
+    ) {
+        Surface(
+            modifier = Modifier
+                .wrapContentWidth()
+                .wrapContentHeight(),
+            shape = MaterialTheme.shapes.large
+        ) {
+            AutoRemoveDialogContent(settingsViewModel, onDismiss, onTimeSelected )
+        }
+    }
+    return openDialog.value
+}
+
+@Composable
+fun AutoRemoveDialogContent(
+    settingsViewModel: SettingsViewModel,
+    onDismiss: () -> Unit,
+    onTimeSelected: (String) -> Unit
+) {
+    val context = LocalContext.current
+
     val timeOptions = listOf(
         stringResource(R.string.never),
         stringResource(R.string.one_hour),
@@ -75,75 +100,62 @@ fun autoRemoveDialog(
 
     var selectedOption by remember { mutableStateOf(selectedTime) }
 
-    AlertDialog(
-        onDismissRequest = {
-            openDialog.value = false
-        }
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(16.dp)
     ) {
-        Surface(
-            modifier = Modifier
-                .wrapContentWidth()
-                .wrapContentHeight(),
-            shape = MaterialTheme.shapes.large
-        ) {
-            Column(
-                modifier = Modifier
+        Text(
+            modifier = Modifier.align(Alignment.CenterHorizontally),
+            text = stringResource(id = R.string.auto_delete_time),
+            style = MaterialTheme.typography.titleMedium
+        )
+        Spacer(modifier = Modifier.height(16.dp))
+
+        timeOptions.forEach { text ->
+            Row(
+                Modifier
+                    .selectable(
+                        selected = (text == selectedOption),
+                        onClick = { selectedOption = text }
+                    )
                     .fillMaxWidth()
-                    .padding(16.dp)
-            ) {
-                Text(
-                    modifier = Modifier.align(Alignment.CenterHorizontally),
-                    text = stringResource(id = R.string.auto_delete_time),
-                    style = MaterialTheme.typography.titleMedium
+                    .padding(16.dp)) {
+                RadioButton(
+                    selected = (text == selectedOption),
+                    onClick = null // null so that the processing is only on Row
                 )
-                Spacer(modifier = Modifier.height(16.dp))
-
-                timeOptions.forEach { text ->
-                    Row(
-                        Modifier
-                        .selectable(
-                            selected = (text == selectedOption),
-                            onClick = { selectedOption = text }
-                        )
-                        .fillMaxWidth()
-                        .padding(16.dp)) {
-                        RadioButton(
-                            selected = (text == selectedOption),
-                            onClick = null // null so that the processing is only on Row
-                        )
-                        Text(
-                            text = text,
-                            modifier = Modifier.padding(start = 8.dp)
-                        )
-                    }
-                }
-
-                Spacer(modifier = Modifier.height(16.dp))
-
-                Button(
-                    modifier = Modifier.fillMaxWidth(),
-                    onClick = {
-                        selectedTimeLong = when (selectedOption) {
-                            context.getString(R.string.never) -> 0L
-                            context.getString(R.string.one_hour) -> 3600000L
-                            context.getString(R.string.one_day) -> 86400000L
-                            context.getString(R.string.one_week) -> 604800000L
-                            context.getString(R.string.two_weeks) -> 1209600000L
-                            context.getString(R.string.one_month) -> 2592000000L
-                            else -> 0L
-                        }
-
-                        runBlocking {
-                            settingsViewModel.updateSettings(AppSettingsEntity(0, selectedTimeLong, selectedOption))
-                        }
-                        onTimeSelected(selectedOption)
-                        onDismiss()
-                    }
-                ) {
-                    Text(stringResource(id = R.string.select))
-                }
+                Text(
+                    text = text,
+                    modifier = Modifier.padding(start = 8.dp)
+                )
             }
         }
+
+        Spacer(modifier = Modifier.height(16.dp))
+
+        Button(
+            modifier = Modifier.fillMaxWidth(),
+            onClick = {
+                selectedTimeLong = when (selectedOption) {
+                    context.getString(R.string.never) -> 0L
+                    context.getString(R.string.one_hour) -> 3600000L
+                    context.getString(R.string.one_day) -> 86400000L
+                    context.getString(R.string.one_week) -> 604800000L
+                    context.getString(R.string.two_weeks) -> 1209600000L
+                    context.getString(R.string.one_month) -> 2592000000L
+                    else -> 0L
+                }
+
+                runBlocking {
+                    settingsViewModel.updateSettings(AppSettingsEntity(0, selectedTimeLong, selectedOption))
+                }
+
+                onTimeSelected(selectedOption)
+                onDismiss()
+            }
+        ) {
+            Text(stringResource(id = R.string.select))
+        }
     }
-    return openDialog.value
 }
