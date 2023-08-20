@@ -74,6 +74,7 @@ fun FavoriteScreen(
                     NotificationItem(
                         homeViewModel = homeViewModel,
                         notification = notification,
+                        navController = navController,
                         context = context
                     )
                 }

@@ -84,4 +84,6 @@
     <string name="notification_imported">Notifications imported!</string>
     <string name="error_the_file_is_corrupted">Error: The file is corrupted</string>
     <string name="file_name">"File name: "</string>
+    <string name="rate_the_app">Rate the app!</string>
+    <string name="go_to_the_chat">Go to the chat!</string>
 </resources>

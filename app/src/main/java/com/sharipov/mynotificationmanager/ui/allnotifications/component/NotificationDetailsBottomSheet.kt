@@ -39,8 +39,10 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import com.maxkeppeker.sheets.core.models.base.rememberSheetState
 import com.sharipov.mynotificationmanager.R
+import com.sharipov.mynotificationmanager.navigation.Screens
 import com.sharipov.mynotificationmanager.viewmodel.HomeViewModel
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
@@ -53,6 +55,7 @@ import java.util.Locale
 fun NotificationDetailsBottomSheet(
     showNotification: Boolean,
     homeViewModel: HomeViewModel,
+    navController: NavController,
     notificationId: String,
     showNotificationValue: () -> Unit,
     ) {
@@ -70,7 +73,8 @@ fun NotificationDetailsBottomSheet(
         ) {
             NotificationDetailsBottomSheetContent(
                 homeViewModel = homeViewModel,
-                notificationId = notificationId
+                notificationId = notificationId,
+                navController = navController
             ){
                 showNotificationValue()
             }
@@ -84,6 +88,7 @@ fun NotificationDetailsBottomSheet(
 fun NotificationDetailsBottomSheetContent(
     homeViewModel: HomeViewModel,
     notificationId: String,
+    navController: NavController,
     showNotificationValue: () -> Unit
 ){
     val notificationsFlow = homeViewModel.notificationListFlow
@@ -166,7 +171,7 @@ fun NotificationDetailsBottomSheetContent(
                     }
                 }
             }
-            Row(Modifier.padding(bottom = 24.dp)) {
+            Row {
                 Button(
                     onClick = {
                         clipboardManager.setPrimaryClip(
@@ -207,6 +212,24 @@ fun NotificationDetailsBottomSheetContent(
                             .copy(fontWeight = FontWeight.Bold)
                     )
                 }
+            }
+            Button(
+                onClick = {
+                    notificationState.value?.let { notification ->
+                        navController.navigate(Screens.Chat.route + "/${notification.user}/${notification.packageName}/${notification.group}")
+                    }
+                    showNotificationValue()
+                },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(8.dp, bottom = 32.dp),
+            ) {
+                Text(
+                    text = stringResource(id = R.string.go_to_the_chat),
+                    modifier = Modifier.padding(8.dp),
+                    style = MaterialTheme.typography.titleSmall
+                        .copy(fontWeight = FontWeight.Bold)
+                )
             }
         }
     }

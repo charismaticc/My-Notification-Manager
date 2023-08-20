@@ -31,6 +31,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
+import androidx.navigation.NavController
 import com.google.accompanist.drawablepainter.rememberDrawablePainter
 import com.sharipov.mynotificationmanager.R
 import com.sharipov.mynotificationmanager.model.NotificationEntity
@@ -46,6 +47,7 @@ import java.util.*
 fun NotificationItem(
     homeViewModel: HomeViewModel,
     notification: NotificationEntity,
+    navController: NavController,
     context: Context
 ) {
     var showNotification by remember { mutableStateOf(false) }
@@ -89,6 +91,7 @@ fun NotificationItem(
     NotificationDetailsBottomSheet(
         showNotification = showNotification,
         homeViewModel = homeViewModel,
+        navController = navController,
         notificationId = notification.id.toString()) {
         showNotification = !showNotification
     }

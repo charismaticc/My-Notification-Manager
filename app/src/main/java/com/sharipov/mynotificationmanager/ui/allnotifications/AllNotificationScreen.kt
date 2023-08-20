@@ -146,6 +146,7 @@ fun AllNotificationScreen(
                         NotificationItem(
                             homeViewModel = homeViewModel,
                             notification = notification,
+                            navController = navController,
                             context = context,
                         )
                     }
