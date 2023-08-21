@@ -69,4 +69,6 @@
     <string name="notification_imported">Импортированные уведомления!</string>
     <string name="error_the_file_is_corrupted">Ошибка: файл поврежден</string>
     <string name="file_name">"Имя файла: "</string>
+    <string name="rate_the_app">Оценит приложение!</string>
+    <string name="go_to_the_chat">Перейти в чат!</string>
 </resources>

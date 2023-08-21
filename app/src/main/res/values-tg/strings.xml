@@ -69,4 +69,6 @@
     <string name="notification_imported">Огоҳиномаҳо воридот шуданд!</string>
     <string name= "error_the_file_is_corrupted">Хатоги: Файл вайрон шудааст</string>
     <string name="file_name">"Номи файл: "</string>
+    <string name="rate_the_app">Барномаро баҳо диҳед!</string>
+    <string name="go_to_the_chat">Ба чат гузаштан!</string>
 </resources>
