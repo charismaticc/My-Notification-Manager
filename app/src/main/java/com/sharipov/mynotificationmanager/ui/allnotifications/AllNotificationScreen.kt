@@ -115,7 +115,7 @@ fun AllNotificationScreen(
                 ) {
                     Text(
                         text = "${stringResource(id = R.string.count_of_your_notification)} " +
-                                "${notificationFlow.size}",
+                                "${(if(!showStatistic) notificationFlow.size else dummyData.sum())}",
                         modifier = Modifier
                             .align(Alignment.CenterHorizontally)
                             .padding(8.dp)
