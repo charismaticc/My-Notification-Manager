@@ -77,7 +77,7 @@ fun NotificationItem(
                 }
             )
 
-    Card(elevation = CardDefaults.cardElevation(), modifier = modifier) {
+    Card(elevation = CardDefaults.cardElevation(4.dp), modifier = modifier) {
         Box(modifier = Modifier.fillMaxSize()) {
             SwipeableActionsBox(
                 swipeThreshold = 150.dp,

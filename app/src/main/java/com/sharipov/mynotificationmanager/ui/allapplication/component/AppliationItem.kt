@@ -46,7 +46,7 @@ fun ApplicationItem(
 
     Card(
         modifier = modifier,
-        elevation = CardDefaults.cardElevation(),
+        elevation = CardDefaults.cardElevation(4.dp),
     ) {
         Box(modifier = Modifier.fillMaxSize()) {
             Row(modifier = Modifier.padding(8.dp, 16.dp, 16.dp, 16.dp)) {
