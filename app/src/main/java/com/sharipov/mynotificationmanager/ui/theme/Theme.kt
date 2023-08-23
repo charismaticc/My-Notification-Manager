@@ -82,6 +82,9 @@ fun topBarColorScheme(): TopAppBarColors {
         navigationIconContentColor = contentColorFor(MaterialTheme.colorScheme.primary),
     )
 
-    return if (PreferencesManager.getThemeStyle(context = LocalContext.current) == "light_theme" || (!isSystemInDarkTheme() && PreferencesManager.getThemeStyle(context = LocalContext.current) == "system_theme")) topAppBarColors
+    return if (PreferencesManager.getThemeStyle(context = LocalContext.current) == "light_theme"
+        || (!isSystemInDarkTheme()
+                && PreferencesManager.getThemeStyle(context = LocalContext.current) == "system_theme")
+    ) topAppBarColors
     else TopAppBarDefaults.centerAlignedTopAppBarColors()
 }

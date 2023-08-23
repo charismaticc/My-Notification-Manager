@@ -1,5 +1,6 @@
 package com.sharipov.mynotificationmanager.ui.notificationmanagement.component
 
+import android.content.Context
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.isSystemInDarkTheme
@@ -30,11 +31,7 @@ fun ToggleDisplayMode(whichListIsDisplayed: MutableState<Boolean>) {
             modifier = Modifier
                 .weight(1f)
                 .background(
-                    if (whichListIsDisplayed.value) {
-                        if (PreferencesManager.getThemeStyle(context)  != "light_theme" && isSystemInDarkTheme()) {
-                            Color.DarkGray
-                        } else Color(android.graphics.Color.parseColor("#DCDCDC"))
-                    } else MaterialTheme.colorScheme.background
+                    toggleDisplayBackground(whichListIsDisplayed.value, context)
                 )
                 .clickable {
                     whichListIsDisplayed.value = true
@@ -52,12 +49,7 @@ fun ToggleDisplayMode(whichListIsDisplayed: MutableState<Boolean>) {
             modifier = Modifier
                 .weight(1f)
                 .background(
-                    if (!whichListIsDisplayed.value){
-                        if (PreferencesManager.getThemeStyle(context) != "light_theme" && isSystemInDarkTheme()) {
-                            Color.DarkGray
-                        } else Color(android.graphics.Color.parseColor("#DCDCDC"))
-                    }
-                    else MaterialTheme.colorScheme.background
+                    toggleDisplayBackground(!whichListIsDisplayed.value, context)
                 )
                 .clickable {
                     whichListIsDisplayed.value = false
@@ -72,4 +64,15 @@ fun ToggleDisplayMode(whichListIsDisplayed: MutableState<Boolean>) {
             )
         }
     }
+}
+
+@Composable
+fun toggleDisplayBackground(whichListIsDisplayed: Boolean, context: Context): Color {
+    return if (whichListIsDisplayed) {
+        if (PreferencesManager.getThemeStyle(context)  == "light_theme"
+            || (!isSystemInDarkTheme() && PreferencesManager.getThemeStyle(context) == "system_theme")
+        ) {
+            Color(android.graphics.Color.parseColor("#DCDCDC"))
+        } else Color.DarkGray
+    } else MaterialTheme.colorScheme.background
 }
