@@ -16,6 +16,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
@@ -37,7 +38,6 @@ fun UserItem(
 ) {
     var showDialog by remember { mutableStateOf(false) }
     val coroutineScope = rememberCoroutineScope()
-
     Card(
         modifier = modifier,
         elevation = CardDefaults.cardElevation(),
@@ -63,7 +63,8 @@ fun UserItem(
                     painter = if(group != "not_group") painterResource(id = R.drawable.ic_groups)
                             else  painterResource(id = R.drawable.ic_person),
                     contentDescription = "User icon",
-                    modifier = Modifier.size(48.dp)
+                    modifier = Modifier.size(48.dp),
+                    colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.primary)
                 )
 
                 Text(
