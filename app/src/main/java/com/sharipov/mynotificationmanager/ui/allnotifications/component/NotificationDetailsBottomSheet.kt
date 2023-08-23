@@ -4,7 +4,10 @@ import android.annotation.SuppressLint
 import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
+import android.content.pm.PackageManager
+import android.graphics.drawable.Drawable
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.basicMarquee
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -15,14 +18,12 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Surface
@@ -32,6 +33,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
@@ -39,7 +41,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.content.ContextCompat
 import androidx.navigation.NavController
+import com.google.accompanist.drawablepainter.rememberDrawablePainter
 import com.maxkeppeker.sheets.core.models.base.rememberSheetState
 import com.sharipov.mynotificationmanager.R
 import com.sharipov.mynotificationmanager.navigation.Screens
@@ -99,7 +103,13 @@ fun NotificationDetailsBottomSheetContent(
     val dateFormat = SimpleDateFormat("dd.MM.yyyy HH:mm:ss", Locale.getDefault())
     val clipboardManager =
         LocalContext.current.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+    val context = LocalContext.current
 
+    val appIconDrawable : Drawable? = try {
+        notificationState.value?.let { context.packageManager.getApplicationIcon(it.packageName) }
+    } catch (e: PackageManager.NameNotFoundException) {
+        ContextCompat.getDrawable(context, R.drawable.ic_notifications)
+    }
     Surface(
         modifier = Modifier.wrapContentSize()
     ) {
@@ -109,17 +119,17 @@ fun NotificationDetailsBottomSheetContent(
                     .fillMaxWidth()
                     .padding(8.dp)
             ) {
-                Row(modifier = Modifier.padding(8.dp, 8.dp, 8.dp, 8.dp)) {
-                    Icon(
-                        imageVector = Icons.Filled.Notifications,
-                        contentDescription = "icon",
-                        tint = MaterialTheme.colorScheme.primary,
+                Row(modifier = Modifier.padding(8.dp)) {
+                    Image(
+                        painter = rememberDrawablePainter(appIconDrawable),
+                        contentDescription = "App icon",
                         modifier = Modifier
-                            .padding(8.dp, 8.dp, 8.dp, 8.dp)
+                            .padding(8.dp)
                             .size(56.dp)
-                            .align(Alignment.CenterVertically),
+                            .align(Alignment.CenterVertically)
+                            .clip(CircleShape),
                     )
-                    Column(Modifier.padding(16.dp, 16.dp, 16.dp, 16.dp)) {
+                    Column(Modifier.padding(16.dp)) {
                         Row {
                             Text(stringResource(id = R.string.from) + " ")
                             Text(
