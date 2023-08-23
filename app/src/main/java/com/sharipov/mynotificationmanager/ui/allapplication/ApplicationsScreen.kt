@@ -17,7 +17,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import com.sharipov.mynotificationmanager.ui.bottombarcomponent.BottomBar
 import com.sharipov.mynotificationmanager.R
 import com.sharipov.mynotificationmanager.navigation.Screens
-import com.sharipov.mynotificationmanager.ui.conversations.component.ApplicationItem
+import com.sharipov.mynotificationmanager.ui.allapplication.component.ApplicationItem
 import com.sharipov.mynotificationmanager.utils.TransparentSystemBars
 import com.sharipov.mynotificationmanager.utils.Constants
 import com.sharipov.mynotificationmanager.viewmodel.HomeViewModel
@@ -74,8 +74,11 @@ fun ApplicationsScreen(
 
                 items(applicationListState.value.size) { index ->
                     val packageName = applicationListState.value[index]
+                    val notificationCountFlow = homeViewModel.getApplicationsNotificationsCount(packageName)
+                    val notificationCount by notificationCountFlow.collectAsState(initial = 0)
                     ApplicationItem(
                         packageName = packageName,
+                        notificationCount = notificationCount,
                         modifier = Modifier
                             .fillMaxSize()
                             .padding(16.dp, 16.dp, 16.dp)

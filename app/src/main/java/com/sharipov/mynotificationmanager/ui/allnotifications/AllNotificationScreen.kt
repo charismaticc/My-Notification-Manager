@@ -1,9 +1,7 @@
 package com.sharipov.mynotificationmanager.ui.allnotifications
 
 import android.annotation.SuppressLint
-import android.os.Build
 import androidx.activity.compose.BackHandler
-import androidx.annotation.RequiresApi
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.clickable
@@ -38,7 +36,6 @@ import java.util.Calendar
 import java.util.Locale
 import kotlin.system.exitProcess
 
-@RequiresApi(Build.VERSION_CODES.O)
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter", "RememberReturnType")
 @Composable
 fun AllNotificationScreen(
@@ -160,7 +157,6 @@ fun AllNotificationScreen(
     }
 }
 
-@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun getDummy(homeViewModel: HomeViewModel): List<Int> {
     val dateList = mutableListOf<Int>()
@@ -175,7 +171,6 @@ fun getDummy(homeViewModel: HomeViewModel): List<Int> {
     return dateList
 }
 
-@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun getNotificationFlow(
     homeViewModel: HomeViewModel,

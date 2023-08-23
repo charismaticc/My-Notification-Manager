@@ -77,6 +77,10 @@ interface NotificationDao {
     @Query("SELECT DISTINCT packageName FROM notification")
     fun getApplications(): Flow<List<String>>
 
+    // Get application notification count
+    @Query("SELECT COUNT(*) FROM notification WHERE packageName = :packageName")
+    fun getApplicationsCount(packageName: String): Flow<Int>
+
     // Get all notifications for a specific application package
     @Query("SELECT DISTINCT user, `group` FROM notification WHERE packageName = :packageName")
     fun getApplicationUserNames(packageName: String): Flow<List<UserGroup>>
