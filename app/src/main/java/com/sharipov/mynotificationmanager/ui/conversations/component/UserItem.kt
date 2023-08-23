@@ -40,7 +40,7 @@ fun UserItem(
     val coroutineScope = rememberCoroutineScope()
     Card(
         modifier = modifier,
-        elevation = CardDefaults.cardElevation(),
+        elevation = CardDefaults.cardElevation(4.dp),
     ) {
         Box(modifier = Modifier
             .fillMaxSize()
