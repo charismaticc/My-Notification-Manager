@@ -123,5 +123,6 @@ fun FeedBackBottomSheetContent() {
                 )
             }
         }
+        Spacer(modifier = Modifier.padding(24.dp))
     }
 }

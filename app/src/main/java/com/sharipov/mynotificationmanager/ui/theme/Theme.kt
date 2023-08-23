@@ -3,7 +3,11 @@ package com.sharipov.mynotificationmanager.ui.theme
 import android.app.Activity
 import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.TopAppBarColors
+import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.contentColorFor
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.dynamicDarkColorScheme
 import androidx.compose.material3.dynamicLightColorScheme
@@ -14,6 +18,7 @@ import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
 import androidx.core.view.ViewCompat
+import com.sharipov.mynotificationmanager.data.PreferencesManager
 
 private val DarkColorScheme = darkColorScheme(
     primary = Purple80,
@@ -65,4 +70,18 @@ fun MyNotificationManagerTheme(
         typography = Typography,
         content = content
     )
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun topBarColorScheme(): TopAppBarColors {
+    val topAppBarColors = TopAppBarDefaults.topAppBarColors(
+        containerColor = MaterialTheme.colorScheme.primary,
+        titleContentColor = contentColorFor(MaterialTheme.colorScheme.primary),
+        actionIconContentColor = contentColorFor(MaterialTheme.colorScheme.primary),
+        navigationIconContentColor = contentColorFor(MaterialTheme.colorScheme.primary),
+    )
+
+    return if (PreferencesManager.getThemeStyle(context = LocalContext.current) == "light_theme" || (!isSystemInDarkTheme() && PreferencesManager.getThemeStyle(context = LocalContext.current) == "system_theme")) topAppBarColors
+    else TopAppBarDefaults.centerAlignedTopAppBarColors()
 }

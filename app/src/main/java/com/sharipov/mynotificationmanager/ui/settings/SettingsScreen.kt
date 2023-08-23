@@ -28,6 +28,7 @@ import com.sharipov.mynotificationmanager.ui.settings.components.dialogs.private
 import com.sharipov.mynotificationmanager.utils.Constants
 import com.sharipov.mynotificationmanager.ui.settings.components.ClickableListItem
 import com.sharipov.mynotificationmanager.ui.settings.components.dialogs.selectThemeDialog
+import com.sharipov.mynotificationmanager.ui.theme.topBarColorScheme
 import com.sharipov.mynotificationmanager.utils.TransparentSystemBars
 import com.sharipov.mynotificationmanager.utils.setChanges
 import com.sharipov.mynotificationmanager.viewmodel.HomeViewModel
@@ -64,7 +65,8 @@ fun SettingsScreen(
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis
                     )
-                }
+                },
+                colors = topBarColorScheme()
             )
         },
         bottomBar = {
@@ -83,7 +85,7 @@ fun SettingsScreen(
             userScrollEnabled = true
         ) {
 
-            item { Spacer(modifier = Modifier.height(48.dp)) }
+            item { Spacer(modifier = Modifier.height(64.dp)) }
 
             item {
                 ClickableListItem(

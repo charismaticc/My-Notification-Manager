@@ -75,7 +75,7 @@ fun AboutUsDialogContent() {
             Column(modifier = Modifier.padding(start = 16.dp)) {
                 Text(
                     text = stringResource(id = R.string.app_name),
-                    style = MaterialTheme.typography.titleMedium
+                    style = MaterialTheme.typography.titleLarge
                 )
                 Text(
                     text = stringResource(id = R.string.developer),
@@ -104,6 +104,6 @@ fun AboutUsDialogContent() {
                 style = MaterialTheme.typography.titleMedium
             )
         }
-        Spacer(modifier = Modifier.padding(32.dp))
+        Spacer(modifier = Modifier.padding(24.dp))
     }
 }

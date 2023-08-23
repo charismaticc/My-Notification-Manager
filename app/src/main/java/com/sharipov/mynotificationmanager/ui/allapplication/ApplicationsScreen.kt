@@ -18,6 +18,7 @@ import com.sharipov.mynotificationmanager.ui.bottombarcomponent.BottomBar
 import com.sharipov.mynotificationmanager.R
 import com.sharipov.mynotificationmanager.navigation.Screens
 import com.sharipov.mynotificationmanager.ui.allapplication.component.ApplicationItem
+import com.sharipov.mynotificationmanager.ui.theme.topBarColorScheme
 import com.sharipov.mynotificationmanager.utils.TransparentSystemBars
 import com.sharipov.mynotificationmanager.utils.Constants
 import com.sharipov.mynotificationmanager.viewmodel.HomeViewModel
@@ -46,7 +47,8 @@ fun ApplicationsScreen(
                         maxLines = 1,
                         overflow = TextOverflow.Ellipsis
                     )
-                }
+                },
+                colors = topBarColorScheme()
             )
         },
         bottomBar = {
@@ -71,7 +73,7 @@ fun ApplicationsScreen(
             LazyColumn(
                 verticalArrangement = Arrangement.spacedBy(8.dp)
             ) {
-
+                item { Spacer(modifier = Modifier.padding(8.dp)) }
                 items(applicationListState.value.size) { index ->
                     val packageName = applicationListState.value[index]
                     val notificationCountFlow = homeViewModel.getApplicationsNotificationsCount(packageName)

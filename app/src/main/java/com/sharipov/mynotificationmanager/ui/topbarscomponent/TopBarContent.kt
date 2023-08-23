@@ -20,10 +20,10 @@ import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.CenterAlignedTopAppBar
-import androidx.compose.material3.Divider
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedTextField
@@ -48,6 +48,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.google.accompanist.drawablepainter.rememberDrawablePainter
 import com.sharipov.mynotificationmanager.R
+import com.sharipov.mynotificationmanager.ui.theme.topBarColorScheme
 import com.sharipov.mynotificationmanager.viewmodel.HomeViewModel
 
 
@@ -76,6 +77,7 @@ fun SearchTopBarContent(
                 )
             }
         },
+        colors = topBarColorScheme()
     )
     SearchOutlineTextFiled(searchVisible, searchText, onSearchTextChange, onSearchClick)
 }
@@ -91,12 +93,15 @@ fun TopBarContent(
     CenterAlignedTopAppBar(
         title = {
             Row(
-                verticalAlignment = Alignment.CenterVertically) {
-                if(appIcon != null) {
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                if (appIcon != null) {
                     Image(
                         painter = rememberDrawablePainter(appIcon),
                         contentDescription = null,
-                        modifier = Modifier.size(48.dp).clip(CircleShape)
+                        modifier = Modifier
+                            .size(48.dp)
+                            .clip(CircleShape)
                     )
                 }
                 Text(
@@ -104,7 +109,8 @@ fun TopBarContent(
                     maxLines = 1,
                     modifier = Modifier.padding(start = 8.dp),
                     overflow = TextOverflow.Ellipsis
-                )}
+                )
+            }
         },
         navigationIcon = {
             IconButton(onClick = { onNavigationClick() }) {
@@ -114,6 +120,7 @@ fun TopBarContent(
                 )
             }
         },
+        colors = topBarColorScheme()
     )
 }
 
@@ -137,7 +144,7 @@ fun ChatTopBarContent(
     CenterAlignedTopAppBar(
         title = {
             Text(
-                text = if(group == "not_group") userName else group,
+                text = if (group == "not_group") userName else group,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
                 modifier = Modifier.basicMarquee()
@@ -186,7 +193,7 @@ fun ChatTopBarContent(
                     },
                 )
 
-                Divider()
+                HorizontalDivider()
 
                 DropdownMenuItem(
                     text = {
@@ -203,7 +210,8 @@ fun ChatTopBarContent(
                     }
                 )
             }
-        }
+        },
+        colors = topBarColorScheme()
     )
     SearchOutlineTextFiled(searchVisible, searchText, onSearchTextChange, onSearchClick)
 }
@@ -214,7 +222,7 @@ fun SearchOutlineTextFiled(
     text: String,
     onSearchTextChange: (String) -> Unit,
     onSearchClick: () -> Unit,
-    ) {
+) {
 
     val focusRequester = remember { FocusRequester() }
 
