@@ -43,6 +43,7 @@ import com.sharipov.mynotificationmanager.R
 import com.sharipov.mynotificationmanager.utils.exportDatabase
 import com.sharipov.mynotificationmanager.utils.importDatabase
 import com.sharipov.mynotificationmanager.utils.getFileNameFromUri
+import com.sharipov.mynotificationmanager.utils.shareFile
 import com.sharipov.mynotificationmanager.viewmodel.HomeViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -222,14 +223,25 @@ fun ExportScreen(context: Context, homeViewModel: HomeViewModel) {
                     }
                 }
                 if(exportStatus.first) {
-                    Row{
-                        Text(text = stringResource(id = R.string.file_name))
-                        Text(
-                            text = "${exportStatus.second}_backup.json",
-                            modifier = Modifier.basicMarquee(),
-                            maxLines = 1
-                        )
+                    Column {
+                        Row{
+                            Text(text = stringResource(id = R.string.file_name))
+                            Text(
+                                text = "${exportStatus.second}_backup.json",
+                                modifier = Modifier.basicMarquee(),
+                                maxLines = 1
+                            )
+                        }
+                        Button(
+                            modifier = Modifier.fillMaxWidth().padding(top = 16.dp, bottom = 16.dp),
+                            onClick = {
+                                shareFile(context = context, fileName = "${exportStatus.second}_backup.json")
+                            }
+                        ) {
+                            Text(text = stringResource(id = R.string.share))
+                        }
                     }
+
                 }
             }
         }

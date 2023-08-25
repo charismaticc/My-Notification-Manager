@@ -2,9 +2,11 @@ package com.sharipov.mynotificationmanager.utils
 
 import android.content.ContentResolver
 import android.content.Context
+import android.content.Intent
 import android.net.Uri
 import android.os.Environment
 import android.widget.Toast
+import androidx.core.content.FileProvider
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.sharipov.mynotificationmanager.R
@@ -74,4 +76,25 @@ fun importDatabase(context: Context, homeViewModel: HomeViewModel, uri: Uri?): P
         val status =  context.getString(R.string.error_the_file_is_corrupted)
         return Pair(false, status)
     }
+}
+
+fun shareFile(context: Context, fileName: String) {
+    val fileProviderAuthority = "com.sharipov.mynotificationmanager.fileprovider"
+    val exportFile = File(
+        File(
+            File(
+                Environment.getExternalStorageDirectory(),
+                Environment.DIRECTORY_DOCUMENTS
+            ),
+            "Notification manager"
+        ),
+        "backups/$fileName"
+    )
+    val fileUri = FileProvider.getUriForFile(context, fileProviderAuthority, exportFile)
+    val shareIntent = Intent(Intent.ACTION_SEND).apply {
+        type = "application/text"
+        putExtra(Intent.EXTRA_STREAM, fileUri)
+    }
+    val chooserIntent = Intent.createChooser(shareIntent, null)
+    context.startActivity(chooserIntent)
 }
