@@ -13,8 +13,8 @@ android {
         applicationId "com.sharipov.mynotificationmanager"
         minSdk 26
         targetSdk 34
-        versionCode 26
-        versionName "1.0.7"
+        versionCode 27
+        versionName "1.0.8"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
@@ -126,4 +126,7 @@ dependencies {
 
     implementation "androidx.activity:activity-compose:1.8.0-alpha06"
     implementation "androidx.compose.ui:ui-tooling:1.5.0"
+
+    implementation 'com.airbnb.android:lottie:3.4.0'
+    implementation 'com.airbnb.android:lottie-compose:6.0.1'
 }
