@@ -75,11 +75,13 @@ fun ApplicationsScreen(
             ) {
                 item { Spacer(modifier = Modifier.padding(8.dp)) }
                 items(applicationListState.value.size) { index ->
-                    val packageName = applicationListState.value[index]
+                    val packageName = applicationListState.value[index].packageName
+                    val appName = applicationListState.value[index].appName
                     val notificationCountFlow = homeViewModel.getApplicationsNotificationsCount(packageName)
                     val notificationCount by notificationCountFlow.collectAsState(initial = 0)
                     ApplicationItem(
                         packageName = packageName,
+                        appName = appName,
                         notificationCount = notificationCount,
                         modifier = Modifier
                             .fillMaxSize()

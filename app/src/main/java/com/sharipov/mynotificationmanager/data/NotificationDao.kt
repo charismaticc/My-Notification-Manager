@@ -1,6 +1,7 @@
 package com.sharipov.mynotificationmanager.data
 
 import androidx.room.*
+import com.sharipov.mynotificationmanager.model.Application
 import com.sharipov.mynotificationmanager.model.NotificationEntity
 import com.sharipov.mynotificationmanager.model.UserGroup
 import kotlinx.coroutines.flow.Flow
@@ -74,8 +75,8 @@ interface NotificationDao {
     fun getFavoriteNotifications(): Flow<List<NotificationEntity>>
 
     // Get all distinct application package names
-    @Query("SELECT DISTINCT packageName FROM notification")
-    fun getApplications(): Flow<List<String>>
+    @Query("SELECT DISTINCT notification.packageName, notification.appName FROM notification")
+    fun getApplications(): Flow<List<Application>>
 
     // Get application notification count
     @Query("SELECT COUNT(*) FROM notification WHERE packageName = :packageName")

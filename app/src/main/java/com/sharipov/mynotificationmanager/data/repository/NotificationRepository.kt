@@ -1,12 +1,12 @@
 package com.sharipov.mynotificationmanager.data.repository
 
 import com.sharipov.mynotificationmanager.data.NotificationDao
+import com.sharipov.mynotificationmanager.model.Application
 import com.sharipov.mynotificationmanager.model.NotificationEntity
 import com.sharipov.mynotificationmanager.model.UserGroup
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOn
-import kotlinx.coroutines.withContext
 
 class NotificationRepository(
     private val notificationDao: NotificationDao
@@ -23,7 +23,7 @@ class NotificationRepository(
         notificationDao.searchUserNotifications(group, userName, packageName, query)
     fun getFavoriteNotifications(): Flow<List<NotificationEntity>> =
         notificationDao.getFavoriteNotifications()
-    fun getApplications(): Flow<List<String>> =
+    fun getApplications(): Flow<List<Application>>  =
         notificationDao.getApplications()
     fun getApplicationsNotificationsCount(packageName: String) =
             notificationDao.getApplicationsCount(packageName).flowOn(Dispatchers.IO)

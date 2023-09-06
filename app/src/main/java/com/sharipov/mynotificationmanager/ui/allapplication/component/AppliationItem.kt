@@ -11,7 +11,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
@@ -22,6 +21,7 @@ import com.sharipov.mynotificationmanager.R
 @Composable
 fun ApplicationItem(
     packageName: String,
+    appName: String,
     notificationCount: Int,
     modifier: Modifier
 ) {
@@ -33,15 +33,6 @@ fun ApplicationItem(
         context.packageManager.getApplicationIcon(packageName)
     } catch (e: PackageManager.NameNotFoundException) {
         ContextCompat.getDrawable(context, R.drawable.ic_android)
-    }
-
-    // get app name
-    val appName = try {
-        context.packageManager.getApplicationLabel(
-            context.packageManager.getApplicationInfo(packageName, 0)
-        ).toString()
-    } catch (e: PackageManager.NameNotFoundException) {
-        stringResource(id = R.string.unknown)
     }
 
     Card(

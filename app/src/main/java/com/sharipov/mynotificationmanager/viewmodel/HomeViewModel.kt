@@ -2,6 +2,7 @@ package com.sharipov.mynotificationmanager.viewmodel
 
 import androidx.lifecycle.ViewModel
 import com.sharipov.mynotificationmanager.data.repository.NotificationRepository
+import com.sharipov.mynotificationmanager.model.Application
 import com.sharipov.mynotificationmanager.model.NotificationEntity
 import com.sharipov.mynotificationmanager.model.UserGroup
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -18,7 +19,7 @@ interface HomeViewModelAbstract {
     fun searchNotificationsInGroup(group: String, packageName: String, query: String): Flow<List<NotificationEntity>>
     fun getAllUserNotifications(group: String, userName: String, packageName: String): Flow<List<NotificationEntity>>
     fun searchUserNotifications(group: String, userName: String, packageName: String, query: String): Flow<List<NotificationEntity>>
-    fun getApplications(): Flow<List<String>>
+    fun getApplications(): Flow<List<Application>>
     fun getApplicationsNotificationsCount(packageName: String): Flow<Int>
     fun getApplicationUserNames(packageName: String): Flow<List<UserGroup>>
     fun getFavoriteNotifications(): Flow<List<NotificationEntity>>
