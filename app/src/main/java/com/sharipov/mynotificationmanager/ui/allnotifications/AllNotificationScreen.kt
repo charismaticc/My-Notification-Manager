@@ -23,9 +23,10 @@ import com.sharipov.mynotificationmanager.ui.bottombarcomponent.BottomBar
 import com.sharipov.mynotificationmanager.R
 import com.sharipov.mynotificationmanager.model.NotificationEntity
 import com.sharipov.mynotificationmanager.navigation.Screens
+import com.sharipov.mynotificationmanager.ui.allnotifications.component.AppInfo
 import com.sharipov.mynotificationmanager.ui.allnotifications.component.MyFloatingActionButton
 import com.sharipov.mynotificationmanager.ui.allnotifications.component.NotificationItem
-import com.sharipov.mynotificationmanager.ui.allnotifications.component.bottomSheet
+import com.sharipov.mynotificationmanager.ui.allnotifications.component.filterSheet
 import com.sharipov.mynotificationmanager.ui.topbarscomponent.SearchTopBarContent
 import com.sharipov.mynotificationmanager.utils.TransparentSystemBars
 import com.sharipov.mynotificationmanager.utils.Constants
@@ -35,7 +36,6 @@ import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
 import kotlin.system.exitProcess
-
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter", "RememberReturnType")
 @Composable
 fun AllNotificationScreen(
@@ -56,6 +56,16 @@ fun AllNotificationScreen(
     var showStatistic by remember { mutableStateOf(false) }
     val dates = getWeekDays()
     val dummyData = getDummy(homeViewModel)
+    val applicationListState = homeViewModel.getApplications().collectAsState(initial = listOf())
+
+    val initialApplications = applicationListState.value.map { application ->
+        AppInfo(packageName = application.packageName, appName = application.appName, isActive = true)
+    }
+    var applications: MutableState<List<AppInfo>> = remember { mutableStateOf(emptyList()) }
+
+    if(initialApplications.isNotEmpty()) {
+        applications = mutableStateOf(initialApplications)
+    }
 
     TransparentSystemBars()
 
@@ -150,7 +160,7 @@ fun AllNotificationScreen(
                     item { Spacer(modifier = Modifier.height(156.dp)) }
                 }
             }
-            data = bottomSheet(showFilters) { showFilters = false }
+            data = filterSheet(showFilters, applications) { showFilters = false }
             fromDate = data.split(":")[0]
             toDate = data.split(":")[1]
         }

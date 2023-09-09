@@ -6,7 +6,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.material3.Divider
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -43,7 +43,7 @@ fun AllApplication(
             .padding(16.dp)
     ) {
         Image(
-            painter = if (whichListIsDisplayed) painterResource(id = R.drawable.ic_notifications)
+            painter = if (whichListIsDisplayed) painterResource(id = R.drawable.ic_notifications_2)
                     else painterResource(id = R.drawable.ic_notifications_off),
             contentDescription = null,
             modifier = Modifier.size(48.dp),
@@ -67,5 +67,5 @@ fun AllApplication(
             }
         )
     }
-    Divider(color = Color.Gray, thickness = 1.dp)
+    HorizontalDivider(thickness = 1.dp, color = Color.Gray)
 }
