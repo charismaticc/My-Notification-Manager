@@ -42,9 +42,11 @@ fun SplashScreen(
     UpdateApplicationList(settingsViewModel = settingsViewModel)
     TransparentSystemBars()
 
+    Splash(context)
+
     LaunchedEffect(key1 = true) {
         startAnimate = true
-        delay(4000)
+        delay(1500)
 
         val autoDeleteTimeout = settingsViewModel.getAppSettings()?.autoDeleteTimeoutLong ?: 0L
 
@@ -58,8 +60,6 @@ fun SplashScreen(
 
         navController.navigate(Screens.AllNotifications.route)
     }
-
-    Splash(context)
 }
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
