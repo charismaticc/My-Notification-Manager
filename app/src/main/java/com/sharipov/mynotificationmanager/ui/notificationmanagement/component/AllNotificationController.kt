@@ -25,7 +25,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.sharipov.mynotificationmanager.R
-import com.sharipov.mynotificationmanager.data.PreferencesManager
+import com.sharipov.mynotificationmanager.data.ThemePreferences
 import com.sharipov.mynotificationmanager.viewmodel.SettingsViewModel
 
 @Composable
@@ -47,7 +47,11 @@ fun AllApplication(
                     else painterResource(id = R.drawable.ic_notifications_off),
             contentDescription = null,
             modifier = Modifier.size(48.dp),
-            colorFilter = ColorFilter.tint(if (PreferencesManager.getThemeStyle(context) == "dark_theme") Color.White else Color.DarkGray)
+            colorFilter = ColorFilter
+                .tint(
+                    if (ThemePreferences.getThemeMode(context) == "dark_theme") Color.White
+                    else Color.DarkGray
+                )
         )
         Text(
             text = stringResource(id = R.string.all_notification),
@@ -59,7 +63,7 @@ fun AllApplication(
             checked = isChecked,
             onCheckedChange = { newValue ->
                 isChecked = newValue
-                if(whichListIsDisplayed) {
+                if (whichListIsDisplayed) {
                     settingsViewModel.setExcludedStatusForAllNotifications(isChecked)
                 } else {
                     settingsViewModel.setBlockedStatusForAllNotifications(isBlocked = isChecked)

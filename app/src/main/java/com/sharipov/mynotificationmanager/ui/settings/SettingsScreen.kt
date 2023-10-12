@@ -15,22 +15,23 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.currentBackStackEntryAsState
-import com.sharipov.mynotificationmanager.ui.bottombarcomponent.BottomBar
-import com.sharipov.mynotificationmanager.data.PreferencesManager
 import com.sharipov.mynotificationmanager.R
+import com.sharipov.mynotificationmanager.data.PreferencesManager
+import com.sharipov.mynotificationmanager.data.ThemePreferences
 import com.sharipov.mynotificationmanager.navigation.Screens
+import com.sharipov.mynotificationmanager.ui.bottombarcomponent.BottomBar
+import com.sharipov.mynotificationmanager.ui.settings.components.ClickableListItem
 import com.sharipov.mynotificationmanager.ui.settings.components.dialogs.LanguageDialog
 import com.sharipov.mynotificationmanager.ui.settings.components.dialogs.aboutUsDialog
 import com.sharipov.mynotificationmanager.ui.settings.components.dialogs.autoRemoveDialog
 import com.sharipov.mynotificationmanager.ui.settings.components.dialogs.exportImportDialog
 import com.sharipov.mynotificationmanager.ui.settings.components.dialogs.feedbackDialog
 import com.sharipov.mynotificationmanager.ui.settings.components.dialogs.privatePolicyDialog
-import com.sharipov.mynotificationmanager.utils.Constants
-import com.sharipov.mynotificationmanager.ui.settings.components.ClickableListItem
 import com.sharipov.mynotificationmanager.ui.settings.components.dialogs.selectThemeDialog
 import com.sharipov.mynotificationmanager.ui.theme.topBarColorScheme
+import com.sharipov.mynotificationmanager.utils.Constants
 import com.sharipov.mynotificationmanager.utils.TransparentSystemBars
-import com.sharipov.mynotificationmanager.utils.setChanges
+import com.sharipov.mynotificationmanager.utils.setLocaleBasedOnUserPreferences
 import com.sharipov.mynotificationmanager.viewmodel.HomeViewModel
 import com.sharipov.mynotificationmanager.viewmodel.SettingsViewModel
 
@@ -170,7 +171,7 @@ fun SettingsScreen(
             openLanguageDialog.value -> LanguageDialog(
                 onLanguageSelected = { selectedLanguage ->
                     PreferencesManager.saveSelectedLanguage(context, selectedLanguage)
-                    setChanges(context)
+                    setLocaleBasedOnUserPreferences(context)
                     if (context is Activity) {
                         context.recreate()
                     }
@@ -182,8 +183,11 @@ fun SettingsScreen(
 
             openThemeDialog.value -> {
                 openThemeDialog.value = selectThemeDialog(
-                    onThemeSelected = { selectThemeDialog ->
-                        PreferencesManager.updateThemeStyle(context, selectThemeDialog)
+                    onThemeModeSelected = { mode ->
+                        ThemePreferences.updateThemeMode(context, mode)
+                    },
+                    onThemeStyleSelected = { theme ->
+                        ThemePreferences.updateSelectedTheme(context, theme)
                         if (context is Activity) {
                             context.recreate()
                         }

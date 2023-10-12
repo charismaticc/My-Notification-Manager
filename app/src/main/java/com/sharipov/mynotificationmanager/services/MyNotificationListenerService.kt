@@ -34,6 +34,7 @@ class MyNotificationListenerService : NotificationListenerService() {
         notificationDao = database.notificationDao()
         excludedAppDao = database.excludedAppDao()
         context = applicationContext
+        database.close()
     }
 
     @RequiresApi(Build.VERSION_CODES.S)

@@ -22,6 +22,7 @@ interface HomeViewModelAbstract {
     fun getApplications(): Flow<List<Application>>
     fun getApplicationsNotificationsCount(packageName: String): Flow<Int>
     fun getApplicationUserNames(packageName: String): Flow<List<UserGroup>>
+    fun getNotificationsByAppNames(packageName: List<String>): Flow<List<NotificationEntity>>
     fun getFavoriteNotifications(): Flow<List<NotificationEntity>>
     fun searchNotifications(query: String): Flow<List<NotificationEntity>>
     fun getNotificationsFromData(fromDate: Long?, toDate: Long?): Flow<List<NotificationEntity>>
@@ -72,6 +73,9 @@ class HomeViewModel
 
     override fun getApplicationUserNames(packageName: String) =
         notificationRepository.getApplicationUserNames(packageName)
+
+    override fun getNotificationsByAppNames(packageName: List<String>) =
+        notificationRepository.getNotificationsByAppNames(packageName)
 
     override fun addNotification(notification: NotificationEntity) {
         ioScope.launch {

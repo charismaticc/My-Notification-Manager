@@ -13,7 +13,6 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.annotation.RequiresApi
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -28,12 +27,11 @@ import com.google.android.play.core.install.model.AppUpdateType
 import com.google.android.play.core.install.model.InstallStatus
 import com.google.android.play.core.install.model.UpdateAvailability
 import com.google.android.play.core.ktx.isFlexibleUpdateAllowed
-import com.google.android.play.core.ktx.isImmediateUpdateAllowed
-import com.sharipov.mynotificationmanager.data.PreferencesManager
-import com.sharipov.mynotificationmanager.ui.theme.MyNotificationManagerTheme
-import com.sharipov.mynotificationmanager.viewmodel.HomeViewModel
 import com.sharipov.mynotificationmanager.navigation.SetupNavHost
-import com.sharipov.mynotificationmanager.utils.setChanges
+import com.sharipov.mynotificationmanager.ui.theme.MyNotificationManagerTheme
+import com.sharipov.mynotificationmanager.ui.theme.getThemeMode
+import com.sharipov.mynotificationmanager.utils.setLocaleBasedOnUserPreferences
+import com.sharipov.mynotificationmanager.viewmodel.HomeViewModel
 import com.sharipov.mynotificationmanager.viewmodel.SettingsViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.delay
@@ -49,34 +47,23 @@ class MainActivity : ComponentActivity() {
     @RequiresApi(Build.VERSION_CODES.R)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         appUpdateManager = AppUpdateManagerFactory.create(applicationContext)
-        if(updateType == AppUpdateType.FLEXIBLE) {
-            appUpdateManager.registerListener(installStateUpdateListener)
-        }
+        appUpdateManager.registerListener(installStateUpdateListener)
+
         checkForAppUpdate()
-        // Request permission to listen to notifications
-        if (!NotificationManagerCompat.getEnabledListenerPackages(this).contains(packageName)) {
-            val intent = Intent(Settings.ACTION_NOTIFICATION_LISTENER_SETTINGS)
-            startActivity(intent)
-        }
 
-        if (!isBatteryOptimizationIgnored()) {
-            requestBatteryOptimization()
-        }
+        val permission = getPermissionList()
+        val needGetAnyPermission = permission.any { it.second }
 
-        setChanges(this)
+        setLocaleBasedOnUserPreferences(this)
 
         val homeViewModel: HomeViewModel by viewModels()
         val settingsViewModel: SettingsViewModel by viewModels()
 
-        setContent  {
+        setContent {
 
-            val theme = when (PreferencesManager.getThemeStyle(this)) {
-                "dark_theme" -> true
-                "light_theme" -> false
-                "system_theme" -> isSystemInDarkTheme()
-                else -> isSystemInDarkTheme()
-            }
+            val theme = getThemeMode(this)
 
             MyNotificationManagerTheme(theme) {
                 Surface(
@@ -84,20 +71,23 @@ class MainActivity : ComponentActivity() {
                     color = MaterialTheme.colorScheme.background
                 ) {
                     val navController = rememberNavController()
-                    SetupNavHost(homeViewModel, settingsViewModel, navController = navController)
+                    SetupNavHost(homeViewModel = homeViewModel,
+                        settingsViewModel = settingsViewModel,
+                        permission = if(needGetAnyPermission) permission else null,
+                        navController = navController)
                 }
             }
         }
     }
-    private fun checkForAppUpdate(){
+
+    private fun checkForAppUpdate() {
         appUpdateManager.appUpdateInfo.addOnSuccessListener { info ->
             val isUpdateAvailable = info.updateAvailability() == UpdateAvailability.UPDATE_AVAILABLE
-            val isUpdateAllowed = when(updateType) {
+            val isUpdateAllowed = when (updateType) {
                 AppUpdateType.FLEXIBLE -> info.isFlexibleUpdateAllowed
-                AppUpdateType.IMMEDIATE -> info.isImmediateUpdateAllowed
                 else -> false
             }
-            if(isUpdateAllowed && isUpdateAvailable) {
+            if (isUpdateAllowed && isUpdateAvailable) {
                 appUpdateManager.startUpdateFlowForResult(
                     info,
                     updateType,
@@ -109,7 +99,7 @@ class MainActivity : ComponentActivity() {
     }
 
     private val installStateUpdateListener = InstallStateUpdatedListener { state ->
-        if(state.installStatus() == InstallStatus.DOWNLOADED) {
+        if (state.installStatus() == InstallStatus.DOWNLOADED) {
             Toast.makeText(
                 applicationContext,
                 "Download successfully. Restarting app in 5 seconds...",
@@ -121,37 +111,35 @@ class MainActivity : ComponentActivity() {
             }
         }
     }
+
     override fun onResume() {
         super.onResume()
-        if(updateType == AppUpdateType.IMMEDIATE) {
-            appUpdateManager.appUpdateInfo.addOnSuccessListener { info ->
-                if (info.updateAvailability() == UpdateAvailability.DEVELOPER_TRIGGERED_UPDATE_IN_PROGRESS) {
-                    appUpdateManager.startUpdateFlowForResult(
-                        info,
-                        updateType,
-                        this,
-                        123
-                    )
-                }
+        appUpdateManager.appUpdateInfo.addOnSuccessListener { info ->
+            if (info.updateAvailability() == UpdateAvailability.DEVELOPER_TRIGGERED_UPDATE_IN_PROGRESS) {
+                appUpdateManager.startUpdateFlowForResult(
+                    info,
+                    updateType,
+                    this,
+                    123
+                )
             }
         }
     }
+
     @Deprecated("Deprecated in Java")
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if(resultCode != RESULT_OK) {
+        if (resultCode != RESULT_OK) {
             println("Something went wrong...")
         }
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        if (updateType == AppUpdateType.FLEXIBLE) {
-            appUpdateManager.unregisterListener(installStateUpdateListener)
-        }
+        appUpdateManager.unregisterListener(installStateUpdateListener)
     }
 
-    private val REQUEST_BATTERY_OPTIMIZATION = 1
+    private val requestBatteryOptimization = 1
 
     private fun isBatteryOptimizationIgnored(): Boolean {
         val powerManager = getSystemService(Context.POWER_SERVICE) as PowerManager
@@ -162,6 +150,32 @@ class MainActivity : ComponentActivity() {
     private fun requestBatteryOptimization() {
         val intent = Intent(Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS)
         intent.data = Uri.parse("package:$packageName")
-        startActivityForResult(intent, REQUEST_BATTERY_OPTIMIZATION)
+        startActivityForResult(intent, requestBatteryOptimization)
+    }
+
+    private fun getPermissionList(): List<Pair<String, Boolean>> {
+
+        val notificationListener =
+            !NotificationManagerCompat.getEnabledListenerPackages(this).contains(packageName)
+        val batteryOptimizationIgnore = !isBatteryOptimizationIgnored()
+
+        return listOf(
+            Pair("NotificationListener", notificationListener),
+            Pair("BatteryOptimizationIgnore", batteryOptimizationIgnore)
+        )
+    }
+
+    fun getPermission() {
+        val notificationListener =
+            !NotificationManagerCompat.getEnabledListenerPackages(this).contains(packageName)
+        val batteryOptimizationIgnore = !isBatteryOptimizationIgnored()
+
+        if (notificationListener) {
+            val intent = Intent(Settings.ACTION_NOTIFICATION_LISTENER_SETTINGS)
+            startActivity(intent)
+        }
+        if (batteryOptimizationIgnore) {
+            requestBatteryOptimization()
+        }
     }
 }

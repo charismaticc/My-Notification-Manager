@@ -35,6 +35,8 @@ class NotificationRepository(
         notificationDao.getNotificationsFromData(fromDate, toDate)
     fun getApplicationUserNames(packageName: String): Flow<List<UserGroup>> =
         notificationDao.getApplicationUserNames(packageName)
+    fun getNotificationsByAppNames(packageName: List<String>): Flow<List<NotificationEntity>> =
+        notificationDao.getNotificationsByAppNames(packageName)
     suspend fun deleteNotificationsForUser(group: String, user: String, packageName: String) =
         notificationDao.deleteNotificationsForUser(group, user, packageName)
     suspend fun deleteExpiredNotification(autoDeleteTimeout: Long) =

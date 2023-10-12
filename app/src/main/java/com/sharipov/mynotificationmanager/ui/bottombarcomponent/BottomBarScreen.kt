@@ -3,10 +3,12 @@ package com.sharipov.mynotificationmanager.ui.bottombarcomponent
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.sharipov.mynotificationmanager.R
@@ -29,7 +31,8 @@ fun BottomBar(
         Constants.Screens.SETTINGS_SCREEN to painterResource(id = R.drawable.ic_settings),
     )
     NavigationBar(
-        modifier = Modifier.fillMaxWidth().size(62.dp),
+        modifier = Modifier.fillMaxWidth().size(62.dp).shadow(16.dp),
+        containerColor = MaterialTheme.colorScheme.background
     ) {
         items.forEach { data ->
             NavigationBarItem(
@@ -53,6 +56,7 @@ fun BottomBar(
                     )
                 }
             )
+
         }
     }
 }

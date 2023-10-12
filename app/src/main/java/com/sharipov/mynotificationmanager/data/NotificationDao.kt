@@ -86,6 +86,10 @@ interface NotificationDao {
     @Query("SELECT DISTINCT user, `group` FROM notification WHERE packageName = :packageName")
     fun getApplicationUserNames(packageName: String): Flow<List<UserGroup>>
 
+    // Get all notifications for a specific applications
+    @Query("SELECT * FROM notification WHERE packageName IN (:packageName)")
+    fun getNotificationsByAppNames(packageName: List<String>): Flow<List<NotificationEntity>>
+
     // Check if a notification already exists for a specific user, text, package name, and app name
     @Query(
         "SELECT COUNT(*) FROM notification WHERE user = :user " +

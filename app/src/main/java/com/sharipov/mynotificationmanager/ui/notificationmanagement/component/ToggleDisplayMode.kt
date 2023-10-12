@@ -21,7 +21,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.sharipov.mynotificationmanager.R
-import com.sharipov.mynotificationmanager.data.PreferencesManager
+import com.sharipov.mynotificationmanager.data.ThemePreferences
 
 @Composable
 fun ToggleDisplayMode(whichListIsDisplayed: MutableState<Boolean>) {
@@ -68,9 +68,9 @@ fun ToggleDisplayMode(whichListIsDisplayed: MutableState<Boolean>) {
 
 @Composable
 fun toggleDisplayBackground(whichListIsDisplayed: Boolean, context: Context): Color {
-    return if (whichListIsDisplayed) {
-        if (PreferencesManager.getThemeStyle(context)  == "light_theme"
-            || (!isSystemInDarkTheme() && PreferencesManager.getThemeStyle(context) == "system_theme")
+    return if (!whichListIsDisplayed) {
+        if (ThemePreferences.getThemeMode(context)  == "light_theme"
+            || (!isSystemInDarkTheme() && ThemePreferences.getThemeMode(context) == "system_theme")
         ) {
             Color(android.graphics.Color.parseColor("#DCDCDC"))
         } else Color.DarkGray

@@ -14,7 +14,7 @@ android {
         minSdk 26
         targetSdk 34
         versionCode 27
-        versionName "1.0.8"
+        versionName "2.1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
@@ -129,4 +129,7 @@ dependencies {
 
     implementation 'com.airbnb.android:lottie:3.4.0'
     implementation 'com.airbnb.android:lottie-compose:6.0.1'
+
+    //leak canary
+    debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.12'
 }

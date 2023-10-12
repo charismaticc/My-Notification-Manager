@@ -41,8 +41,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.sharipov.mynotificationmanager.R
 import com.sharipov.mynotificationmanager.utils.exportDatabase
-import com.sharipov.mynotificationmanager.utils.importDatabase
 import com.sharipov.mynotificationmanager.utils.getFileNameFromUri
+import com.sharipov.mynotificationmanager.utils.importDatabase
 import com.sharipov.mynotificationmanager.utils.shareFile
 import com.sharipov.mynotificationmanager.viewmodel.HomeViewModel
 
@@ -119,7 +119,7 @@ fun ImportScreen(context: Context, homeViewModel: HomeViewModel) {
     Column(
         modifier = Modifier
             .wrapContentSize()
-            .padding(16.dp)
+            .padding(16.dp, bottom = 48.dp)
     ) {
         Text(
             text = stringResource(id = R.string.select_the_backup_file),
@@ -153,7 +153,7 @@ fun ImportScreen(context: Context, homeViewModel: HomeViewModel) {
                     importButtonStatus = !importStatus.first
                 }
             ) {
-                Text(text = stringResource(id = R.string.import_))
+                Text(text = stringResource(id = R.string.import_), color = Color.White,)
             }
         }
         if(importStatus.second != "") {
@@ -202,7 +202,7 @@ fun ExportScreen(context: Context, homeViewModel: HomeViewModel) {
                     exportButtonStatus = !exportStatus.first
                 }
             ) {
-                Text(text = stringResource(id = R.string.export))
+                Text(text = stringResource(id = R.string.export), color = Color.White,)
             }
         } else {
             HorizontalDivider(
@@ -238,7 +238,7 @@ fun ExportScreen(context: Context, homeViewModel: HomeViewModel) {
                                 shareFile(context = context, fileName = "${exportStatus.second}_backup.json")
                             }
                         ) {
-                            Text(text = stringResource(id = R.string.share))
+                            Text(text = stringResource(id = R.string.share), color = Color.White,)
                         }
                     }
 
@@ -273,7 +273,8 @@ fun FileSelectionButton(
     ) {
         Text(
             if(selectedFileUri != null) stringResource(id = R.string.select_another_file)
-            else stringResource(id = R.string.select_file)
+            else stringResource(id = R.string.select_file),
+            color = Color.White,
         )
     }
 }

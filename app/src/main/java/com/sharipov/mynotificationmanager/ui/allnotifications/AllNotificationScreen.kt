@@ -1,14 +1,30 @@
 package com.sharipov.mynotificationmanager.ui.allnotifications
 
 import android.annotation.SuppressLint
-import androidx.activity.compose.BackHandler
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
+import androidx.compose.material3.Card
+import androidx.compose.material3.FabPosition
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
@@ -19,53 +35,45 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.currentBackStackEntryAsState
-import com.sharipov.mynotificationmanager.ui.bottombarcomponent.BottomBar
 import com.sharipov.mynotificationmanager.R
 import com.sharipov.mynotificationmanager.model.NotificationEntity
 import com.sharipov.mynotificationmanager.navigation.Screens
-import com.sharipov.mynotificationmanager.ui.allnotifications.component.AppInfo
 import com.sharipov.mynotificationmanager.ui.allnotifications.component.MyFloatingActionButton
 import com.sharipov.mynotificationmanager.ui.allnotifications.component.NotificationItem
 import com.sharipov.mynotificationmanager.ui.allnotifications.component.filterSheet
+import com.sharipov.mynotificationmanager.ui.bottombarcomponent.BottomBar
 import com.sharipov.mynotificationmanager.ui.topbarscomponent.SearchTopBarContent
-import com.sharipov.mynotificationmanager.utils.TransparentSystemBars
 import com.sharipov.mynotificationmanager.utils.Constants
+import com.sharipov.mynotificationmanager.utils.TransparentSystemBars
 import com.sharipov.mynotificationmanager.utils.dateConverter
 import com.sharipov.mynotificationmanager.viewmodel.HomeViewModel
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
-import kotlin.system.exitProcess
-@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter", "RememberReturnType")
+
+@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter", "RememberReturnType",
+    "UnrememberedMutableState"
+)
 @Composable
 fun AllNotificationScreen(
     homeViewModel: HomeViewModel,
     navController: NavController,
 ) {
-
     val context = LocalContext.current
-    var searchVisible by remember { mutableStateOf(false) }
-    var searchText by remember { mutableStateOf("") }
+
+    var showSearch by remember { mutableStateOf(false) }
+    var showFilters by remember { mutableStateOf(false) }
+    var showStatistic by remember { mutableStateOf(false) }
     var data by remember { mutableStateOf("") }
     var fromDate by remember { mutableStateOf("") }
     var toDate by remember { mutableStateOf("") }
     val currentNavBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = currentNavBackStackEntry?.destination?.route ?: Constants.Screens.APPLICATION_SCREEN
+    var searchText by remember { mutableStateOf("") }
+
     val notificationFlow = getNotificationFlow(homeViewModel, searchText, fromDate, toDate)
-    var showFilters by remember { mutableStateOf(false) }
-    var showStatistic by remember { mutableStateOf(false) }
     val dates = getWeekDays()
     val dummyData = getDummy(homeViewModel)
-    val applicationListState = homeViewModel.getApplications().collectAsState(initial = listOf())
-
-    val initialApplications = applicationListState.value.map { application ->
-        AppInfo(packageName = application.packageName, appName = application.appName, isActive = true)
-    }
-    var applications: MutableState<List<AppInfo>> = remember { mutableStateOf(emptyList()) }
-
-    if(initialApplications.isNotEmpty()) {
-        applications = mutableStateOf(initialApplications)
-    }
 
     TransparentSystemBars()
 
@@ -73,8 +81,8 @@ fun AllNotificationScreen(
         topBar = {
             SearchTopBarContent(
                 title = stringResource(id = R.string.all_notification),
-                onSearchClick = { searchVisible = !searchVisible },
-                searchVisible = searchVisible,
+                onSearchClick = { showSearch = !showSearch },
+                searchVisible = showSearch,
                 searchText = searchText,
                 onSearchTextChange = { searchText = it }
             )
@@ -90,60 +98,45 @@ fun AllNotificationScreen(
             )
         },
         floatingActionButton = {
-            MyFloatingActionButton(onFiltersClick = { showFilters = !showFilters })
+            MyFloatingActionButton(
+                onFiltersClick = { showFilters = !showFilters }
+            )
         },
         floatingActionButtonPosition = FabPosition.End
     ) {
-        BackHandler {
-            if(searchVisible) {
-                searchVisible = false
-            } else if(showStatistic) {
-                showStatistic = false
-            } else if(navController.currentBackStackEntry?.destination?.route == Screens.AllNotifications.route) {
-                exitProcess(0)
-            }
-            else {
-                navController.popBackStack()
-            }
-        }
         Column(
             modifier = Modifier.fillMaxSize(),
             verticalArrangement = Arrangement.Top,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-
             Spacer(modifier = Modifier.padding(32.dp))
-
-            if (!searchVisible) {
+            if (!showSearch) {
                 Card(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(start = 16.dp, top = 8.dp, end = 16.dp, bottom = 8.dp)
-                        .clickable {
-                            showStatistic = !showStatistic
-                        }
+                        .clickable { showStatistic = !showStatistic }
                 ) {
+                    val statisticText =
+                        "${stringResource(id = R.string.count_of_your_notification)} ${
+                            if (!showStatistic) notificationFlow.size else dummyData.sum()
+                        }"
                     Text(
-                        text = "${stringResource(id = R.string.count_of_your_notification)} " +
-                                "${(if(!showStatistic) notificationFlow.size else dummyData.sum())}",
+                        text = statisticText,
                         modifier = Modifier
                             .align(Alignment.CenterHorizontally)
                             .padding(8.dp)
                     )
-                    AnimatedVisibility(
-                        visible = showStatistic
-                    ) {
+                    AnimatedVisibility(visible = showStatistic) {
                         BarChart(dates, dummyData)
                     }
                 }
-            }
-
-            if (searchVisible) {
+            } else {
                 Spacer(modifier = Modifier.padding(32.dp))
             }
 
             AnimatedVisibility(
-                visible = !searchVisible || searchText.isNotEmpty(),
+                visible = !showSearch || searchText.isNotEmpty(),
             ) {
                 LazyColumn(
                     modifier = Modifier.fillMaxSize()
@@ -160,25 +153,36 @@ fun AllNotificationScreen(
                     item { Spacer(modifier = Modifier.height(156.dp)) }
                 }
             }
-            data = filterSheet(showFilters, applications) { showFilters = false }
-            fromDate = data.split(":")[0]
-            toDate = data.split(":")[1]
+            data = filterSheet(showFilters) { showFilters = false }
+            val dateRange = data.split(":")
+            fromDate = dateRange.getOrElse(0) { "" }
+            toDate = dateRange.getOrElse(1) { "" }
         }
     }
 }
 
+//@Composable
+//fun getApplications(homeViewModel: HomeViewModel): MutableState<List<AppInfo>> {
+//    val applicationListState = homeViewModel.getApplications().collectAsState(initial = listOf())
+//
+//    return remember(applicationListState.value) {
+//        mutableStateOf(
+//            applicationListState.value.map { application ->
+//                AppInfo(packageName = application.packageName, appName = application.appName, isActive = true)
+//            }
+//        )
+//    }
+//}
+
 @Composable
 fun getDummy(homeViewModel: HomeViewModel): List<Int> {
-    val dateList = mutableListOf<Int>()
     val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
-    val calendar = Calendar.getInstance()
-    calendar.add(Calendar.DAY_OF_MONTH, -7)
-    for (i in 0..6) {
+    val calendar = Calendar.getInstance().apply { add(Calendar.DAY_OF_MONTH, -7) }
+    return (0..6).map {
         calendar.add(Calendar.DAY_OF_MONTH, 1)
         val data = dateFormat.format(calendar.time)
-        dateList += getNotificationFlow(homeViewModel, "", data, data).size
+        getNotificationFlow(homeViewModel, "", data, data).size
     }
-    return dateList
 }
 
 @Composable
@@ -188,29 +192,27 @@ fun getNotificationFlow(
     fromDate: String,
     toDate: String
 ): List<NotificationEntity> {
-    return if (searchText.isNotBlank()) {
-        homeViewModel.searchNotifications(searchText).collectAsState(emptyList()).value
-    } else if(fromDate.isNotBlank() || toDate.isNotBlank()) {
-        val fromDateLongValue = dateConverter("from", fromDate)
-        val toDateLongValue = dateConverter("to", toDate)
-        homeViewModel.getNotificationsFromData(fromDateLongValue, toDateLongValue).collectAsState(emptyList()).value
-    }else {
-        homeViewModel.notificationListFlow.collectAsState(emptyList()).value
+    return when {
+        searchText.isNotBlank() -> homeViewModel.searchNotifications(searchText).collectAsState(emptyList()).value
+        fromDate.isNotBlank() || toDate.isNotBlank() -> {
+            val fromDateLongValue = dateConverter("from", fromDate)
+            val toDateLongValue = dateConverter("to", toDate)
+            homeViewModel.getNotificationsFromData(fromDateLongValue, toDateLongValue).collectAsState(emptyList()).value
+        }
+        else -> homeViewModel.notificationListFlow.collectAsState(emptyList()).value
     }
 }
 
 fun getWeekDays(): List<String> {
     val calendar = Calendar.getInstance()
     val dateFormat = SimpleDateFormat("EE", Locale.getDefault())
-
-    val daysOfWeek = mutableListOf<String>()
-
-    for (i in 0 until 7) {
-        daysOfWeek.add(dateFormat.format(calendar.time))
+    return (0 until 7).map {
+        val date = dateFormat.format(calendar.time)
         calendar.add(Calendar.DAY_OF_WEEK, -1)
-    }
-    return daysOfWeek.reversed()
+        date
+    }.reversed()
 }
+
 @Composable
 fun BarChart(dates: List<String>, data: List<Int>, modifier: Modifier = Modifier) {
     var maxCount by remember { mutableIntStateOf(0) }
@@ -244,10 +246,10 @@ fun BarChart(dates: List<String>, data: List<Int>, modifier: Modifier = Modifier
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(top = 8.dp)
-                .height(300.dp) // Set the height of the chart
+                .height(300.dp)
         ) {
-            val barWidth = size.width / (data.size * 2) // Width of each bar
-            val spaceBetweenBars = size.width / (data.size * 4) // Space between bars
+            val barWidth = size.width / (data.size * 2)
+            val spaceBetweenBars = size.width / (data.size * 4)
 
             data.forEachIndexed { index, count ->
                 val barHeight = size.height * count / maxCount

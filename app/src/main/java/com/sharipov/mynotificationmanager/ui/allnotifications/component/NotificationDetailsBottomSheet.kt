@@ -34,6 +34,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
@@ -196,6 +197,7 @@ fun NotificationDetailsBottomSheetContent(
                     Text(
                         text = stringResource(id = R.string.copy),
                         modifier = Modifier.padding(8.dp),
+                        color = Color.White,
                         style = MaterialTheme.typography.titleSmall
                             .copy(fontWeight = FontWeight.Bold)
                     )
@@ -218,6 +220,7 @@ fun NotificationDetailsBottomSheetContent(
                     Text(
                         text = stringResource(id = R.string.delete),
                         modifier = Modifier.padding(8.dp),
+                        color = Color.White,
                         style = MaterialTheme.typography.titleSmall
                             .copy(fontWeight = FontWeight.Bold)
                     )
@@ -236,6 +239,7 @@ fun NotificationDetailsBottomSheetContent(
             ) {
                 Text(
                     text = stringResource(id = R.string.go_to_the_chat),
+                    color = Color.White,
                     modifier = Modifier.padding(8.dp),
                     style = MaterialTheme.typography.titleSmall
                         .copy(fontWeight = FontWeight.Bold)

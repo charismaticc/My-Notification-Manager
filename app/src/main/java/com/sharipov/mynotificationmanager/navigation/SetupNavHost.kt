@@ -4,11 +4,12 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import com.sharipov.mynotificationmanager.ui.PermissionScreen
+import com.sharipov.mynotificationmanager.ui.allapplication.ApplicationsScreen
 import com.sharipov.mynotificationmanager.ui.allnotifications.AllNotificationScreen
+import com.sharipov.mynotificationmanager.ui.chat.ChatScreen
 import com.sharipov.mynotificationmanager.ui.conversations.ConversationsScreen
 import com.sharipov.mynotificationmanager.ui.favorite.FavoriteScreen
-import com.sharipov.mynotificationmanager.ui.allapplication.ApplicationsScreen
-import com.sharipov.mynotificationmanager.ui.chat.ChatScreen
 import com.sharipov.mynotificationmanager.ui.notificationmanagement.NotificationManagement
 import com.sharipov.mynotificationmanager.ui.settings.SettingsScreen
 import com.sharipov.mynotificationmanager.ui.splashscreen.SplashScreen
@@ -25,6 +26,7 @@ sealed class Screens(val route: String){
     object Chat: Screens(route = Constants.Screens.CHAT_SCREEN)
     object AllNotifications: Screens(route = Constants.Screens.ALL_NOTIFICATIONS_SCREEN)
     object Favorite: Screens(route = Constants.Screens.FAVORITE_SCREEN)
+    object Permissions: Screens(route = Constants.Screens.PERMISSIONS_SCREEN)
     object NotificationManagement: Screens(route = Constants.Screens.NOTIFICATION_MANAGEMENT_SCREEN)
 }
 
@@ -32,6 +34,7 @@ sealed class Screens(val route: String){
 fun SetupNavHost(
     homeViewModel: HomeViewModel,
     settingsViewModel: SettingsViewModel,
+    permission: List<Pair<String, Boolean>>?,
     navController: NavHostController,
 ) {
     NavHost(
@@ -43,8 +46,15 @@ fun SetupNavHost(
             SplashScreen(
                 navController = navController,
                 homeViewModel = homeViewModel,
+                permission = permission,
                 settingsViewModel = settingsViewModel
             )
+        }
+
+        composable(route = Screens.Permissions.route) {
+            PermissionScreen(
+                permission = permission,
+                navController = navController)
         }
 
         composable(route = Screens.Applications.route) {

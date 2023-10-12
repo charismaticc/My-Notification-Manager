@@ -4,6 +4,7 @@ import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import com.sharipov.mynotificationmanager.R
 
@@ -22,12 +23,12 @@ fun DeleteAlertDialog(
         },
         confirmButton = {
             Button(onClick = onConfirm) {
-                Text(stringResource(id = R.string.delete))
+                Text(stringResource(id = R.string.delete), color = Color.White)
             }
         },
         dismissButton = {
             Button(onClick = onCancel) {
-                Text(stringResource(id = R.string.cancel))
+                Text(stringResource(id = R.string.cancel), color = Color.White)
             }
         }
     )

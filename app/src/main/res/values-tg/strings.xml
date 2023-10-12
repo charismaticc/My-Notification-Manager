@@ -73,4 +73,9 @@
     <string name="go_to_the_chat">Ба чат гузаштан!</string>
     <string name="share">Нусхаи эҳтиетиро фиристодан</string>
     <string name="filters">Filters</string>
+    <string name="notifications_description">Required to save notifications</string>
+    <string name="notifications">Notifications</string>
+    <string name="battery_optimization">Battery Optimization</string>
+    <string name="battery_optimization_description">Without permission to play battery optimization, apps will not be able to run in the background and will not be able to save all notifications</string>
+    <string name="give_permissions">Give permissions</string>
 </resources>

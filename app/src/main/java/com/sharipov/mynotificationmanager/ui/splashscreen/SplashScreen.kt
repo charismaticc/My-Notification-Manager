@@ -18,23 +18,24 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.airbnb.lottie.compose.*
+import com.sharipov.mynotificationmanager.R
+import com.sharipov.mynotificationmanager.data.ThemePreferences
 import com.sharipov.mynotificationmanager.navigation.Screens
-import com.sharipov.mynotificationmanager.viewmodel.HomeViewModel
-import com.sharipov.mynotificationmanager.viewmodel.SettingsViewModel
-import kotlinx.coroutines.delay
 import com.sharipov.mynotificationmanager.utils.TransparentSystemBars
 import com.sharipov.mynotificationmanager.utils.UpdateApplicationList
-import com.sharipov.mynotificationmanager.R
+import com.sharipov.mynotificationmanager.viewmodel.HomeViewModel
+import com.sharipov.mynotificationmanager.viewmodel.SettingsViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import com.airbnb.lottie.compose.*
-import com.sharipov.mynotificationmanager.data.PreferencesManager
 
 @Composable
 fun SplashScreen(
     navController: NavController,
     homeViewModel: HomeViewModel,
+    permission: List<Pair<String, Boolean>>?,
     settingsViewModel: SettingsViewModel
 ) {
     val context = LocalContext.current
@@ -47,9 +48,7 @@ fun SplashScreen(
     LaunchedEffect(key1 = true) {
         startAnimate = true
         delay(1500)
-
         val autoDeleteTimeout = settingsViewModel.getAppSettings()?.autoDeleteTimeoutLong ?: 0L
-
         if (autoDeleteTimeout != 0L) {
             val currentTime = System.currentTimeMillis()
             val deleteThreshold = currentTime - autoDeleteTimeout
@@ -57,16 +56,20 @@ fun SplashScreen(
                 homeViewModel.deleteExpiredNotification(deleteThreshold)
             }
         }
-
-        navController.navigate(Screens.AllNotifications.route)
+        if(permission == null) {
+            navController.navigate(Screens.AllNotifications.route)
+        }
+        else {
+            navController.navigate(Screens.Permissions.route)
+        }
     }
 }
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun Splash(context: Context) {
-    val useDarkAnimation = if(PreferencesManager.getThemeStyle(context) == "light_theme") true
-    else if (PreferencesManager.getThemeStyle(context) == "dark_theme") false
+    val useDarkAnimation = if(ThemePreferences.getThemeMode(context) == "light_theme") true
+    else if (ThemePreferences.getThemeMode(context) == "dark_theme") false
     else !isSystemInDarkTheme()
 
     val animation = if(!useDarkAnimation)LottieCompositionSpec.RawRes(resId = R.raw.animation_dark)
