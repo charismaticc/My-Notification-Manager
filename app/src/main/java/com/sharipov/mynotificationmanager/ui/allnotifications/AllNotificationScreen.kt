@@ -3,8 +3,10 @@ package com.sharipov.mynotificationmanager.ui.allnotifications
 import android.annotation.SuppressLint
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.Canvas
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -13,7 +15,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.material3.Card
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.FabPosition
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -27,6 +29,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.platform.LocalContext
@@ -51,7 +55,8 @@ import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
 
-@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter", "RememberReturnType",
+@SuppressLint(
+    "UnusedMaterial3ScaffoldPaddingParameter", "RememberReturnType",
     "UnrememberedMutableState"
 )
 @Composable
@@ -68,7 +73,8 @@ fun AllNotificationScreen(
     var fromDate by remember { mutableStateOf("") }
     var toDate by remember { mutableStateOf("") }
     val currentNavBackStackEntry by navController.currentBackStackEntryAsState()
-    val currentRoute = currentNavBackStackEntry?.destination?.route ?: Constants.Screens.APPLICATION_SCREEN
+    val currentRoute =
+        currentNavBackStackEntry?.destination?.route ?: Constants.Screens.APPLICATION_SCREEN
     var searchText by remember { mutableStateOf("") }
 
     val notificationFlow = getNotificationFlow(homeViewModel, searchText, fromDate, toDate)
@@ -111,24 +117,31 @@ fun AllNotificationScreen(
         ) {
             Spacer(modifier = Modifier.padding(32.dp))
             if (!showSearch) {
-                Card(
+                Box(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(start = 16.dp, top = 8.dp, end = 16.dp, bottom = 8.dp)
+                        .shadow(8.dp)
+                        .clip(RoundedCornerShape(10.dp))
+                        .background(MaterialTheme.colorScheme.background)
                         .clickable { showStatistic = !showStatistic }
                 ) {
                     val statisticText =
                         "${stringResource(id = R.string.count_of_your_notification)} ${
                             if (!showStatistic) notificationFlow.size else dummyData.sum()
                         }"
-                    Text(
-                        text = statisticText,
-                        modifier = Modifier
-                            .align(Alignment.CenterHorizontally)
-                            .padding(8.dp)
-                    )
-                    AnimatedVisibility(visible = showStatistic) {
-                        BarChart(dates, dummyData)
+                    Column(modifier = Modifier.fillMaxWidth()) {
+                        Text(
+                            text = statisticText,
+                            modifier = Modifier
+                                .padding(8.dp)
+                                .align(Alignment.CenterHorizontally)
+                        )
+                        AnimatedVisibility(
+                            visible = showStatistic
+                        ) {
+                            BarChart(dates, dummyData)
+                        }
                     }
                 }
             } else {
@@ -193,12 +206,16 @@ fun getNotificationFlow(
     toDate: String
 ): List<NotificationEntity> {
     return when {
-        searchText.isNotBlank() -> homeViewModel.searchNotifications(searchText).collectAsState(emptyList()).value
+        searchText.isNotBlank() -> homeViewModel.searchNotifications(searchText)
+            .collectAsState(emptyList()).value
+
         fromDate.isNotBlank() || toDate.isNotBlank() -> {
             val fromDateLongValue = dateConverter("from", fromDate)
             val toDateLongValue = dateConverter("to", toDate)
-            homeViewModel.getNotificationsFromData(fromDateLongValue, toDateLongValue).collectAsState(emptyList()).value
+            homeViewModel.getNotificationsFromData(fromDateLongValue, toDateLongValue)
+                .collectAsState(emptyList()).value
         }
+
         else -> homeViewModel.notificationListFlow.collectAsState(emptyList()).value
     }
 }
