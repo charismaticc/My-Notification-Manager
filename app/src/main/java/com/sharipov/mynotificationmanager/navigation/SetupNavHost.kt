@@ -34,7 +34,6 @@ sealed class Screens(val route: String){
 fun SetupNavHost(
     homeViewModel: HomeViewModel,
     settingsViewModel: SettingsViewModel,
-    permission: List<Pair<String, Boolean>>?,
     navController: NavHostController,
 ) {
     NavHost(
@@ -46,15 +45,12 @@ fun SetupNavHost(
             SplashScreen(
                 navController = navController,
                 homeViewModel = homeViewModel,
-                permission = permission,
                 settingsViewModel = settingsViewModel
             )
         }
 
         composable(route = Screens.Permissions.route) {
-            PermissionScreen(
-                permission = permission,
-                navController = navController)
+            PermissionScreen(navController = navController)
         }
 
         composable(route = Screens.Applications.route) {

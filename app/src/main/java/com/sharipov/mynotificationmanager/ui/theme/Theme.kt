@@ -19,7 +19,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
-import androidx.core.view.ViewCompat
+import androidx.core.view.WindowCompat
 import com.sharipov.mynotificationmanager.data.ThemePreferences
 
 private val DarkColorScheme = darkColorScheme(
@@ -53,31 +53,37 @@ fun MyNotificationManagerTheme(
 
     val colorScheme = when {
         dynamicColor && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> {
-            val dynamicScheme = if (darkTheme) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
-            if(!isSystemTheme) {
+            val dynamicScheme =
+                if (darkTheme) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
+            if (!isSystemTheme) {
                 if (darkTheme) {
                     dynamicScheme.copy(
                         primary = theme?.primary ?: MaterialTheme.colorScheme.primary,
+                        onPrimary = Color.White,
                         inversePrimary = theme?.inversePrimary
                             ?: MaterialTheme.colorScheme.inversePrimary
                     )
                 } else {
                     dynamicScheme.copy(
                         primary = theme?.primary ?: MaterialTheme.colorScheme.primary,
+                        onPrimary = Color.White,
                         inversePrimary = theme?.inversePrimary
                             ?: MaterialTheme.colorScheme.inversePrimary,
-                        background = theme?.background  ?: MaterialTheme.colorScheme.background
+                        background = theme?.background ?: MaterialTheme.colorScheme.background,
+                        onBackground = theme?.primary ?: MaterialTheme.colorScheme.primary,
+                        surface = theme?.background ?: MaterialTheme.colorScheme.background,
                     )
                 }
-            }
-            else {
+            } else {
                 dynamicScheme
             }
         }
+
         darkTheme -> DarkColorScheme.copy(
             primary = theme?.primary ?: MaterialTheme.colorScheme.primary,
             inversePrimary = theme?.inversePrimary ?: MaterialTheme.colorScheme.inversePrimary
         )
+
         else -> LightColorScheme.copy(
             primary = theme?.primary ?: MaterialTheme.colorScheme.primary,
             background = theme?.background ?: MaterialTheme.colorScheme.background,
@@ -89,8 +95,10 @@ fun MyNotificationManagerTheme(
     if (!view.isInEditMode) {
         SideEffect {
             (view.context as Activity).window.statusBarColor = colorScheme.primary.toArgb()
-            ViewCompat.getWindowInsetsController(view)?.isAppearanceLightStatusBars = darkTheme
+            val window = WindowCompat.getInsetsController((view.context as Activity).window, view)
+            window.isAppearanceLightStatusBars = darkTheme
         }
+
     }
 
     MaterialTheme(
@@ -103,6 +111,7 @@ fun MyNotificationManagerTheme(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun topBarColorScheme(): TopAppBarColors {
+    val context = LocalContext.current
     val topAppBarColors = TopAppBarDefaults.topAppBarColors(
         containerColor = MaterialTheme.colorScheme.primary,
         titleContentColor = contentColorFor(MaterialTheme.colorScheme.primary),
@@ -110,14 +119,19 @@ fun topBarColorScheme(): TopAppBarColors {
         navigationIconContentColor = contentColorFor(MaterialTheme.colorScheme.primary),
     )
 
-    return if (ThemePreferences.getThemeMode(context = LocalContext.current) == "light_theme"
+    return if (ThemePreferences.getThemeMode(context = context) == "light_theme"
         || (!isSystemInDarkTheme()
-                && ThemePreferences.getThemeMode(context = LocalContext.current) == "system_theme")
+                && ThemePreferences.getThemeMode(context = context) == "system_theme")
     ) topAppBarColors
     else TopAppBarDefaults.centerAlignedTopAppBarColors()
 }
 
-data class Theme(val name: String, val primary: Color, val background: Color, val inversePrimary: Color)
+data class Theme(
+    val name: String,
+    val primary: Color,
+    val background: Color,
+    val inversePrimary: Color
+)
 
 object AppThemes {
     private val oceanBreeze = Theme(
@@ -193,16 +207,18 @@ object AppThemes {
     )
 
 
-    private val themeList = listOf(oceanBreeze, caramelDream, forestHarmony, silverDriftingClouds,
+    private val themeList = listOf(
+        oceanBreeze, caramelDream, forestHarmony, silverDriftingClouds,
         sunsetSerenity, violetTwilight, fireRedBlaze, sunnyLemonade, royalPurpleReign,
-        earthlyTerracotta)
+        earthlyTerracotta
+    )
 
     fun getThemesList(): List<Theme> {
         return themeList
     }
 
     fun getTheme(name: String): Theme? {
-        return themeList.find { it.name == name}
+        return themeList.find { it.name == name }
     }
 }
 

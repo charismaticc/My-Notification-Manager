@@ -35,7 +35,6 @@ import kotlinx.coroutines.launch
 fun SplashScreen(
     navController: NavController,
     homeViewModel: HomeViewModel,
-    permission: List<Pair<String, Boolean>>?,
     settingsViewModel: SettingsViewModel
 ) {
     val context = LocalContext.current
@@ -56,12 +55,7 @@ fun SplashScreen(
                 homeViewModel.deleteExpiredNotification(deleteThreshold)
             }
         }
-        if(permission == null) {
-            navController.navigate(Screens.AllNotifications.route)
-        }
-        else {
-            navController.navigate(Screens.Permissions.route)
-        }
+        navController.navigate(Screens.Permissions.route)
     }
 }
 

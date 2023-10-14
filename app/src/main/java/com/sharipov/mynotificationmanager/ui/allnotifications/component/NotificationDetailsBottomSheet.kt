@@ -96,6 +96,7 @@ fun NotificationDetailsBottomSheetContent(
     navController: NavController,
     showNotificationValue: () -> Unit
 ){
+    val context = LocalContext.current
     val notificationsFlow = homeViewModel.notificationListFlow
     val notification = notificationsFlow.map { notifications ->
         notifications.firstOrNull { it.id == notificationId.toInt() }
@@ -103,8 +104,7 @@ fun NotificationDetailsBottomSheetContent(
     val notificationState = notification.collectAsState(initial = null)
     val dateFormat = SimpleDateFormat("dd.MM.yyyy HH:mm:ss", Locale.getDefault())
     val clipboardManager =
-        LocalContext.current.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
-    val context = LocalContext.current
+        context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
 
     val appIconDrawable : Drawable? = try {
         notificationState.value?.let { context.packageManager.getApplicationIcon(it.packageName) }

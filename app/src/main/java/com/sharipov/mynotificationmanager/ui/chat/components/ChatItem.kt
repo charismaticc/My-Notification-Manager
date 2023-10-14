@@ -44,14 +44,14 @@ import java.util.*
 
 @Composable
 fun ChatItem(homeViewModel: HomeViewModel, notification: NotificationEntity) {
+    val context = LocalContext.current
 
     val dateFormat = SimpleDateFormat("dd.MM.yyyy HH:mm:ss", Locale.getDefault())
 
     var expanded by remember { mutableStateOf(false) }
     val clipboardManager =
-        LocalContext.current.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+        context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
 
-    val context = LocalContext.current
     val icon: ImageVector
     val color: Color
 

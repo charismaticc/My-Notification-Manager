@@ -11,7 +11,8 @@ import kotlinx.coroutines.runBlocking
 
 @Composable
 fun UpdateApplicationList(settingsViewModel: SettingsViewModel) {
-    val packageManager = LocalContext.current.packageManager
+    val context = LocalContext.current
+    val packageManager = context.packageManager
     val apps = packageManager.getInstalledPackages(0)
     val appListFromSource = mutableListOf<ExcludedAppEntity>()
 

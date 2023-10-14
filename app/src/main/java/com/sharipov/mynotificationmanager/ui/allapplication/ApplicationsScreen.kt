@@ -33,7 +33,8 @@ fun ApplicationsScreen(
 ) {
 
     val currentNavBackStackEntry by navController.currentBackStackEntryAsState()
-    val currentRoute = currentNavBackStackEntry?.destination?.route ?: Constants.Screens.APPLICATION_SCREEN
+    val currentRoute =
+        currentNavBackStackEntry?.destination?.route ?: Constants.Screens.APPLICATION_SCREEN
     val applicationListState = homeViewModel.getApplications().collectAsState(initial = listOf())
 
     TransparentSystemBars()
@@ -61,7 +62,7 @@ fun ApplicationsScreen(
                 navigateToNotificationManagement = { navController.navigate(Screens.NotificationManagement.route) },
             )
         }
-    ){
+    ) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -77,7 +78,8 @@ fun ApplicationsScreen(
                 items(applicationListState.value.size) { index ->
                     val packageName = applicationListState.value[index].packageName
                     val appName = applicationListState.value[index].appName
-                    val notificationCountFlow = homeViewModel.getApplicationsNotificationsCount(packageName)
+                    val notificationCountFlow =
+                        homeViewModel.getApplicationsNotificationsCount(packageName)
                     val notificationCount by notificationCountFlow.collectAsState(initial = 0)
                     ApplicationItem(
                         packageName = packageName,
@@ -85,7 +87,7 @@ fun ApplicationsScreen(
                         notificationCount = notificationCount,
                         modifier = Modifier
                             .fillMaxSize()
-                            .padding(16.dp, 16.dp, 16.dp)
+                            .padding(start = 16.dp, top = 8.dp, end = 16.dp)
                             .clickable {
                                 navController.navigate(Screens.Conversations.route + "/$packageName")
                             }
