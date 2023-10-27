@@ -101,10 +101,8 @@ fun SelectThemeContent(
         ) {
             item {
                 Card(modifier = Modifier.fillParentMaxSize()) {
-                    selectedTheme?.let {
-                        PrimaryColor(it) { theme ->
-                            selectedTheme = theme
-                        }
+                    PrimaryColor(selectedTheme) { theme ->
+                        selectedTheme = theme
                     }
                 }
             }
@@ -115,7 +113,7 @@ fun SelectThemeContent(
             onClick = {
                 onDismiss()
                 onThemeSelected(selectedThemeMode)
-                selectedTheme?.let { onThemeStyleSelected(it) }
+                onThemeStyleSelected(selectedTheme)
             }
         ) {
             Text(stringResource(id = R.string.select), color = Color.White)
@@ -199,8 +197,8 @@ fun PrimaryColor(selectedTheme: String, onThemeSelected: (String) -> Unit) {
             item {
                 ColorRow(
                     themeName = theme.name,
-                    primary = theme.primary,
-                    background = theme.background,
+                    primary = theme.lightColorScheme.primary,
+                    background = theme.lightColorScheme.background,
                     isSelected = (selectedTheme == theme.name),
                     onThemeSelected = { onThemeSelected(theme.name) }
                 )

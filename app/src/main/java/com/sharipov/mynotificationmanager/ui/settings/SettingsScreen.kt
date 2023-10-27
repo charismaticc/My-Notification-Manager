@@ -82,7 +82,6 @@ fun SettingsScreen(
         },
     ) {
         LazyColumn(
-            verticalArrangement = Arrangement.spacedBy(8.dp),
             userScrollEnabled = true
         ) {
 

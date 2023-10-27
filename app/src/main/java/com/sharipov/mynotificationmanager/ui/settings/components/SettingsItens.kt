@@ -3,6 +3,7 @@ package com.sharipov.mynotificationmanager.ui.settings.components
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -10,6 +11,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -31,13 +33,11 @@ fun ClickableListItem(
 ) {
     Box(
         modifier = modifier
-            .padding(8.dp)
             .fillMaxWidth()
             .clickable(onClick = onClick)
-            .shadow(8.dp)
-            .clip(RoundedCornerShape(8.dp))
-            .background(MaterialTheme.colorScheme.background) // Set the background color to blue
+            .background(MaterialTheme.colorScheme.background)
     ){
+        Column {
             Row(
                 verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier
@@ -57,6 +57,12 @@ fun ClickableListItem(
                     modifier = Modifier.fillMaxWidth(),
                 )
             }
+            HorizontalDivider(
+                modifier.padding(start = 8.dp, end = 8.dp),
+                thickness = 1.dp,
+                color = MaterialTheme.colorScheme.primary
+            )
         }
     }
+}
 

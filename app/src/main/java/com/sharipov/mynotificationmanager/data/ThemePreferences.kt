@@ -20,9 +20,9 @@ object ThemePreferences {
         editor.apply()
     }
 
-    fun getTheme(context: Context): String? {
+    fun getTheme(context: Context): String {
         val sharedPreferences = getSharedPreferences(context)
-        return sharedPreferences.getString(KEY_SELECTED_THEME, "System")
+        return sharedPreferences.getString(KEY_SELECTED_THEME, "System") ?: "System"
     }
 
     fun updateCreatedTheme(context: Context, color: String) {

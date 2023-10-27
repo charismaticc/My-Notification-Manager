@@ -87,7 +87,6 @@ fun ApplicationsScreen(
                         notificationCount = notificationCount,
                         modifier = Modifier
                             .fillMaxSize()
-                            .padding(start = 16.dp, top = 8.dp, end = 16.dp)
                             .clickable {
                                 navController.navigate(Screens.Conversations.route + "/$packageName")
                             }

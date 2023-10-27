@@ -41,18 +41,15 @@ fun ApplicationItem(
     Box(
         modifier = modifier
             .fillMaxWidth()
-            .shadow(8.dp)
-            .clip(RoundedCornerShape(10.dp))
             .background(MaterialTheme.colorScheme.background)
-    ){
-        Box(modifier = Modifier.fillMaxSize()) {
-            Row(modifier = Modifier.padding(8.dp, 16.dp, 16.dp, 16.dp)) {
-
+    ) {
+        Column {
+            Row(modifier = Modifier.padding(16.dp, 16.dp, 16.dp, 16.dp)) {
                 Image(
                     painter = rememberDrawablePainter(appIconDrawable),
                     contentDescription = "App icon",
                     modifier = Modifier
-                        .size(48.dp)
+                        .size(56.dp)
                         .clip(CircleShape)
                 )
 
@@ -74,12 +71,17 @@ fun ApplicationItem(
                     modifier = Modifier
                         .weight(1f)
                         .align(Alignment.CenterVertically)
-                        .padding(start = 8.dp)
+                        .padding(start = 8.dp, end = 8.dp)
                         .fillMaxWidth(),
                     style = MaterialTheme.typography.titleLarge,
                     maxLines = 1
                 )
             }
+            HorizontalDivider(
+                modifier = Modifier.fillMaxWidth().padding(start = 80.dp),
+                thickness = 1.dp,
+                color = MaterialTheme.colorScheme.primary
+            )
         }
     }
 }

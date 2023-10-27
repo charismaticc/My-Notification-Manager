@@ -13,7 +13,6 @@ import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material.icons.outlined.Star
@@ -24,12 +23,12 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
 import androidx.navigation.NavController
@@ -67,32 +66,24 @@ fun NotificationItem(
     )
 
     val modifier = Modifier
-            .fillMaxSize()
-            .padding(16.dp, 16.dp, 16.dp)
-            .combinedClickable(
-                onClick = {
-                    showNotification.value = !showNotification.value
-                },
-                onLongClick = {
-                    updateNotification(notification, homeViewModel, context)
-                }
-            )
-
-    Box(
-        modifier = modifier
-            .fillMaxWidth()
-            .shadow(8.dp)
-            .clip(RoundedCornerShape(10.dp))
-            .background(MaterialTheme.colorScheme.background)
-    ){
-        Box(modifier = Modifier.fillMaxSize()) {
-            SwipeableActionsBox(
-                swipeThreshold = 150.dp,
-                endActions = listOf(delete),
-                backgroundUntilSwipeThreshold = if(isSystemInDarkTheme()) Color.DarkGray else Color.Gray
-            ) {
-                NotificationItemContext(homeViewModel, notification)
+        .fillMaxSize()
+        .combinedClickable(
+            onClick = {
+                showNotification.value = !showNotification.value
+            },
+            onLongClick = {
+                updateNotification(notification, homeViewModel, context)
             }
+        )
+        .background(MaterialTheme.colorScheme.background)
+
+    Box(modifier) {
+        SwipeableActionsBox(
+            swipeThreshold = 150.dp,
+            endActions = listOf(delete),
+            backgroundUntilSwipeThreshold = if(isSystemInDarkTheme()) Color.DarkGray else Color.Gray
+        ) {
+            NotificationItemContext(homeViewModel, notification)
         }
     }
 
@@ -110,9 +101,9 @@ fun NotificationItemContext(
     notification: NotificationEntity,
 ) {
     val context = LocalContext.current
-    val dateFormat = SimpleDateFormat("dd.MM.yyyy HH:mm:ss", Locale.getDefault())
     val icon: ImageVector
     val color: Color
+    val dataTime = formatNotificationTime(notification.time)
 
     val appIconDrawable : Drawable? = try {
         context.packageManager.getApplicationIcon(notification.packageName)
@@ -127,43 +118,96 @@ fun NotificationItemContext(
         icon = Icons.Outlined.Star
         color = MaterialTheme.colorScheme.inversePrimary
     }
-
-    Row(modifier = Modifier.padding(16.dp)) {
-        Image(
-            painter = rememberDrawablePainter(appIconDrawable),
-            contentDescription = "App icon",
-            modifier = Modifier
-                .align(Alignment.CenterVertically)
-                .size(56.dp)
-                .clip(CircleShape),
-        )
-        Column(modifier = Modifier
-            .fillMaxSize()
-            .padding(start = 16.dp, end = 8.dp)) {
-            Text(notification.appName, style = MaterialTheme.typography.titleMedium, maxLines = 1)
-            Text(notification.user, style = MaterialTheme.typography.bodyLarge, maxLines = 1)
-            Text(notification.text, style = MaterialTheme.typography.bodyMedium, maxLines = 1)
-
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween
+    Column {
+        Row(modifier = Modifier.padding(16.dp)) {
+            Image(
+                painter = rememberDrawablePainter(appIconDrawable),
+                contentDescription = "App icon",
+                modifier = Modifier
+                    .align(Alignment.CenterVertically)
+                    .size(56.dp)
+                    .clip(CircleShape),
+            )
+            Column(modifier = Modifier
+                .fillMaxSize()
+                .padding(start = 16.dp, end = 8.dp)
             ) {
-                Text(
-                    text = dateFormat.format(Date(notification.time)),
-                    style = MaterialTheme.typography.bodySmall,
-                    modifier = Modifier.padding(top = 8.dp)
-                )
-                Image(
-                    imageVector = icon,
-                    contentDescription = "",
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween
+                ) {
+                    Text(
+                        notification.appName,
+                        style = MaterialTheme.typography.titleMedium,
+                        maxLines = 1
+                    )
+                    Image(
+                        imageVector = icon,
+                        contentDescription = "",
+                        modifier = Modifier
+                            .size(32.dp)
+                            .clickable {
+                                updateNotification(notification, homeViewModel, context)
+                            },
+                        colorFilter = ColorFilter.tint(color)
+                    )
+                }
+                Text(notification.user, style = MaterialTheme.typography.bodyLarge, maxLines = 1)
+                Row(
                     modifier = Modifier
-                        .size(32.dp)
-                        .clickable {
-                            updateNotification(notification, homeViewModel, context)
-                        },
-                    colorFilter = ColorFilter.tint(color)
-                )
+                        .fillMaxWidth()
+                        .padding(top = 8.dp),
+                    horizontalArrangement = Arrangement.SpaceBetween
+                ) {
+                    Text(
+                        notification.text,
+                        modifier = Modifier.fillMaxWidth().weight(2f),
+                        style = MaterialTheme.typography.bodyMedium,
+                        maxLines = 1
+                    )
+                    Text(
+                        text = dataTime,
+                        modifier = Modifier.weight(0.5f),
+                        style = MaterialTheme.typography.bodyMedium,
+                        textAlign = TextAlign.End
+                    )
+                }
             }
+        }
+
+        HorizontalDivider(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(start = 90.dp),
+            thickness = 1.dp,
+            color = MaterialTheme.colorScheme.primary
+        )
+    }
+}
+
+fun formatNotificationTime(timeInMillis: Long): String {
+    val currentTimeMillis = System.currentTimeMillis()
+    val differenceInMillis = currentTimeMillis - timeInMillis
+
+    val oneDayInMillis = 24 * 60 * 60 * 1000
+    val oneWeekInMillis = 6 * oneDayInMillis
+
+    return when {
+        differenceInMillis < oneDayInMillis -> {
+            val simpleDateFormat = SimpleDateFormat("HH:mm", Locale.getDefault())
+            val date = Date(timeInMillis)
+            simpleDateFormat.format(date)
+        }
+        differenceInMillis < oneWeekInMillis -> {
+            val calendar = Calendar.getInstance()
+            calendar.timeInMillis = timeInMillis
+            val shortDayOfWeek = SimpleDateFormat("EE.", Locale.getDefault()).format(calendar.time)
+            shortDayOfWeek
+        }
+        else -> {
+            val simpleDateFormat = SimpleDateFormat("dd MMM", Locale.getDefault())
+            val date = Date(timeInMillis)
+            simpleDateFormat.format(date)
         }
     }
 }
