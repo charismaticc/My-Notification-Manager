@@ -3,16 +3,13 @@ package com.sharipov.mynotificationmanager.ui.allapplication.component
 import android.content.pm.PackageManager
 import android.graphics.drawable.Drawable
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -38,10 +35,11 @@ fun ApplicationItem(
         ContextCompat.getDrawable(context, R.drawable.ic_android)
     }
 
-    Box(
-        modifier = modifier
-            .fillMaxWidth()
-            .background(MaterialTheme.colorScheme.background)
+    Card(
+        modifier = modifier,
+        elevation = CardDefaults.cardElevation(
+            defaultElevation = 10.dp
+        )
     ) {
         Column {
             Row(modifier = Modifier.padding(16.dp, 16.dp, 16.dp, 16.dp)) {
@@ -77,11 +75,6 @@ fun ApplicationItem(
                     maxLines = 1
                 )
             }
-            HorizontalDivider(
-                modifier = Modifier.fillMaxWidth().padding(start = 80.dp),
-                thickness = 1.dp,
-                color = MaterialTheme.colorScheme.primary
-            )
         }
     }
 }

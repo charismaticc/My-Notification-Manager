@@ -1,6 +1,7 @@
 package com.sharipov.mynotificationmanager.ui.allapplication
 
 import android.annotation.SuppressLint
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -87,6 +88,8 @@ fun ApplicationsScreen(
                         notificationCount = notificationCount,
                         modifier = Modifier
                             .fillMaxSize()
+                            .padding(16.dp, 8.dp, 16.dp, 8.dp)
+                            .background(MaterialTheme.colorScheme.background)
                             .clickable {
                                 navController.navigate(Screens.Conversations.route + "/$packageName")
                             }

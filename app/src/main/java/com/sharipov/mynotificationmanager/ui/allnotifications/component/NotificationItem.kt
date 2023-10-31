@@ -10,7 +10,6 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.combinedClickable
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
@@ -27,7 +26,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
@@ -36,13 +34,13 @@ import com.google.accompanist.drawablepainter.rememberDrawablePainter
 import com.sharipov.mynotificationmanager.R
 import com.sharipov.mynotificationmanager.model.NotificationEntity
 import com.sharipov.mynotificationmanager.viewmodel.HomeViewModel
-import me.saket.swipe.SwipeAction
-import me.saket.swipe.SwipeableActionsBox
 import java.text.SimpleDateFormat
 import java.util.*
 
 @OptIn(ExperimentalFoundationApi::class)
-@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter", "RememberReturnType")
+@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter", "RememberReturnType",
+    "SuspiciousIndentation"
+)
 @Composable
 fun NotificationItem(
     homeViewModel: HomeViewModel,
@@ -52,21 +50,9 @@ fun NotificationItem(
 ) {
     val showNotification = remember { mutableStateOf(false) }
 
-    val delete = SwipeAction(
-        icon = { Icon(
-                modifier = Modifier.size(40.dp),
-                painter = painterResource(id = R.drawable.ic_delete),
-                contentDescription = null,
-                tint = Color.White
-            )},
-        background = Color.Red,
-        onSwipe = {
-            homeViewModel.deleteNotification(notification)
-        },
-    )
-
     val modifier = Modifier
         .fillMaxSize()
+        .padding(start = 16.dp, top = 8.dp, end = 16.dp, bottom = 8.dp)
         .combinedClickable(
             onClick = {
                 showNotification.value = !showNotification.value
@@ -77,15 +63,15 @@ fun NotificationItem(
         )
         .background(MaterialTheme.colorScheme.background)
 
-    Box(modifier) {
-        SwipeableActionsBox(
-            swipeThreshold = 150.dp,
-            endActions = listOf(delete),
-            backgroundUntilSwipeThreshold = if(isSystemInDarkTheme()) Color.DarkGray else Color.Gray
+        Card(
+            modifier = modifier,
+            elevation = CardDefaults.cardElevation(
+                defaultElevation = 10.dp
+            )
         ) {
             NotificationItemContext(homeViewModel, notification)
         }
-    }
+
 
     NotificationDetailsBottomSheet(
         showNotification = showNotification.value,
@@ -116,7 +102,7 @@ fun NotificationItemContext(
         color = MaterialTheme.colorScheme.primary
     } else {
         icon = Icons.Outlined.Star
-        color = MaterialTheme.colorScheme.inversePrimary
+        color = Color.Gray
     }
     Column {
         Row(modifier = Modifier.padding(16.dp)) {
@@ -161,7 +147,9 @@ fun NotificationItemContext(
                 ) {
                     Text(
                         notification.text,
-                        modifier = Modifier.fillMaxWidth().weight(2f),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .weight(2f),
                         style = MaterialTheme.typography.bodyMedium,
                         maxLines = 1
                     )
@@ -174,14 +162,6 @@ fun NotificationItemContext(
                 }
             }
         }
-
-        HorizontalDivider(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(start = 90.dp),
-            thickness = 1.dp,
-            color = MaterialTheme.colorScheme.primary
-        )
     }
 }
 

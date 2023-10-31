@@ -22,9 +22,9 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
+import androidx.compose.material3.SecondaryTabRow
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Tab
-import androidx.compose.material3.TabRow
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -73,17 +73,23 @@ fun ExportImportModalBottomSheetContent(context: Context, homeViewModel: HomeVie
     var selectedTabIndex by remember { mutableIntStateOf(pagerState.currentPage) }
 
     Column(modifier = Modifier.wrapContentSize()) {
-        TabRow(
+        SecondaryTabRow(
             selectedTabIndex = selectedTabIndex,
             modifier = Modifier.background(Color.Gray)
         ) {
             Tab(
-                text = { Text(stringResource(id = R.string.export)) },
+                text = { Text(
+                        text = stringResource(id = R.string.export),
+                        color = MaterialTheme.colorScheme.onBackground)
+                       },
                 selected = selectedTabIndex == 0,
                 onClick = { selectedTabIndex = 0 }
             )
             Tab(
-                text = { Text(stringResource(id = R.string.import_)) },
+                text = { Text(
+                        text = stringResource(id = R.string.import_),
+                        color = MaterialTheme.colorScheme.onBackground)
+                       },
                 selected = selectedTabIndex == 1,
                 onClick = { selectedTabIndex = 1 }
             )
@@ -153,7 +159,7 @@ fun ImportScreen(context: Context, homeViewModel: HomeViewModel) {
                     importButtonStatus = !importStatus.first
                 }
             ) {
-                Text(text = stringResource(id = R.string.import_), color = Color.White,)
+                Text(text = stringResource(id = R.string.import_), color = Color.White)
             }
         }
         if(importStatus.second != "") {
@@ -202,7 +208,7 @@ fun ExportScreen(context: Context, homeViewModel: HomeViewModel) {
                     exportButtonStatus = !exportStatus.first
                 }
             ) {
-                Text(text = stringResource(id = R.string.export), color = Color.White,)
+                Text(text = stringResource(id = R.string.export), color = Color.White)
             }
         } else {
             HorizontalDivider(
@@ -238,7 +244,7 @@ fun ExportScreen(context: Context, homeViewModel: HomeViewModel) {
                                 shareFile(context = context, fileName = "${exportStatus.second}_backup.json")
                             }
                         ) {
-                            Text(text = stringResource(id = R.string.share), color = Color.White,)
+                            Text(text = stringResource(id = R.string.share), color = Color.White)
                         }
                     }
 

@@ -85,7 +85,7 @@ fun SettingsScreen(
             userScrollEnabled = true
         ) {
 
-            item { Spacer(modifier = Modifier.height(64.dp)) }
+            item { Spacer(modifier = Modifier.height(76.dp)) }
 
             item {
                 ClickableListItem(

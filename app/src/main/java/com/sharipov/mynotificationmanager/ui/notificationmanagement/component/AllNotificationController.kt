@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -18,14 +19,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.sharipov.mynotificationmanager.R
-import com.sharipov.mynotificationmanager.data.ThemePreferences
 import com.sharipov.mynotificationmanager.viewmodel.SettingsViewModel
 
 @Composable
@@ -33,7 +32,6 @@ fun AllApplication(
     settingsViewModel: SettingsViewModel,
     whichListIsDisplayed: Boolean
 ) {
-    val context = LocalContext.current
     var isChecked by remember { mutableStateOf(false) }
     Row(
         horizontalArrangement = Arrangement.SpaceBetween,
@@ -48,10 +46,7 @@ fun AllApplication(
             contentDescription = null,
             modifier = Modifier.size(48.dp),
             colorFilter = ColorFilter
-                .tint(
-                    if (ThemePreferences.getThemeMode(context) == "dark_theme") Color.White
-                    else Color.DarkGray
-                )
+                .tint(MaterialTheme.colorScheme.primary)
         )
         Text(
             text = stringResource(id = R.string.all_notification),

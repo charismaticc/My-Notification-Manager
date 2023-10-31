@@ -3,10 +3,8 @@ package com.sharipov.mynotificationmanager.ui.allnotifications
 import android.annotation.SuppressLint
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.Canvas
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -15,9 +13,9 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.FabPosition
-import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -30,8 +28,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.platform.LocalContext
@@ -118,14 +114,14 @@ fun AllNotificationScreen(
         ) {
             Spacer(modifier = Modifier.padding(32.dp))
             if (!showSearch) {
-                Box(
+                Card(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(start = 16.dp, top = 8.dp, end = 16.dp, bottom = 8.dp)
-                        .shadow(8.dp)
-                        .clip(RoundedCornerShape(10.dp))
-                        .background(MaterialTheme.colorScheme.background)
-                        .clickable { showStatistic = !showStatistic }
+                        .clickable { showStatistic = !showStatistic },
+                    elevation = CardDefaults.cardElevation(
+                        defaultElevation = 10.dp
+                    )
                 ) {
                     val statisticText =
                         "${stringResource(id = R.string.count_of_your_notification)} ${
@@ -234,7 +230,8 @@ fun getWeekDays(): List<String> {
 @Composable
 fun BarChart(dates: List<String>, data: List<Int>, modifier: Modifier = Modifier) {
     var maxCount by remember { mutableIntStateOf(0) }
-    val color = MaterialTheme.colorScheme.primary
+    val color = MaterialTheme.colorScheme.onBackground
+    val columnColor = MaterialTheme.colorScheme.primary
 
     data.forEach { count ->
         if (count > maxCount) {
@@ -274,7 +271,7 @@ fun BarChart(dates: List<String>, data: List<Int>, modifier: Modifier = Modifier
                 val startX = (index * (barWidth * 2)) + spaceBetweenBars
                 val startY = size.height - barHeight
                 drawRect(
-                    color = color,
+                    color = columnColor,
                     size = Size(barWidth, barHeight),
                     topLeft = Offset(startX, startY),
                 )

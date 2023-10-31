@@ -101,16 +101,16 @@ data class Theme(
 object AppThemes {
     private val oceanBreeze =
         Theme("Ocean Breeze", oceanBreezeLightColorScheme, oceanBreezeDarkColorScheme)
-    private val caramelDream =
-        Theme("Caramel Dream", caramelDreamLightColorScheme, caramelDreamDarkColorScheme)
     private val forestHarmony =
         Theme("Forest Harmony", forestHarmonyLightColorScheme, forestHarmonyDarkColorScheme)
+    private val sunsetSerenity =
+        Theme("Sunset Serenity", sunsetSerenityLightColorScheme, sunsetSerenityDarkColorScheme)
+    private val fireRedBlaze =
+        Theme("Fire Red Blaze", fireRedBlazeLightColorScheme, fireRedBlazeDarkColorScheme)
+    private val sunnyLemonade =
+        Theme("Sunny Lemonade", sunnyLemonadeLightColorScheme, sunnyLemonadeDarkColorScheme)
 
-    /*
-     silverDriftingClouds, sunsetSerenity, violetTwilight, fireRedBlaze, sunnyLemonade, royalPurpleReign, earthlyTerracotta
-     */
-
-    private val themeList = listOf(oceanBreeze, caramelDream, forestHarmony)
+    private val themeList = listOf(oceanBreeze, forestHarmony, sunsetSerenity, fireRedBlaze, sunnyLemonade)
 
     fun getThemesList(): List<Theme> {
         return themeList
@@ -135,7 +135,7 @@ fun getThemeMode(content: Context): Boolean {
     }
 }
 
-// "Ocean Breeze"
+////////////// "Ocean Breeze"
 private val oceanBreezeDarkColorScheme = darkColorScheme(
     primary = Color(0xFF006994),
     inversePrimary = Color(0xFF66A6BA),
@@ -143,44 +143,21 @@ private val oceanBreezeDarkColorScheme = darkColorScheme(
     primaryContainer = Color(0xFF33445A),
     onPrimaryContainer = Color(0xFFFFFFFF),
 
-    secondary = Color(0xFF99004C),
     onSecondary = Color(0xFFFFFFFF),
-    secondaryContainer = Color(0xFF006994),
+    secondaryContainer = Color(0xFF006994), // fon aktivnoy iconci
     onSecondaryContainer = Color(0xFFFFFFFF),  // цвет активной иконки ботмБар
-
-    tertiary = Color(0xFF00704A),
-    onTertiary = Color(0xFFFFFFFF),
-    tertiaryContainer = Color(0xFF2D6C50),
-    onTertiaryContainer = Color(0xFFFFFFFF),
 
     background = Color(0xFF042E40),
     onBackground = Color(0xFFFFFFFF),
 
-    surface = Color(0xFF333333),   // фон ботом шилта
+    surface = Color(0xFF042E40),   // фон ботом шилта
     onSurface = Color(0xFFFFFFFF),  // цвет текста на ботм шилте
-    surfaceVariant = Color(0xFF666666),  // цвет карточки
+    surfaceVariant = Color(0xFF04384E),  // цвет карточки
     onSurfaceVariant = Color(0xFFFFFFFF),  // цыет текста на карточке
-
-    surfaceTint = Color(0xFF444444),
-    inverseSurface = Color(0xFFDDDDDD),
-    inverseOnSurface = Color(0xFF333333),
-
-    error = Color(0xFFFF0000),
-    onError = Color(0xFFFFFFFF),
-    errorContainer = Color(0xFF330000),
-    onErrorContainer = Color(0xFFFFFFFF),
 
     outline = Color(0xFF006994),  // рамка радиобатона
     outlineVariant = Color(0xFFFFFFFF),  // цвет внутри радиобатона
-
-    scrim = Color(0xAA000000),  // Затемнения фона от ботомшилта
-    surfaceBright = Color(0xFFCCCCCC),
-    surfaceContainer = Color(0xFF444444),
-    surfaceContainerHigh = Color(0xFF555555),
-    surfaceContainerHighest = Color(0xFF666666),
-    surfaceContainerLow = Color(0xFF333333),
-    surfaceContainerLowest = Color(0xFFFF0000),
-    surfaceDim = Color(0xFF555555)
+    error = Color(0xFFFF0000),
 )
 
 private val oceanBreezeLightColorScheme = lightColorScheme(
@@ -188,285 +165,220 @@ private val oceanBreezeLightColorScheme = lightColorScheme(
     inversePrimary = Color(0xFF66A6BA),
     onPrimary = Color(0xFFFFFFFF),
     primaryContainer = Color(0xFFC1E1E3),
-    onPrimaryContainer = Color(0xFF000000),
+    onPrimaryContainer = Color(0xFF006994),
 
-    secondary = Color(0xFF99004C),
     onSecondary = Color(0xFF000000),
     secondaryContainer = Color(0xFFC1E1E3),
     onSecondaryContainer = Color(0xFF006994),  // цвет активной иконки ботмБар
 
-    tertiary = Color(0xFF00704A),
-    onTertiary = Color(0xFF000000),
-    tertiaryContainer = Color(0xFFC1E1E3),
-    onTertiaryContainer = Color(0xFF000000),
-
-    background = Color(0xFFFFFFFF),
+    background = Color(0xFFF2F1EF),
     onBackground = Color(0xFF000000),
 
-    surface = Color(0xFFFFFFFF),  // фон ботом шилта
+    surface = Color(0xFFEEEEEE),  // фон ботом шилта
     onSurface = Color(0xFF000000),  // цвет текста на ботм шилте
-    surfaceVariant = Color(0xFFCCCCCC),  // цвет карточки
+    surfaceVariant = Color(0xFFFFFFFF),  // цвет карточки
     onSurfaceVariant = Color(0xFF006994),  // цыет текста на карточке
-
-    surfaceTint = Color(0xFFEEEEEE),
-    inverseSurface = Color(0xFF000000),
-    inverseOnSurface = Color(0xFFFFFFFF),
-
-    error = Color(0xFFFF0000),
-    onError = Color(0xFFFFFFFF),
-    errorContainer = Color(0xFFFFDDDD),
-    onErrorContainer = Color(0xFF000000),
 
     outline = Color(0xFF006994), // рамка радиобатона
     outlineVariant = Color(0xFFFFFFFF), // цвет внутри радиобатона
-
-    scrim = Color(0x00000000),  // Затемнения фона от ботомшилта
-    surfaceBright = Color(0xFFFFFFFF),
-    surfaceContainer = Color(0xFFFFFFFF),
-    surfaceContainerHigh = Color(0xFFDDDDDD),
-    surfaceContainerHighest = Color(0xFFCCCCCC),
-    surfaceContainerLow = Color(0xFFEEEEEE),
-    surfaceContainerLowest = Color(0xFFDDDDDD),
-    surfaceDim = Color(0xFFDDDDDD)
-)
-
-// name = "Caramel Dream",
-private val caramelDreamLightColorScheme = lightColorScheme(
-    primary = Color(0xFF006994),
-    onPrimary = Color(0xFFFFFFFF),
-    primaryContainer = Color(0xFF33445A),
-    onPrimaryContainer = Color(0xFFFFFFFF),
-    inversePrimary = Color(0xFF66A6BA),
-
-    secondary = Color(0xFF99004C),
-    onSecondary = Color(0xFFFFFFFF),
-    secondaryContainer = Color(0xFF66A6BA),
-    onSecondaryContainer = Color(0xFF006994),  // цвет активной иконки ботмБар
-
-    tertiary = Color(0xFF00704A),
-    onTertiary = Color(0xFFFFFFFF),
-    tertiaryContainer = Color(0xFF2D6C50),
-    onTertiaryContainer = Color(0xFFFFFFFF),
-
-    background = Color(0xFFC1E1E3),
-    onBackground = Color(0xFF000000),
-
-    surface = Color(0xFF333333),    // фон ботом шилта
-    onSurface = Color(0xFFFFFFFF),  // цвет текста на ботм шилте
-    surfaceVariant = Color(0xFF666666),  // цвет карточки
-    onSurfaceVariant = Color(0xFF006994),  // цыет текста на карточке
-
-    surfaceTint = Color(0xFF444444),
-    inverseSurface = Color(0xFFDDDDDD),
-    inverseOnSurface = Color(0xFF333333),
-
     error = Color(0xFFFF0000),
-    onError = Color(0xFFFFFFFF),
-    errorContainer = Color(0xFF330000),
-    onErrorContainer = Color(0xFFFFFFFF),
-
-    outline = Color(0xFF006994), // рамка радиобатона
-    outlineVariant = Color(0xFFCCCCCC), // цвет внутри радиобатона
-
-    scrim = Color(0xAA000000),  // Затемнения фона от ботомшилта
-    surfaceBright = Color(0xFFCCCCCC),
-    surfaceContainer = Color(0xFF444444),
-    surfaceContainerHigh = Color(0xFF555555),
-    surfaceContainerHighest = Color(0xFF666666),
-    surfaceContainerLow = Color(0xFF333333),
-    surfaceContainerLowest = Color(0xFF222222),
-    surfaceDim = Color(0xFF555555)
 )
-
-private val caramelDreamDarkColorScheme = darkColorScheme(
-    primary = Color(0xFFB6410F),
-    onPrimary = Color(0xFF000000),
-    primaryContainer = Color(0xFFF1DAAE),
-    onPrimaryContainer = Color(0xFF000000),
-
-    secondary = Color(0xFF91553D),
-    onSecondary = Color(0xFF000000),
-    secondaryContainer = Color(0xFFF1DAAE),
-    onSecondaryContainer = Color(0xFF000000),  // цвет активной иконки ботмБар
-
-    tertiary = Color(0xFF00704A),
-    onTertiary = Color(0xFF000000),
-    tertiaryContainer = Color(0xFFF1DAAE),
-    onTertiaryContainer = Color(0xFF000000),
-
-    background = Color(0xFFFFFFFF),
-    onBackground = Color(0xFF000000),
-
-    surface = Color(0xFFDDDDDD),  // фон ботом шилта
-    onSurface = Color(0xFF000000),  // цвет текста на ботм шилте
-    surfaceVariant = Color(0xFFCCCCCC),  // цвет карточки
-    onSurfaceVariant = Color(0xFF000000),  // цыет текста на карточке
-
-    surfaceTint = Color(0xFFEEEEEE),
-    inverseSurface = Color(0xFF000000),
-    inverseOnSurface = Color(0xFFFFFFFF),
-
-    error = Color(0xFFFF0000),
-    onError = Color(0xFFFFFFFF),
-    errorContainer = Color(0xFFFFDDDD),
-    onErrorContainer = Color(0xFF000000),
-
-    outline = Color(0xFF999999), // рамка радиобатона
-    outlineVariant = Color(0xFFCCCCCC), // цвет внутри радиобатона
-
-    scrim = Color(0x00000000),  // Затемнения фона от ботомшилта
-    surfaceBright = Color(0xFFFFFFFF),
-    surfaceContainer = Color(0xFFFFFFFF),
-    surfaceContainerHigh = Color(0xFFDDDDDD),
-    surfaceContainerHighest = Color(0xFFCCCCCC),
-    surfaceContainerLow = Color(0xFFEEEEEE),
-    surfaceContainerLowest = Color(0xFFDDDDDD),
-    surfaceDim = Color(0xFFDDDDDD)
-)
-
 
 //name = "Forest Harmony",
 private val forestHarmonyLightColorScheme = lightColorScheme(
     primary = Color(0xFF777E5C),
-    onPrimary = Color(0xFFFFFFFF),
-    primaryContainer = Color(0xFF33445A),
-    onPrimaryContainer = Color(0xFFFFFFFF),
     inversePrimary = Color(0xFFAAB68B),
+    onPrimary = Color(0xFFFFFFFF),
+    primaryContainer = Color(0xFFADB49C),
+    onPrimaryContainer = Color(0xFF777E5C),
 
-    secondary = Color(0xFF99004C),
-    onSecondary = Color(0xFFFFFFFF),
-    secondaryContainer = Color(0xFF442B64),
-    onSecondaryContainer = Color(0xFFFFFFFF),  // цвет активной иконки ботмБар
-
-    tertiary = Color(0xFF00704A),
-    onTertiary = Color(0xFFFFFFFF),
-    tertiaryContainer = Color(0xFF2D6C50),
-    onTertiaryContainer = Color(0xFFFFFFFF),
+    onSecondary = Color(0xFF000000),
+    secondaryContainer = Color(0xFFB8BDAF),
+    onSecondaryContainer = Color(0xFF777E5C),  // цвет активной иконки ботмБар
 
     background = Color(0xFFF2F1EF),
-    onBackground = Color(0xFF33445A),
+    onBackground = Color(0xFF000000),
 
-    surface = Color(0xFF333333),  // фон ботом шилта
-    onSurface = Color(0xFFFFFFFF),  // цвет текста на ботм шилте
-    surfaceVariant = Color(0xFF666666),  // цвет карточки
-    onSurfaceVariant = Color(0xFFFFFFFF),  // цыет текста на карточке
-
-    surfaceTint = Color(0xFF444444),
-    inverseSurface = Color(0xFFDDDDDD),
-    inverseOnSurface = Color(0xFF333333),
-
-    error = Color(0xFFFF0000),
-    onError = Color(0xFFFFFFFF),
-    errorContainer = Color(0xFF330000),
-    onErrorContainer = Color(0xFFFFFFFF),
+    surface = Color(0xFFEEEEEE),  // фон ботом шилта
+    onSurface = Color(0xFF000000),  // цвет текста на ботм шилте
+    surfaceVariant = Color(0xFFFFFFFF),  // цвет карточки
+    onSurfaceVariant = Color(0xFF777E5C),  // цыет текста на карточке
 
     outline = Color(0xFF777E5C), // рамка радиобатона
-    outlineVariant = Color(0xFFCCCCCC), // цвет внутри радиобатона
-
-    scrim = Color(0xAA000000),  // Затемнения фона от ботомшилта
-    surfaceBright = Color(0xFFCCCCCC),
-    surfaceContainer = Color(0xFF444444),
-    surfaceContainerHigh = Color(0xFF555555),
-    surfaceContainerHighest = Color(0xFF666666),
-    surfaceContainerLow = Color(0xFF333333),
-    surfaceContainerLowest = Color(0xFF222222),
-    surfaceDim = Color(0xFF555555)
+    outlineVariant = Color(0xFFFFFFFF), // цвет внутри радиобатона
+    error = Color(0xFFFF0000),
 )
 
 private val forestHarmonyDarkColorScheme = darkColorScheme(
     primary = Color(0xFF777E5C),
-    onPrimary = Color(0xFFF2F1EF),
-    primaryContainer = Color(0xFFF2F1EF),
-    onPrimaryContainer = Color(0xFF000000),
+    inversePrimary = Color(0xFF585F3E),
+    onPrimary = Color(0xFFFFFFFF),
+    primaryContainer = Color(0xFF40462C),
+    onPrimaryContainer = Color(0xFFFFFFFF),
 
-    secondary = Color(0xFFAAB68B),
+    onSecondary = Color(0xFFFFFFFF),
+    secondaryContainer = Color(0xFF90947F), // Цвет фона активной кнопки
+    onSecondaryContainer = Color(0xFFFFFFFF),  // цвет активной иконки ботмБар
+
+    background = Color(0xFF585F3E),
+    onBackground = Color(0xFFFFFFFF),
+
+    surface = Color(0xFF585F3E), // фон ботом шилта
+    onSurface = Color(0xFFFFFFFF), // цвет текста на ботм шилте
+    surfaceVariant = Color(0xFF60664B),  // цвет карточки
+    onSurfaceVariant = Color(0xFFFFFFFF),  // цыет текста на карточке
+
+    outline = Color(0xFF777E5C), // рамка радиобатона
+    outlineVariant = Color(0xFFCCCCCC), // цвет внутри радиобатона
+    error = Color(0xFFFF0000),
+ )
+
+///"Fire Red Blaze",
+private val fireRedBlazeLightColorScheme = lightColorScheme(
+    primary = Color(0xFFD32F2F),
+    inversePrimary = Color(0xFFD14646),
+    onPrimary = Color(0xFFFFFFFF),
+    onPrimaryContainer = Color(0xFFD32F2F),
+
     onSecondary = Color(0xFF000000),
-    secondaryContainer = Color(0xFFAAB68B), // Цвет фона активной кнопки
-    onSecondaryContainer = Color(0xFFF2F1EF),  // цвет активной иконки ботмБар
+    secondaryContainer = Color(0xFFE9AFAF), // Цвет фона активной кнопки
+    onSecondaryContainer = Color(0xFFD32F2F),  // цвет активной иконки ботмБар
 
-    tertiary = Color(0xFF00704A),
-    onTertiary = Color(0xFF000000),
-    tertiaryContainer = Color(0xFFF2F1EF),
-    onTertiaryContainer = Color(0xFF000000),
-
-    background = Color(0xFF535841),
-    onBackground = Color(0xFFF2F1EF),
+    background = Color(0xFFF2F1EF),
+    onBackground = Color(0xFF000000),
 
     surface = Color(0xFFDDDDDD), // фон ботом шилта
     onSurface = Color(0xFF000000), // цвет текста на ботм шилте
-    surfaceVariant = Color(0xFFCCCCCC),  // цвет карточки
-    onSurfaceVariant = Color(0xFF000000),  // цыет текста на карточке
+    surfaceVariant = Color(0xFFFFFFFF),  // цвет карточки
+    onSurfaceVariant = Color(0xFFD32F2F),  // цыет текста на карточке
 
-    surfaceTint = Color(0xFFEEEEEE),
-    inverseSurface = Color(0xFF000000),
-    inverseOnSurface = Color(0xFFFFFFFF),
-
-    error = Color(0xFFFF0000),
-    onError = Color(0xFFFFFFFF),
-    errorContainer = Color(0xFFFFDDDD),
-    onErrorContainer = Color(0xFF000000),
-
-    outline = Color(0xFF999999), // рамка радиобатона
+    outline = Color(0xFFD32F2F), // рамка радиобатона
     outlineVariant = Color(0xFFCCCCCC), // цвет внутри радиобатона
+    error = Color(0xFFFF0000),
+)
 
-    scrim = Color(0x00000000),   // Затемнения фона от ботомшилта
-    surfaceBright = Color(0xFFFFFFFF),
-    surfaceContainer = Color(0xFFFFFFFF),
-    surfaceContainerHigh = Color(0xFFDDDDDD),
-    surfaceContainerHighest = Color(0xFFCCCCCC),
-    surfaceContainerLow = Color(0xFFEEEEEE),
-    surfaceContainerLowest = Color(0xFFDDDDDD),
-    surfaceDim = Color(0xFFDDDDDD)
+private val fireRedBlazeDarkColorScheme = darkColorScheme(
+    primary = Color(0xFFD32F2F),
+    inversePrimary = Color(0xFFE45555),
+    onPrimary = Color(0xFFFFFFFF),
+    primaryContainer = Color(0xFFD32F2F),
+    onPrimaryContainer = Color(0xFFFFFFFF),
+
+    onSecondary = Color(0xFFFFFFFF),
+    secondaryContainer = Color(0xFFEB5252), // Color for active button background
+    onSecondaryContainer = Color(0xFFFFFFFF), // Color for active icon in bottom bar
+
+    background = Color(0xFF802222),  // Background color for dark theme
+    onBackground = Color(0xFFFFFFFF), // Text color on the dark background
+
+    surface = Color(0xFF802222), // Background color for bottom sheet
+    onSurface = Color(0xFFFFFFFF), // Text color on the bottom sheet
+    surfaceVariant = Color(0xFFA72727), // Color for card background
+    onSurfaceVariant = Color(0xFFFFFFFF), // Text color on the card
+
+    outline = Color(0xFFD32F2F), // Border color for radio button
+    outlineVariant = Color(0xFFFFFFFF), // Color inside radio button
+    error = Color(0xFFFF0000),
 )
 
 
-//private val silverDriftingClouds = Theme(
-//    name = "Silver Drifting Clouds",
-//    primary = Color(0xFF586E8F),
-//    background = Color(0xFFEBEAEB),
-//    inversePrimary = Color(0xFFB1C7DE)
-//)
-//
-//private val sunsetSerenity = Theme(
-//    name = "Sunset Serenity",
-//    primary = Color(0xFFD66D41),
-//    background = Color(0xFFF2E3D8),
-//    inversePrimary = Color(0xFFA96B57)
-//)
-//
-//private val violetTwilight = Theme(
-//    name = "Violet Twilight",
-//    primary = Color(0xFF7B5094),
-//    background = Color(0xFFE2D5E7),
-//    inversePrimary = Color(0xFFA88BBE)
-//)
-//
-//private val fireRedBlaze = Theme(
-//    name = "Fire Red Blaze",
-//    primary = Color(0xFFD32F2F),
-//    background = Color(0xFFFDF5E6),
-//    inversePrimary = Color(0xFFFFA07A)
-//)
-//
-//private val sunnyLemonade = Theme(
-//    name = "Sunny Lemonade",
-//    primary = Color(0xFFFFD700),
-//    background = Color(0xFFFFFACD),
-//    inversePrimary = Color(0xFF808000)
-//)
-//
-//
-//private val royalPurpleReign = Theme(
-//    name = "Royal Purple Reign",
-//    primary = Color(0xFF800080),
-//    background = Color(0xFFD8BFD8),
-//    inversePrimary = Color(0xFF4B0082)
-//)
-//
-//
-//private val earthlyTerracotta = Theme(
-//    name = "Earthly Terracotta",
-//    primary = Color(0xFFCC5533),
-//    background = Color(0xFFF4A460),
-//    inversePrimary = Color(0xFF8B4513)
-//)
+
+///"Sunny Lemonade"
+private val sunnyLemonadeLightColorScheme = lightColorScheme(
+    primary = Color(0xFFB8A01F),
+    inversePrimary = Color(0xFFCDDC39),
+    onPrimary = Color(0xFFFFFFFF),
+    primaryContainer = Color(0xFFD3D35C),
+    onPrimaryContainer = Color(0xFFB8A01F),
+
+    onSecondary = Color(0xFF000000),
+    secondaryContainer = Color(0xFFC7C19F), // Цвет фона активной кнопки
+    onSecondaryContainer = Color(0xFFB8A01F),  // цвет активной иконки ботмБар
+
+    background = Color(0xFFF2F1EF),
+    onBackground = Color(0xFF000000),
+
+    surface = Color(0xFFDDDDDD), // фон ботом шилта
+    onSurface = Color(0xFF000000), // цвет текста на ботм шилте
+    surfaceVariant = Color(0xFFFFFFFF),  // цвет карточки
+    onSurfaceVariant = Color(0xFFB8A01F),  // цыет текста на карточке
+
+    outline = Color(0xFFB8A01F), // рамка радиобатона
+    outlineVariant = Color(0xFFCCCCCC), // цвет внутри радиобатона
+    error = Color(0xFFFF0000),
+)
+
+private val sunnyLemonadeDarkColorScheme = darkColorScheme(
+    primary = Color(0xFFB8A01F),
+    inversePrimary = Color(0xFF919102),
+    onPrimary = Color(0xFFFFFFFF),
+    primaryContainer = Color(0xFF5E5319),
+    onPrimaryContainer = Color(0xFFFFFFFF),
+
+    onSecondary = Color(0xFFFFFFFF),
+    secondaryContainer = Color(0xFF968D5F), // Color for active button background
+    onSecondaryContainer = Color(0xFFFFFFFF), // Color for active icon in bottom bar
+
+    background = Color(0xFF756401), // Background color for dark theme
+    onBackground = Color(0xFFFFFFFF), // Text color on the dark background
+
+
+    surface = Color(0xFFA28800), // Background color for bottom sheet
+    onSurface = Color(0xFFFFFFFF), // Text color on the bottom sheet
+    surfaceVariant = Color(0xFFA08E2B), // Color for card background
+    onSurfaceVariant = Color(0xFFFFFFFF), // Text color on the card
+
+    outline = Color(0xFFB8A01F), // Border color for radio button
+    outlineVariant = Color(0xFFFFFFFF), // Color inside radio button
+    error = Color(0xFFFF0000),
+)
+
+
+///Sunset Serenity
+private val sunsetSerenityLightColorScheme = lightColorScheme(
+    primary = Color(0xFFD66D41),
+    onPrimary = Color(0xFFFFFFFF),
+    inversePrimary = Color(0xFFA96B57),
+    primaryContainer = Color(0xFFA8897F),
+    onPrimaryContainer = Color(0xFFD66D41),
+
+    onSecondary = Color(0xFF000000),
+    secondaryContainer = Color(0xFFD5C8C3), // Цвет фона активной кнопки
+    onSecondaryContainer = Color(0xFFD66D41),  // цвет активной иконки ботмБар
+
+    background = Color(0xFFF2F1EF),
+    onBackground = Color(0xFF000000),
+
+    surface = Color(0xFFDDDDDD), // фон ботом шилта
+    onSurface = Color(0xFF000000), // цвет текста на ботм шилте
+    surfaceVariant = Color(0xFFFFFFFF),  // цвет карточки
+    onSurfaceVariant = Color(0xFFD66D41),  // цыет текста на карточке
+
+    outline = Color(0xFFD66D41), // рамка радиобатона
+    outlineVariant = Color(0xFFCCCCCC), // цвет внутри радиобатона
+    error = Color(0xFFFF0000),
+)
+
+private val sunsetSerenityDarkColorScheme = darkColorScheme(
+    primary = Color(0xFFA85532),
+    inversePrimary = Color(0xFFA96B57),
+    onPrimary = Color(0xFFFFFFFF),
+    primaryContainer = Color(0xFF80442A),
+    onPrimaryContainer = Color(0xFFFFFFFF),
+
+    onSecondary = Color(0xFFFFFFFF),
+    secondaryContainer = Color(0xFF7E4026), // Цвет фона активной кнопки
+    onSecondaryContainer = Color(0xFFFFFFFF),  // цвет активной иконки ботмБар
+
+    background = Color(0xFF7E4026),
+    onBackground = Color(0xFFFFFFFF),
+
+    surface = Color(0xFF69341E), // фон ботом шилта
+    onSurface = Color(0xFFFFFFFF), // цвет текста на ботм шилте
+    surfaceVariant = Color(0xFF7E4026),  // цвет карточки
+    onSurfaceVariant = Color(0xFFFFFFFF),  // цыет текста на карточке
+
+    outline = Color(0xFFA85532), // рамка радиобатона
+    outlineVariant = Color(0xFFCCCCCC), // цвет внутри радиобатона
+    error = Color(0xFFFF0000),
+)

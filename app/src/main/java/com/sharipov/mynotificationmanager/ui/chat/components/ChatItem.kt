@@ -60,7 +60,7 @@ fun ChatItem(homeViewModel: HomeViewModel, notification: NotificationEntity) {
         color = MaterialTheme.colorScheme.primary
     } else {
         icon = Icons.Outlined.Star
-        color = MaterialTheme.colorScheme.inversePrimary
+        color = Color.Gray
     }
 
     Card(

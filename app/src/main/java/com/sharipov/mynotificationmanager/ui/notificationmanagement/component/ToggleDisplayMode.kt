@@ -73,6 +73,6 @@ fun toggleDisplayBackground(whichListIsDisplayed: Boolean, context: Context): Co
             || (!isSystemInDarkTheme() && ThemePreferences.getThemeMode(context) == "system_theme")
         ) {
             Color(android.graphics.Color.parseColor("#DCDCDC"))
-        } else Color.DarkGray
+        } else MaterialTheme.colorScheme.primary
     } else MaterialTheme.colorScheme.background
 }

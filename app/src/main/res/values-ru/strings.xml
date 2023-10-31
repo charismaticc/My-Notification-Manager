@@ -72,10 +72,12 @@
     <string name="rate_the_app">Оценит приложение!</string>
     <string name="go_to_the_chat">Перейти в чат!</string>
     <string name="share">Отправить резервную копию</string>
-    <string name="filters">Filters</string>
-    <string name="notifications_description">Required to save notifications</string>
-    <string name="notifications">Notifications</string>
-    <string name="battery_optimization">Battery Optimization</string>
-    <string name="battery_optimization_description">Without permission to play battery optimization, apps will not be able to run in the background and will not be able to save all notifications</string>
-    <string name="give_permissions">Give permissions</string>
+    <string name="filters">Фильтры</string>
+    <string name="access_to_features">Доступ к функциям</string>
+    <string name="request_access_description">Сейчас мы запросим доступ к функциям, без которых мы не сможем выполнять задачи</string>
+    <string name="notifications_description">Необходимо для сохранения уведомлений</string>
+    <string name="notifications">Уведомления</string>
+    <string name="battery_optimization">Оптимизация батареи</string>
+    <string name="battery_optimization_description">Без разрешения на оптимизацию батареи приложения не смогут работать в фоновом режиме и не смогут сохранять все уведомления</string>
+    <string name="give_permissions">Предоставить разрешения</string>
 </resources>

@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name" translatable="false">Notification manager</string>
-    <string name="app_version" translatable="false">1.0.7</string>
+    <string name="app_version" translatable="false">2.0</string>
     <string name="service_name">My Notification Listener Service</string>
     <string name="private_policy_text">-Privacy Policy\nThis application saves notifications that come to your phone. We value your privacy and adhere to high standards of data protection.\n-Collected data\nThe application collects only notifications that come to your phone. They are stored in the local storage of your device and are not transferred to any third parties.\n-Data usage\nUnsaved notifications are used only inside the app to provide you with the functionality to view and manage them.\n-Data Storage\nNotifications are stored on your device in local storage and can only be deleted by you through the application interface.\n-Contacts\nIf you have any questions or comments regarding our privacy policy, please contact us at akbar20sharipov01@gmail.com</string>
     <string name="applications">Applications</string>
