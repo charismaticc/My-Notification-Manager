@@ -24,22 +24,19 @@ class MyNotificationListenerService : NotificationListenerService() {
     private lateinit var notificationDao: NotificationDao
     private lateinit var excludedAppDao: ExcludedAppDao
     private lateinit var context: Context
-    override fun onCreate() {
-        super.onCreate()
-        val database = Room.databaseBuilder(
-            applicationContext,
-            AppDatabase::class.java,
-            "notification.db"
-        ).build()
-        notificationDao = database.notificationDao()
-        excludedAppDao = database.excludedAppDao()
-        context = applicationContext
-        database.close()
-    }
 
     @RequiresApi(Build.VERSION_CODES.S)
     override fun onNotificationPosted(sbn: StatusBarNotification) {
         try {
+            val database = Room.databaseBuilder(
+                applicationContext,
+                AppDatabase::class.java,
+                "notification.db"
+            ).build()
+            notificationDao = database.notificationDao()
+            excludedAppDao = database.excludedAppDao()
+            context = applicationContext
+
             // get package Name
             val packageName = sbn.packageName
             val coroutineScope = CoroutineScope(Dispatchers.IO)
@@ -87,6 +84,7 @@ class MyNotificationListenerService : NotificationListenerService() {
                     }
                 }
             }
+            database.close()
         } catch (e: Exception) {
             e.printStackTrace()
         }

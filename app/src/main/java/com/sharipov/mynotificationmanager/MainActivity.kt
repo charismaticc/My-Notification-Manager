@@ -33,8 +33,10 @@ import com.sharipov.mynotificationmanager.utils.setLocaleBasedOnUserPreferences
 import com.sharipov.mynotificationmanager.viewmodel.HomeViewModel
 import com.sharipov.mynotificationmanager.viewmodel.SettingsViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import kotlin.time.Duration.Companion.seconds
 
 @AndroidEntryPoint
@@ -57,8 +59,11 @@ class MainActivity : ComponentActivity() {
 
         appUpdateManager = AppUpdateManagerFactory.create(applicationContext)
         appUpdateManager.registerListener(installStateUpdateListener)
-        checkForAppUpdate()
-        setLocaleBasedOnUserPreferences(this)
+
+        lifecycleScope.launch {
+            setLocaleBasedOnUserPreferencesInBackground()
+            checkForAppUpdateInBackground()
+        }
 
         val homeViewModel: HomeViewModel by viewModels()
         val settingsViewModel: SettingsViewModel by viewModels()
@@ -76,6 +81,37 @@ class MainActivity : ComponentActivity() {
                         settingsViewModel = settingsViewModel,
                         navController = navController
                     )
+                }
+            }
+        }
+    }
+
+    private suspend fun setLocaleBasedOnUserPreferencesInBackground() {
+        withContext(Dispatchers.IO) {
+            setLocaleBasedOnUserPreferences(this@MainActivity)
+        }
+    }
+
+    private suspend fun checkForAppUpdateInBackground() {
+        withContext(Dispatchers.IO) {
+            val appUpdateOptions = AppUpdateOptions.defaultOptions(updateType)
+            appUpdateManager.appUpdateInfo.addOnSuccessListener { info ->
+                val isUpdateAvailable = info.updateAvailability() == UpdateAvailability.UPDATE_AVAILABLE
+                val isUpdateAllowed = when (updateType) {
+                    AppUpdateType.FLEXIBLE -> info.isFlexibleUpdateAllowed
+                    else -> false
+                }
+                if (isUpdateAllowed && isUpdateAvailable) {
+                    try {
+                        appUpdateManager.startUpdateFlowForResult(
+                            info,
+                            this@MainActivity,
+                            appUpdateOptions,
+                            123
+                        )
+                    } catch (e: IntentSender.SendIntentException) {
+                        // Handle the exception
+                    }
                 }
             }
         }

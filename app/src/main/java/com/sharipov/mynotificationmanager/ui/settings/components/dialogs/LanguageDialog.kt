@@ -34,7 +34,7 @@ import com.sharipov.mynotificationmanager.data.PreferencesManager
 @Composable
 fun LanguageDialog(onLanguageSelected: (String) -> Unit, onDismiss: () -> Unit) {
     val context = LocalContext.current
-    val languages = listOf("English", "Русский", "Тоҷикӣ", "Українська")
+    val languages = listOf("English", "Русский", "Тоҷикӣ")
     var selectedLanguage by remember { mutableStateOf(PreferencesManager.getSelectedLanguage(context) ?: "English") }
 
     AlertDialog(
