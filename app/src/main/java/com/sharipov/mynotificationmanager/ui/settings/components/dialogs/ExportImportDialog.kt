@@ -66,7 +66,7 @@ fun exportImportDialog(context: Context, homeViewModel: HomeViewModel): Boolean 
     return openDialog.value
 }
 
-@OptIn(ExperimentalFoundationApi::class)
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ExportImportModalBottomSheetContent(context: Context, homeViewModel: HomeViewModel) {
     val pagerState = rememberPagerState(pageCount = { 2 }, initialPage = 0)

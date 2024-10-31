@@ -34,7 +34,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.wear.compose.material3.ContentAlpha
 import com.sharipov.mynotificationmanager.R
 import com.sharipov.mynotificationmanager.model.NotificationEntity
 import com.sharipov.mynotificationmanager.ui.allnotifications.component.updateNotification
@@ -100,7 +99,7 @@ fun ChatItem(homeViewModel: HomeViewModel, notification: NotificationEntity) {
                     Text(
                         text = dateFormat.format(Date(notification.time)),
                         fontSize = 14.sp,
-                        color = MaterialTheme.colorScheme.onSurface.copy(alpha = ContentAlpha.medium)
+//                        color = MaterialTheme.colorScheme.onSurface.copy(alpha = ContentAlpha.medium)
                     )
                     Image(
                         imageVector = icon,
