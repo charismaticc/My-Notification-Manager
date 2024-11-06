@@ -15,7 +15,6 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.sharipov.mynotificationmanager.ui.bottombarcomponent.BottomBar
 import com.sharipov.mynotificationmanager.R
-import com.sharipov.mynotificationmanager.navigation.Screens
 import com.sharipov.mynotificationmanager.ui.allnotifications.component.NotificationItem
 import com.sharipov.mynotificationmanager.ui.theme.topBarColorScheme
 import com.sharipov.mynotificationmanager.utils.TransparentSystemBars
@@ -30,8 +29,6 @@ fun FavoriteScreen(
     navController: NavController,
 ) {
     val context = LocalContext.current
-    val currentNavBackStackEntry by navController.currentBackStackEntryAsState()
-    val currentRoute = currentNavBackStackEntry?.destination?.route ?: Constants.Screens.FAVORITE_SCREEN
     val notificationListState = homeViewModel.getFavoriteNotifications().collectAsState(initial = listOf())
 
     TransparentSystemBars()
@@ -47,16 +44,6 @@ fun FavoriteScreen(
                     )
                 },
                 colors = topBarColorScheme()
-            )
-        },
-        bottomBar = {
-            BottomBar(
-                route = currentRoute,
-                navigateToApplications = { navController.navigate(Screens.Applications.route) },
-                navigateToAllNotifications = { navController.navigate(Screens.AllNotifications.route) },
-                navigateToSettings = { navController.navigate(Screens.Settings.route) },
-                navigateToFavorite = { navController.navigate(Screens.Favorite.route) },
-                navigateToNotificationManagement = { navController.navigate(Screens.NotificationManagement.route) },
             )
         }
     ) {

@@ -24,11 +24,11 @@ fun BottomBar(
     navigateToNotificationManagement: () -> Unit = {},
 ) {
     val items = listOf(
-        Constants.Screens.FAVORITE_SCREEN to painterResource(id = R.drawable.ic_archive),
-        Constants.Screens.APPLICATION_SCREEN to painterResource(id = R.drawable.ic_apps),
-        Constants.Screens.ALL_NOTIFICATIONS_SCREEN to painterResource(id = R.drawable.ic_notifications),
-        Constants.Screens.NOTIFICATION_MANAGEMENT_SCREEN to painterResource(id = R.drawable.ic_rule),
-        Constants.Screens.SETTINGS_SCREEN to painterResource(id = R.drawable.ic_settings),
+        Constants.Screens.FAVORITE_SCREEN to painterResource(id = R.drawable.ic_archive_filled),
+        Constants.Screens.APPLICATION_SCREEN to painterResource(id = R.drawable.ic_apps_filled),
+        Constants.Screens.ALL_NOTIFICATIONS_SCREEN to painterResource(id = R.drawable.ic_notifications_filled),
+        Constants.Screens.NOTIFICATION_MANAGEMENT_SCREEN to painterResource(id = R.drawable.ic_rule_filled),
+        Constants.Screens.SETTINGS_SCREEN to painterResource(id = R.drawable.ic_settings_filled),
     )
     NavigationBar(
         modifier = Modifier.fillMaxWidth().size(62.dp).shadow(16.dp),

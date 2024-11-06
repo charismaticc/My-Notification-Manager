@@ -41,8 +41,8 @@ fun AllApplication(
             .padding(16.dp)
     ) {
         Image(
-            painter = if (whichListIsDisplayed) painterResource(id = R.drawable.ic_notifications_2)
-                    else painterResource(id = R.drawable.ic_notifications_off),
+            painter = if (whichListIsDisplayed) painterResource(id = R.drawable.ic_save_notifications)
+                    else painterResource(id = R.drawable.ic_block_notifications),
             contentDescription = null,
             modifier = Modifier.size(48.dp),
             colorFilter = ColorFilter

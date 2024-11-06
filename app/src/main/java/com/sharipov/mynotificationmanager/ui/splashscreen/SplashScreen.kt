@@ -20,8 +20,8 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.airbnb.lottie.compose.*
 import com.sharipov.mynotificationmanager.R
+import com.sharipov.mynotificationmanager.core.navigation.routes.Routes
 import com.sharipov.mynotificationmanager.data.ThemePreferences
-import com.sharipov.mynotificationmanager.navigation.Screens
 import com.sharipov.mynotificationmanager.utils.TransparentSystemBars
 import com.sharipov.mynotificationmanager.utils.UpdateApplicationList
 import com.sharipov.mynotificationmanager.viewmodel.HomeViewModel
@@ -55,7 +55,7 @@ fun SplashScreen(
                 homeViewModel.deleteExpiredNotification(deleteThreshold)
             }
         }
-        navController.navigate(Screens.Permissions.route)
+        navController.navigate(Routes.PermissionsRoute.route)
     }
 }
 

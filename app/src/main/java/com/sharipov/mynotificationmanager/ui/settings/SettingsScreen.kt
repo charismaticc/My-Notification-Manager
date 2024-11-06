@@ -18,7 +18,6 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import com.sharipov.mynotificationmanager.R
 import com.sharipov.mynotificationmanager.data.PreferencesManager
 import com.sharipov.mynotificationmanager.data.ThemePreferences
-import com.sharipov.mynotificationmanager.navigation.Screens
 import com.sharipov.mynotificationmanager.ui.bottombarcomponent.BottomBar
 import com.sharipov.mynotificationmanager.ui.settings.components.ClickableListItem
 import com.sharipov.mynotificationmanager.ui.settings.components.dialogs.LanguageDialog
@@ -43,8 +42,6 @@ fun SettingsScreen(
     settingsViewModel: SettingsViewModel,
     navController: NavController,
 ) {
-    val currentNavBackStackEntry by navController.currentBackStackEntryAsState()
-    val currentRoute = currentNavBackStackEntry?.destination?.route ?: Constants.Screens.SETTINGS_SCREEN
     val openAutoRemoveDialog = remember { mutableStateOf(false) }
     val openExportImportDialog = remember { mutableStateOf(false) }
     val openPrivatePolicyDialog = remember { mutableStateOf(false) }
@@ -69,17 +66,7 @@ fun SettingsScreen(
                 },
                 colors = topBarColorScheme()
             )
-        },
-        bottomBar = {
-            BottomBar(
-                route = currentRoute,
-                navigateToApplications = { navController.navigate(Screens.Applications.route) },
-                navigateToAllNotifications = { navController.navigate(Screens.AllNotifications.route) },
-                navigateToSettings = { navController.navigate(Screens.Settings.route) },
-                navigateToFavorite = { navController.navigate(Screens.Favorite.route) },
-                navigateToNotificationManagement = { navController.navigate(Screens.NotificationManagement.route) },
-            )
-        },
+        }
     ) {
         LazyColumn(
             userScrollEnabled = true

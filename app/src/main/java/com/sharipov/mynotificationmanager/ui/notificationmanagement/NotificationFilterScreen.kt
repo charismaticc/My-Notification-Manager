@@ -31,7 +31,6 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.sharipov.mynotificationmanager.ui.bottombarcomponent.BottomBar
 import com.sharipov.mynotificationmanager.R
-import com.sharipov.mynotificationmanager.navigation.Screens
 import com.sharipov.mynotificationmanager.ui.notificationmanagement.component.AllApplication
 import com.sharipov.mynotificationmanager.ui.notificationmanagement.component.AppListItem
 import com.sharipov.mynotificationmanager.ui.notificationmanagement.component.ToggleDisplayMode
@@ -42,13 +41,11 @@ import com.sharipov.mynotificationmanager.viewmodel.SettingsViewModel
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun NotificationManagement(
+fun NotificationFilterScreen(
     settingsViewModel: SettingsViewModel,
     navController: NavController,
 ) {
     val context = LocalContext.current
-    val currentNavBackStackEntry by navController.currentBackStackEntryAsState()
-    val currentRoute = currentNavBackStackEntry?.destination?.route ?: Constants.Screens.APPLICATION_SCREEN
     val whichListIsDisplayed = remember { mutableStateOf(true) }
     var searchQuery by remember { mutableStateOf("") }
     var searchVisible by remember { mutableStateOf(false) }
@@ -70,17 +67,7 @@ fun NotificationManagement(
                 searchText = searchQuery,
                 onSearchTextChange = { searchQuery = it }
             )
-        },
-        bottomBar = {
-            BottomBar(
-                route = currentRoute,
-                navigateToApplications = { navController.navigate(Screens.Applications.route) },
-                navigateToAllNotifications = { navController.navigate(Screens.AllNotifications.route) },
-                navigateToSettings = { navController.navigate(Screens.Settings.route) },
-                navigateToFavorite = { navController.navigate(Screens.Favorite.route) },
-                navigateToNotificationManagement = { navController.navigate(Screens.NotificationManagement.route) },
-            )
-        },
+        }
     ) {
         Column(
             modifier = Modifier.fillMaxSize(),

@@ -40,7 +40,7 @@ fun DoNotDisturbMode(initialChecked: Boolean, context: Context) {
             .padding(16.dp)
     ) {
         Image(
-            painter = painterResource(id = R.drawable.ic_notifications_off),
+            painter = painterResource(id = R.drawable.ic_block_notifications),
             contentDescription = null,
             modifier = Modifier.size(48.dp),
             colorFilter = ColorFilter.tint(if (isSystemInDarkTheme()) Color.White else Color.DarkGray)

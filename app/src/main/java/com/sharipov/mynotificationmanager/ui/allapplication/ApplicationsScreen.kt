@@ -17,7 +17,6 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.sharipov.mynotificationmanager.ui.bottombarcomponent.BottomBar
 import com.sharipov.mynotificationmanager.R
-import com.sharipov.mynotificationmanager.navigation.Screens
 import com.sharipov.mynotificationmanager.ui.allapplication.component.ApplicationItem
 import com.sharipov.mynotificationmanager.ui.theme.topBarColorScheme
 import com.sharipov.mynotificationmanager.utils.TransparentSystemBars
@@ -33,9 +32,6 @@ fun ApplicationsScreen(
     navController: NavController,
 ) {
 
-    val currentNavBackStackEntry by navController.currentBackStackEntryAsState()
-    val currentRoute =
-        currentNavBackStackEntry?.destination?.route ?: Constants.Screens.APPLICATION_SCREEN
     val applicationListState = homeViewModel.getApplications().collectAsState(initial = listOf())
 
     TransparentSystemBars()
@@ -51,16 +47,6 @@ fun ApplicationsScreen(
                     )
                 },
                 colors = topBarColorScheme()
-            )
-        },
-        bottomBar = {
-            BottomBar(
-                route = currentRoute,
-                navigateToApplications = { navController.navigate(Screens.Applications.route) },
-                navigateToAllNotifications = { navController.navigate(Screens.AllNotifications.route) },
-                navigateToSettings = { navController.navigate(Screens.Settings.route) },
-                navigateToFavorite = { navController.navigate(Screens.Favorite.route) },
-                navigateToNotificationManagement = { navController.navigate(Screens.NotificationManagement.route) },
             )
         }
     ) {
@@ -91,7 +77,7 @@ fun ApplicationsScreen(
                             .padding(16.dp, 8.dp, 16.dp, 8.dp)
                             .background(MaterialTheme.colorScheme.background)
                             .clickable {
-                                navController.navigate(Screens.Conversations.route + "/$packageName")
+                                navController.navigate( route = "conversations/$packageName")
                             }
                     )
                 }

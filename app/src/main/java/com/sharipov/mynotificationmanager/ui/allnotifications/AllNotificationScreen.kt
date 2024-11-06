@@ -38,7 +38,6 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.sharipov.mynotificationmanager.R
 import com.sharipov.mynotificationmanager.model.NotificationEntity
-import com.sharipov.mynotificationmanager.navigation.Screens
 import com.sharipov.mynotificationmanager.ui.allnotifications.component.MyFloatingActionButton
 import com.sharipov.mynotificationmanager.ui.allnotifications.component.NotificationItem
 import com.sharipov.mynotificationmanager.ui.allnotifications.component.filterSheet
@@ -69,9 +68,6 @@ fun AllNotificationScreen(
     var data by remember { mutableStateOf("") }
     var fromDate by remember { mutableStateOf("") }
     var toDate by remember { mutableStateOf("") }
-    val currentNavBackStackEntry by navController.currentBackStackEntryAsState()
-    val currentRoute =
-        currentNavBackStackEntry?.destination?.route ?: Constants.Screens.APPLICATION_SCREEN
     var searchText by remember { mutableStateOf("") }
 
     val notificationFlow = getNotificationFlow(homeViewModel, searchText, fromDate, toDate)
@@ -88,16 +84,6 @@ fun AllNotificationScreen(
                 searchVisible = showSearch,
                 searchText = searchText,
                 onSearchTextChange = { searchText = it }
-            )
-        },
-        bottomBar = {
-            BottomBar(
-                route = currentRoute,
-                navigateToApplications = { navController.navigate(Screens.Applications.route) },
-                navigateToAllNotifications = { navController.navigate(Screens.AllNotifications.route) },
-                navigateToSettings = { navController.navigate(Screens.Settings.route) },
-                navigateToFavorite = { navController.navigate(Screens.Favorite.route) },
-                navigateToNotificationManagement = { navController.navigate(Screens.NotificationManagement.route) },
             )
         },
         floatingActionButton = {

@@ -20,12 +20,10 @@ import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import com.sharipov.mynotificationmanager.navigation.Screens
 import com.sharipov.mynotificationmanager.viewmodel.HomeViewModel
 import kotlinx.coroutines.launch
 import com.sharipov.mynotificationmanager.R
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun UserItem(
     homeViewModel: HomeViewModel,
@@ -46,7 +44,7 @@ fun UserItem(
             .fillMaxSize()
             .combinedClickable(
                 onClick = {
-                    navController.navigate(Screens.Chat.route + "/${userName}/${packageName}/${group}")
+                    navController.navigate("chat/${userName}/${packageName}/${group}")
                 },
                 onLongClick = {
                     coroutineScope.launch {

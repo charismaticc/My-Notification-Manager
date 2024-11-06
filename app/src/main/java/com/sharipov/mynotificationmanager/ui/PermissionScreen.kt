@@ -81,7 +81,7 @@ fun PermissionScreen(
                     "NotificationListener" -> PermissionItem(
                         stringResource(id = R.string.notifications),
                         stringResource(id = R.string.notifications_description),
-                        painterResource(id = R.drawable.ic_notifications_2)
+                        painterResource(id = R.drawable.ic_save_notifications)
                     )
 
                     "BatteryOptimizationIgnore" -> PermissionItem(

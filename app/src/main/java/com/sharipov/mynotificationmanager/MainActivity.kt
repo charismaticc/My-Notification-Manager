@@ -5,16 +5,16 @@ import android.content.Intent
 import android.content.IntentSender
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.activity.viewModels
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
+import androidx.compose.material3.Scaffold
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.compose.rememberNavController
@@ -26,12 +26,10 @@ import com.google.android.play.core.install.model.AppUpdateType
 import com.google.android.play.core.install.model.InstallStatus
 import com.google.android.play.core.install.model.UpdateAvailability
 import com.google.android.play.core.ktx.isFlexibleUpdateAllowed
-import com.sharipov.mynotificationmanager.navigation.SetupNavHost
+import com.sharipov.mynotificationmanager.core.navigation.Navigation
 import com.sharipov.mynotificationmanager.ui.theme.MyNotificationManagerTheme
 import com.sharipov.mynotificationmanager.ui.theme.getThemeMode
 import com.sharipov.mynotificationmanager.utils.setLocaleBasedOnUserPreferences
-import com.sharipov.mynotificationmanager.viewmodel.HomeViewModel
-import com.sharipov.mynotificationmanager.viewmodel.SettingsViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -60,24 +58,24 @@ class MainActivity : ComponentActivity() {
         checkForAppUpdate()
         setLocaleBasedOnUserPreferences(this)
 
-        val homeViewModel: HomeViewModel by viewModels()
-        val settingsViewModel: SettingsViewModel by viewModels()
-
         setContent {
             val theme = getThemeMode(this)
             MyNotificationManagerTheme(theme) {
-                Surface(
-                    modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colorScheme.background
-                ) {
-                    val navController = rememberNavController()
-                    SetupNavHost(
-                        homeViewModel = homeViewModel,
-                        settingsViewModel = settingsViewModel,
-                        navController = navController
-                    )
-                }
+                AppContext()
             }
+        }
+    }
+
+    @Composable
+    private fun AppContext() {
+        val navController = rememberNavController()
+        Scaffold(
+            modifier = Modifier.fillMaxSize(),
+            bottomBar = {
+                Navigation(navController = navController)
+            }
+        ) { innerPadding ->
+            Log.d("TAG", "AppContext: $innerPadding")
         }
     }
 

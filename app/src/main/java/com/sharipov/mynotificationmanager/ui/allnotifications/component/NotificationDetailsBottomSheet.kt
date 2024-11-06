@@ -47,7 +47,6 @@ import androidx.navigation.NavController
 import com.google.accompanist.drawablepainter.rememberDrawablePainter
 import com.maxkeppeker.sheets.core.models.base.rememberSheetState
 import com.sharipov.mynotificationmanager.R
-import com.sharipov.mynotificationmanager.navigation.Screens
 import com.sharipov.mynotificationmanager.viewmodel.HomeViewModel
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
@@ -109,7 +108,7 @@ fun NotificationDetailsBottomSheetContent(
     val appIconDrawable : Drawable? = try {
         notificationState.value?.let { context.packageManager.getApplicationIcon(it.packageName) }
     } catch (e: PackageManager.NameNotFoundException) {
-        ContextCompat.getDrawable(context, R.drawable.ic_notifications)
+        ContextCompat.getDrawable(context, R.drawable.ic_notifications_filled)
     }
     Surface(
         modifier = Modifier.wrapContentSize()
@@ -229,7 +228,7 @@ fun NotificationDetailsBottomSheetContent(
             Button(
                 onClick = {
                     notificationState.value?.let { notification ->
-                        navController.navigate(Screens.Chat.route + "/${notification.user}/${notification.packageName}/${notification.group}")
+                        navController.navigate("chat/${notification.user}/${notification.packageName}/${notification.group}")
                     }
                     showNotificationValue()
                 },
