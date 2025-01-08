@@ -1,6 +1,7 @@
 package com.sharipov.mynotificationmanager.ui.notificationmanagement
 
 import android.annotation.SuppressLint
+import android.util.Log
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -69,6 +70,8 @@ fun NotificationFilterScreen(
             )
         }
     ) {
+        Log.d("TAG", settingsViewModel.getAllExcludedApps().toString())
+
         Column(
             modifier = Modifier.fillMaxSize(),
             verticalArrangement = Arrangement.Top,

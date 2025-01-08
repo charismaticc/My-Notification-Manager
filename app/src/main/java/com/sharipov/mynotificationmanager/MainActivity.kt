@@ -1,11 +1,11 @@
 package com.sharipov.mynotificationmanager
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Intent
 import android.content.IntentSender
 import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -17,6 +17,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
 import com.google.android.play.core.appupdate.AppUpdateManager
 import com.google.android.play.core.appupdate.AppUpdateManagerFactory
@@ -26,7 +27,13 @@ import com.google.android.play.core.install.model.AppUpdateType
 import com.google.android.play.core.install.model.InstallStatus
 import com.google.android.play.core.install.model.UpdateAvailability
 import com.google.android.play.core.ktx.isFlexibleUpdateAllowed
-import com.sharipov.mynotificationmanager.core.navigation.Navigation
+import com.sharipov.mynotificationmanager.core.navigation.bottomNavBar.BottomNavigationBar
+import com.sharipov.mynotificationmanager.core.navigation.navGraphs.allNotificationsGraph
+import com.sharipov.mynotificationmanager.core.navigation.navGraphs.applicationsGraph
+import com.sharipov.mynotificationmanager.core.navigation.navGraphs.favoriteGraph
+import com.sharipov.mynotificationmanager.core.navigation.navGraphs.mainGraph
+import com.sharipov.mynotificationmanager.core.navigation.navGraphs.notificationFilterGraph
+import com.sharipov.mynotificationmanager.core.navigation.navGraphs.settingsGraph
 import com.sharipov.mynotificationmanager.ui.theme.MyNotificationManagerTheme
 import com.sharipov.mynotificationmanager.ui.theme.getThemeMode
 import com.sharipov.mynotificationmanager.utils.setLocaleBasedOnUserPreferences
@@ -66,16 +73,27 @@ class MainActivity : ComponentActivity() {
         }
     }
 
+    @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
     @Composable
     private fun AppContext() {
         val navController = rememberNavController()
         Scaffold(
             modifier = Modifier.fillMaxSize(),
             bottomBar = {
-                Navigation(navController = navController)
+                BottomNavigationBar(navController)
             }
-        ) { innerPadding ->
-            Log.d("TAG", "AppContext: $innerPadding")
+        ) {
+            NavHost(
+                navController = navController,
+                startDestination = "main_graph",
+            ) {
+                mainGraph(navController = navController)
+                favoriteGraph(navController = navController)
+                applicationsGraph(navController = navController)
+                allNotificationsGraph(navController = navController)
+                notificationFilterGraph(navController = navController)
+                settingsGraph(navController = navController)
+            }
         }
     }
 

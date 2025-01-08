@@ -6,20 +6,11 @@ import android.content.Intent
 import android.net.Uri
 import android.os.PowerManager
 import android.provider.Settings
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.wrapContentSize
-import androidx.compose.material3.HorizontalDivider
-import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
+import android.util.Log
+import androidx.compose.foundation.layout.*
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -31,20 +22,24 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.app.NotificationManagerCompat
-import androidx.core.content.ContextCompat.getSystemService
-import androidx.core.content.ContextCompat.startActivity
+import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
 import androidx.navigation.NavController
-import androidx.wear.compose.material3.Button
-import androidx.wear.compose.material3.ButtonDefaults
 import com.sharipov.mynotificationmanager.R
 import com.sharipov.mynotificationmanager.utils.Constants
 
 @Composable
-fun PermissionScreen(
-    navController: NavController
-) {
+fun PermissionScreen(navController: NavController) {
     val context = LocalContext.current
+    val permissions = getPermissionList(context)
+
+    LaunchedEffect(permissions) {
+        if (permissions.all { !it.second }) {
+            navController.navigate("all_notifications_graph")
+            Log.d("TAG", "PermissionScreen: launch all_notifications_graph")
+        }
+    }
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -52,62 +47,53 @@ fun PermissionScreen(
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
+        TitleText(text = stringResource(R.string.access_to_features))
+
+        Spacer(modifier = Modifier.height(32.dp))
+
         Text(
-            text = stringResource(id = R.string.access_to_features),
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(16.dp),
-            style = androidx.compose.ui.text.TextStyle(
-                fontWeight = FontWeight.Bold,
-                fontSize = 32.sp
+            text = stringResource(R.string.request_access_description),
+            modifier = Modifier.padding(horizontal = 16.dp).fillMaxWidth()
+        )
+
+        Spacer(modifier = Modifier.height(16.dp))
+
+        permissions.filter { it.second }.forEach { (type, isGranted) ->
+            PermissionItem(
+                permission = when (type) {
+                    "NotificationListener" -> stringResource(R.string.notifications)
+                    "BatteryOptimizationIgnore" -> stringResource(R.string.battery_optimization)
+                    else -> "Unknown"
+                },
+                description = when (type) {
+                    "NotificationListener" -> stringResource(R.string.notifications_description)
+                    "BatteryOptimizationIgnore" -> stringResource(R.string.battery_optimization_description)
+                    else -> "Unknown"
+                },
+                icon = painterResource(
+                    id = when (type) {
+                        "NotificationListener" -> R.drawable.ic_save_notifications
+                        "BatteryOptimizationIgnore" -> R.drawable.ic_battery
+                        else -> R.drawable.ic_launcher_foreground
+                    }
+                )
             )
-        )
-
-        Spacer(modifier = Modifier.padding(32.dp))
-
-        Text(
-            text = stringResource(id = R.string.request_access_description),
-            modifier = Modifier
-                .padding(16.dp)
-                .fillMaxWidth()
-        )
-        val permission = getPermissionList()
-        if(permission.all { !it.second }) {
-            navController.navigate(Constants.Screens.ALL_NOTIFICATIONS_SCREEN)
         }
-        for (i in permission) {
-            if(i.second) {
-                when (i.first) {
-                    "NotificationListener" -> PermissionItem(
-                        stringResource(id = R.string.notifications),
-                        stringResource(id = R.string.notifications_description),
-                        painterResource(id = R.drawable.ic_save_notifications)
-                    )
 
-                    "BatteryOptimizationIgnore" -> PermissionItem(
-                        stringResource(id = R.string.battery_optimization),
-                        stringResource(id = R.string.battery_optimization_description),
-                        painterResource(id = R.drawable.ic_battery)
-                    )
-                }
-            }
-        }
+        Spacer(modifier = Modifier.height(16.dp))
 
         Button(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(16.dp),
+                .padding(horizontal = 16.dp),
             onClick = {
-                getPermission(context)
+                requestPermissions(context)
                 navController.navigate(Constants.Screens.ALL_NOTIFICATIONS_SCREEN)
             },
             colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary)
         ) {
             Text(
-                text = stringResource(id = R.string.give_permissions),
-                modifier = Modifier
-                    .fillMaxSize()
-                    .wrapContentSize(Alignment.Center),
+                text = stringResource(R.string.give_permissions),
                 color = Color.White
             )
         }
@@ -115,80 +101,93 @@ fun PermissionScreen(
 }
 
 @Composable
-fun getPermissionList(): List<Pair<String, Boolean>> {
-    val context = LocalContext.current
-    val notificationListener =
-        !NotificationManagerCompat.getEnabledListenerPackages(context).contains(context.packageName)
-    val batteryOptimizationIgnore = !isBatteryOptimizationIgnored(context)
+fun TitleText(text: String) {
+    Text(
+        text = text,
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(16.dp),
+        style = MaterialTheme.typography.headlineLarge.copy(
+            fontWeight = FontWeight.Bold,
+            fontSize = 32.sp
+        )
+    )
+}
 
+
+fun getPermissionList(context: Context): List<Pair<String, Boolean>> {
     return listOf(
-        Pair("NotificationListener", notificationListener),
-        Pair("BatteryOptimizationIgnore", batteryOptimizationIgnore)
+        "NotificationListener" to !NotificationManagerCompat
+            .getEnabledListenerPackages(context)
+            .contains(context.packageName),
+        "BatteryOptimizationIgnore" to !isBatteryOptimizationIgnored(context)
     )
 }
 
 fun isBatteryOptimizationIgnored(context: Context): Boolean {
-    val powerManager = getSystemService(context, PowerManager::class.java) as PowerManager
-    return powerManager.isIgnoringBatteryOptimizations(context.packageName)
+    val powerManager = ContextCompat.getSystemService(context, PowerManager::class.java)
+    return powerManager?.isIgnoringBatteryOptimizations(context.packageName) ?: false
 }
 
 @SuppressLint("BatteryLife")
 fun requestBatteryOptimization(context: Context) {
-    val intent = Intent(Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS)
-    intent.data = Uri.parse("package:${context.packageName}")
-    startActivity(context, intent, bundleOf())
-}
-
-fun getPermission(context: Context) {
-    val notificationListener =
-        !NotificationManagerCompat.getEnabledListenerPackages(context).contains(context.packageName)
-    val batteryOptimizationIgnore = !isBatteryOptimizationIgnored(context)
-
-    if (notificationListener) {
-        val intent = Intent(Settings.ACTION_NOTIFICATION_LISTENER_SETTINGS)
-        startActivity(context, intent, bundleOf())
+    val intent = Intent(Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS).apply {
+        data = Uri.parse("package:${context.packageName}")
     }
-    if (batteryOptimizationIgnore) {
-        requestBatteryOptimization(context)
-    }
+    ContextCompat.startActivity(context, intent, bundleOf())
 }
 
 
+fun requestPermissions(context: Context) {
+    val permissions = getPermissionList(context)
+    permissions.forEach { (type, isGranted) ->
+        if (isGranted) {
+            when (type) {
+                "NotificationListener" -> {
+                    val intent = Intent(Settings.ACTION_NOTIFICATION_LISTENER_SETTINGS)
+                    ContextCompat.startActivity(context, intent, bundleOf())
+                }
+                "BatteryOptimizationIgnore" -> requestBatteryOptimization(context)
+            }
+        }
+    }
+}
 
 @Composable
 fun PermissionItem(permission: String, description: String, icon: Painter) {
-    val modifier = Modifier
-        .padding(
-            start = 16.dp,
-            end = 16.dp,
-            top = 8.dp,
-            bottom = 8.dp
-        )
-        .fillMaxWidth()
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(vertical = 8.dp)
+    ) {
+        HorizontalDivider(thickness = 2.dp)
 
-    HorizontalDivider(
-        modifier = modifier,
-        thickness = 2.dp
-    )
-    Column(modifier = modifier) {
-        Row(verticalAlignment = Alignment.CenterVertically) {
+        Spacer(modifier = Modifier.height(8.dp))
+
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier.padding(horizontal = 16.dp)
+        ) {
             Icon(
                 painter = icon,
                 modifier = Modifier.size(64.dp),
                 contentDescription = null
             )
-            Text(
-                text = permission,
-                modifier = modifier.size(32.dp),
-                style = androidx.compose.ui.text.TextStyle(
-                    fontWeight = FontWeight.Bold,
-                    fontSize = 24.sp
+
+            Spacer(modifier = Modifier.width(16.dp))
+
+            Column {
+                Text(
+                    text = permission,
+                    style = MaterialTheme.typography.titleLarge.copy(
+                        fontWeight = FontWeight.Bold
+                    )
                 )
-            )
+                Text(
+                    text = description,
+                    style = MaterialTheme.typography.bodyMedium
+                )
+            }
         }
-        Text(
-            text = description,
-            modifier = modifier
-        )
     }
 }

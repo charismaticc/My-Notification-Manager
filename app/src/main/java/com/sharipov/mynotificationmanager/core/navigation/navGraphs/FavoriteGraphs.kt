@@ -11,7 +11,7 @@ import com.sharipov.mynotificationmanager.viewmodel.HomeViewModel
 
 fun NavGraphBuilder.favoriteGraph(navController: NavHostController) {
     navigation(
-        startDestination = Routes.AllNotificationRoute.route,
+        startDestination = Routes.FavoriteRoute.route,
         route = "favorite_graph"
     ) {
 
